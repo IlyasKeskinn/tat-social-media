@@ -1,10 +1,47 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
+import { ColorModeScript } from "@chakra-ui/react";
+
+import "@fontsource-variable/roboto-slab";
+import "@fontsource-variable/open-sans";
+const styles = {
+  global: (props) => ({
+    body: {
+      color: mode("gray.800", "whiteAlpha.900")(props),
+      bg: mode("#e6edf2", "#1A2334")(props),
+    },
+  }),
+};
+
+const config = {
+  initialColorMode: "dark",
+  useSystemColorMode: false,
+};
+
+const colors = {
+  gray: {
+    light: "#3a3a3a",
+    dark: "#161616",
+  },
+};
+
+const fonts = {
+  heading: `'Roboto Slab', serif`,
+  body: `'Roboto Slab', serif`,
+};
+
+const theme = extendTheme({ config, styles, colors, fonts });
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <ChakraProvider theme={theme}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <App />
+    </ChakraProvider>
+  </React.StrictMode>
+);

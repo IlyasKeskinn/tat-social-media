@@ -1,9 +1,6 @@
+import MainLayout from "./layouts/MainLayout";
 function App() {
-  return (
-    <>
-      <p>Hello React</p>
-    </>
-  )
+  return <MainLayout />;
 }
 
-export default App
+export default App;
