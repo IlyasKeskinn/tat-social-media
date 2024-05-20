@@ -1,5 +1,6 @@
 import { Box, Container, Flex, Stack } from "@chakra-ui/react";
 import Sidebar from "../components/Sidebar";
+import { Outlet } from "react-router";
 const MainLayout = () => {
   return (
     <Box position={"relative"} w={"full"}>
@@ -8,7 +9,10 @@ const MainLayout = () => {
       >
         <Stack spacing={8} direction={"row"}>
           <Sidebar />
-          <Flex h={"3000px"} flex={3}></Flex>
+          <Flex flex={3}>
+            <Outlet />
+          </Flex>
+          <Flex flex={2}></Flex>
         </Stack>
       </Container>
     </Box>

@@ -64,7 +64,14 @@ const Sidebar = () => {
           </Button>
         </VStack>
       </Flex>
-      <Divider display={{ base: "none", md: "flex" }} orientation="vertical" />
+      <Divider
+        position={"sticky"}
+        top={0}
+        h={"100vh"}
+        style={{ position: "sticky", top: "0" }}
+        display={{ base: "none", md: "flex" }}
+        orientation="vertical"
+      />
     </>
   );
 };
