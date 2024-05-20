@@ -123,7 +123,7 @@ const Actions = () => {
 
 export default Actions;
 
-const ShareSvg = () => {
+export const ShareSvg = () => {
   return (
     <Box my={2} cursor={"pointer"}>
       <svg

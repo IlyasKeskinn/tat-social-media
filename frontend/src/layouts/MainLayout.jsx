@@ -9,10 +9,9 @@ const MainLayout = () => {
       >
         <Stack spacing={8} direction={"row"}>
           <Sidebar />
-          <Flex flex={3}>
+          <Flex flex={5} py={4} my={4}>
             <Outlet />
           </Flex>
-          <Flex flex={2}></Flex>
         </Stack>
       </Container>
     </Box>

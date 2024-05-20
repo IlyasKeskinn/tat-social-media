@@ -18,7 +18,6 @@ import Actions from "./Actions";
 
 const Post = ({ post }) => {
   return (
-    <Box w={"400px"} mb={4}>
       <Flex gap={3} mb={4} py={5} w={"full"}>
         <Flex direction={"column"} alignItems={"center"}>
           <Flex gap={2} alignItems={"center"}>
@@ -68,7 +67,7 @@ const Post = ({ post }) => {
             borderRadius={6}
             overflow={"hidden"}
             h={{ sm: "600px", md: "650px", lg: "500px" }}
-            w={"400px"}
+            w={"100%"}
           >
             <Image
               src={post.image}
@@ -83,7 +82,6 @@ const Post = ({ post }) => {
           <Divider />
         </Flex>
       </Flex>
-    </Box>
   );
 };
 

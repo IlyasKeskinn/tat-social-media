@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "../components/Post";
-import { Flex } from "@chakra-ui/react";
+import { Flex,Text } from "@chakra-ui/react";
 
 const Feed = () => {
   const posts = [
@@ -22,11 +22,19 @@ const Feed = () => {
     },
   ];
   return (
-    <Flex w={"full"} alignItems={"center"} flexDirection={"column"} my={4}>
-      {posts.map((post, index) => {
-        return <Post key={index} post={post} />;
-      })}
-    </Flex>
+    <>
+      <Flex flex={2} alignItems={"center"} flexDirection={"column"}>
+        {posts.map((post, index) => {
+          return <Post key={index} post={post} />;
+        })}
+      </Flex>
+      <Flex flex={2} display={{ base: "none", lg: "flex" }}>
+        <Text>
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis
+          provident beatae fugiat?
+        </Text>
+      </Flex>
+    </>
   );
 };
 
