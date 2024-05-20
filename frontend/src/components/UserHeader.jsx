@@ -12,7 +12,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import {ShareSvg} from "./Actions"
+import { ShareSvg } from "./Actions";
 const UserHeader = () => {
   return (
     <VStack>
@@ -23,7 +23,7 @@ const UserHeader = () => {
         alignItems={"start"}
       >
         <Flex w={"full"} px={{ base: "2", lg: "12" }}>
-          <Flex direction={"column"}>
+          <Flex direction={"column"} alignItems={"center"} gap={2}>
             <Box>
               <Avatar
                 size={{ base: "xl", lg: "2xl" }}
@@ -34,9 +34,7 @@ const UserHeader = () => {
                 border={"1px solid"}
               />
             </Box>
-            <Button w={"full"} bg={"blue.400"} mt={4}>
-              Follow
-            </Button>
+            <Text fontSize={"md"}>@fidelio</Text>
           </Flex>
           <VStack w={"full"} alignItems={"start"} gap={2} mx={6} my={2}>
             <Flex w={"full"} justifyContent={"space-between"}>
@@ -45,9 +43,7 @@ const UserHeader = () => {
                   <Text fontSize={{ base: "xl" }} fontWeight={"bold"}>
                     Ilyas Keskin
                   </Text>
-                  <ShareSvg />
                 </Flex>
-                <Text fontSize={"md"}>@fidelio</Text>
               </Flex>
               <Box>
                 <Menu>
@@ -85,6 +81,13 @@ const UserHeader = () => {
                   </Text>{" "}
                   post
                 </Text>
+              </Flex>
+              <Flex gap={4}>
+                <Button bg={"blue.400"}>Follow</Button>
+                <Button bg={"blue.400"}>
+                  Message
+                  <ShareSvg />
+                </Button>
               </Flex>
               <Text fontSize={"sm"}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
