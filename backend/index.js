@@ -12,7 +12,9 @@ const cors = require("cors");
 //middlewares
 app.use(express.json());
 app.use(cors);
+const errorMiddlewares = require("./middlewares/erros.js");
 
+app.use(errorMiddlewares);
 
 app.listen(port, () => {
   console.log(`Server started at ${port}`);
