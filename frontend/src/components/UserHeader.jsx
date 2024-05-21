@@ -11,9 +11,24 @@ import {
   MenuItem,
   Button,
 } from "@chakra-ui/react";
+
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { ShareSvg } from "./Actions";
+import showToast from "./hooks/showToast";
 const UserHeader = () => {
+  const toast = showToast();
+
+  const handleCopyProfileURL = () => {
+    const profileURL = window.location.href;
+    navigator.clipboard.writeText(profileURL).then(() => {
+      toast(
+        "Copied to clipboard",
+        "Profile URL has been copied successfully.",
+        "success"
+      );
+    });
+  };
+
   return (
     <VStack>
       <Flex
@@ -55,7 +70,16 @@ const UserHeader = () => {
                   </MenuButton>
                   <Portal>
                     <MenuList>
-                      <MenuItem>Report this post!</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleCopyProfileURL();
+                        }}
+                      >
+                        Copy Profile URL
+                      </MenuItem>
+                      <MenuItem>Edit Profile</MenuItem>
+                      <MenuItem>Block this account!</MenuItem>
+                      <MenuItem>Report!</MenuItem>
                     </MenuList>
                   </Portal>
                 </Menu>

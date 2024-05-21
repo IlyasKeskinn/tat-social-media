@@ -49,8 +49,8 @@ const Sidebar = () => {
               T.A.T
             </Heading>
           </Flex>
-          <MenuItem title={"feed"} icon={IoHomeOutline} active={true} />
-          <MenuItem title={"Profile"} icon={FaRegUser} />
+          <MenuItem title={"feed"} to={"/"} icon={IoHomeOutline} />
+          <MenuItem title={"Profile"} to={"/profile/:ilyas"} icon={FaRegUser} />
           <MenuItem title={"Explore"} icon={MdOutlineExplore} />
           <MenuItem title={"Search"} icon={BsSearch} />
           <MenuItem title={"Message"} icon={AiOutlineMessage} />
