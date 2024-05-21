@@ -14,9 +14,12 @@ import {
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { ShareSvg } from "./Actions";
-import showToast from "./hooks/showToast";
+import showToast from "../hooks/showToast";
+import { useNavigate } from "react-router";
 const UserHeader = () => {
+
   const toast = showToast();
+  const navigaye = useNavigate();
 
   const handleCopyProfileURL = () => {
     const profileURL = window.location.href;
@@ -77,7 +80,7 @@ const UserHeader = () => {
                       >
                         Copy Profile URL
                       </MenuItem>
-                      <MenuItem>Edit Profile</MenuItem>
+                      <MenuItem onClick={()=> {navigaye("/profile/edit/:ilyas")}}>Edit Profile</MenuItem>
                       <MenuItem>Block this account!</MenuItem>
                       <MenuItem>Report!</MenuItem>
                     </MenuList>

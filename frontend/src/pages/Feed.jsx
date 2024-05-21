@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "../components/Post";
-import { Flex,Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 const Feed = () => {
   const posts = [
