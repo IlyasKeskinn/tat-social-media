@@ -1,10 +1,10 @@
-import Login from "../components/Login"
-import SignUP from "../components/SignUP"
+import Login from "../components/Login";
+import PasswordResetRequest from "../components/ForgotPassword";
+import ResetPassword from "../components/ResetPassword";
+import SignUP from "../components/SignUP";
 
 const AuthPage = () => {
-  return (
-        <SignUP/>
-  )
-}
+  return <ResetPassword />;
+};
 
-export default AuthPage
+export default AuthPage;

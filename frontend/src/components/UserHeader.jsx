@@ -17,7 +17,6 @@ import { ShareSvg } from "./Actions";
 import showToast from "../hooks/showToast";
 import { useNavigate } from "react-router";
 const UserHeader = () => {
-
   const toast = showToast();
   const navigaye = useNavigate();
 
@@ -80,7 +79,13 @@ const UserHeader = () => {
                       >
                         Copy Profile URL
                       </MenuItem>
-                      <MenuItem onClick={()=> {navigaye("/profile/edit/:ilyas")}}>Edit Profile</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          navigaye("/profile/edit/:ilyas");
+                        }}
+                      >
+                        Edit Profile
+                      </MenuItem>
                       <MenuItem>Block this account!</MenuItem>
                       <MenuItem>Report!</MenuItem>
                     </MenuList>
@@ -110,8 +115,22 @@ const UserHeader = () => {
                 </Text>
               </Flex>
               <Flex gap={4}>
-                <Button bg={"blue.400"}>Follow</Button>
-                <Button bg={"blue.400"}>
+                <Button
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                >
+                  Follow
+                </Button>
+                <Button
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                >
                   Message
                   <ShareSvg />
                 </Button>
