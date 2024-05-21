@@ -8,13 +8,21 @@ import {
   Input,
   Button,
   SimpleGrid,
-  Avatar,
-  AvatarGroup,
   useBreakpointValue,
   Link,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react";
 
+import { LuEyeOff } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
+
+import { useState } from "react";
+
 const SignUP = () => {
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+
   return (
     <Box position={"relative"}>
       <Container
@@ -147,7 +155,7 @@ const SignUP = () => {
                 />
               </Flex>
               <Input
-                placeholder="firstname@lastname.io"
+                placeholder="tatmember@example.com"
                 bg={"gray.100"}
                 border={0}
                 color={"gray.500"}
@@ -164,6 +172,29 @@ const SignUP = () => {
                   color: "gray.500",
                 }}
               />
+              <InputGroup>
+                <Input
+                  placeholder="password"
+                  bg={"gray.100"}
+                  type={show ? "text" : "password"}
+                  border={0}
+                  color={"gray.500"}
+                  _placeholder={{
+                    color: "gray.500",
+                  }}
+                />
+                <InputRightElement>
+                  <Button
+                    bg={"gray.100"}
+                    color={"gray.500"}
+                    h="1.75rem"
+                    size="sm"
+                    onClick={handleClick}
+                  >
+                    {show ? <LuEyeOff /> : <LuEye />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </Stack>
             <Button
               fontFamily={"heading"}
@@ -181,7 +212,11 @@ const SignUP = () => {
             </Button>
           </Box>
           <Stack>
-          <Text align={"end"} color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
+            <Text
+              align={"end"}
+              color={"gray.500"}
+              fontSize={{ base: "sm", sm: "md" }}
+            >
               Already a T.A.T member? <Link color={"blue.400"}>Log in</Link>
             </Text>
           </Stack>
