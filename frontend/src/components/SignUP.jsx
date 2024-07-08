@@ -17,12 +17,77 @@ import {
 import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
+
+import authScreenAtom from "../atoms/authAtom";
+import userAtom from "../atoms/userAtom";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+import useFetch from "../hooks/useFetch";
+import useShowToast from "../hooks/showToast";
+const schema = z.object({
+  firstName: z
+    .string()
+    .min(3, "First name must be at least 3 characters")
+    .max(24, "First name must be at most 24 characters"),
+  lastName: z
+    .string()
+    .min(3, "Last name must be at least 3 characters")
+    .max(24, "Last name must be at most 24 characters"),
+  email: z.string().email("Invalid email address"),
+  userName: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(24, "Username must be at most 24 characters"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(24, "Password must be at most 24 characters"),
+});
 
 const SignUP = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
+  const setUserState = useSetRecoilState(userAtom);
+
+  const showToast = useShowToast();
+
+  const REGISTER_URL = "user/register";
+  const { status, responseData, isLoading, error, postData } = useFetch(
+    REGISTER_URL,
+    "POST"
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
+
+  const onSubmit = (data) => {
+    postData(data);
+  };
+
+  useEffect(() => {
+    if (status === "ok") {
+      localStorage.setItem("tatuser", JSON.stringify(responseData));
+      setUserState(responseData);
+      reset();
+    }
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+  }, [status, error]);
   return (
     <Box position={"relative"}>
       <Container
@@ -132,7 +197,7 @@ const SignUP = () => {
               Ready to shine? Join T.A.T and shine by sharing your world!
             </Text>
           </Stack>
-          <Box as={"form"} mt={10}>
+          <Box as={"form"} mt={10} onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <Flex gap={2}>
                 <Input
@@ -143,6 +208,8 @@ const SignUP = () => {
                   _placeholder={{
                     color: "gray.500",
                   }}
+                  {...register("firstName")}
+                  isInvalid={errors.firstName}
                 />{" "}
                 <Input
                   placeholder="Lastname"
@@ -152,7 +219,17 @@ const SignUP = () => {
                   _placeholder={{
                     color: "gray.500",
                   }}
+                  {...register("lastName")}
+                  isInvalid={errors.lastName}
                 />
+              </Flex>
+              <Flex gap={2}>
+                {errors.firstName && (
+                  <Text color="red.500">{errors.firstName?.message}</Text>
+                )}
+                {errors.lastName && (
+                  <Text color="red.500">{errors.lastName?.message}</Text>
+                )}
               </Flex>
               <Input
                 placeholder="tatmember@example.com"
@@ -162,7 +239,12 @@ const SignUP = () => {
                 _placeholder={{
                   color: "gray.500",
                 }}
+                {...register("email")}
+                isInvalid={errors.email}
               />
+              {errors.email && (
+                <Text color="red.500">{errors.email.message}</Text>
+              )}
               <Input
                 placeholder="Username"
                 bg={"gray.100"}
@@ -171,7 +253,12 @@ const SignUP = () => {
                 _placeholder={{
                   color: "gray.500",
                 }}
+                {...register("userName")}
+                isInvalid={errors.userName}
               />
+              {errors.userName && (
+                <Text color="red.500">{errors.userName.message}</Text>
+              )}
               <InputGroup>
                 <Input
                   placeholder="password"
@@ -182,6 +269,8 @@ const SignUP = () => {
                   _placeholder={{
                     color: "gray.500",
                   }}
+                  {...register("password")}
+                  isInvalid={errors.password}
                 />
                 <InputRightElement>
                   <Button
@@ -195,6 +284,9 @@ const SignUP = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+              {errors.password && (
+                <Text color="red.500">{errors.password.message}</Text>
+              )}
             </Stack>
             <Button
               fontFamily={"heading"}
@@ -207,6 +299,7 @@ const SignUP = () => {
                 boxShadow: "xl",
               }}
               type="submit"
+              isLoading={isLoading}
             >
               Submit
             </Button>
@@ -217,7 +310,15 @@ const SignUP = () => {
               color={"gray.500"}
               fontSize={{ base: "sm", sm: "md" }}
             >
-              Already a T.A.T member? <Link color={"blue.400"}>Log in</Link>
+              Already a T.A.T member?{" "}
+              <Link
+                color={"blue.400"}
+                onClick={() => {
+                  setAuthScreen("login");
+                }}
+              >
+                Log in
+              </Link>
             </Text>
           </Stack>
         </Stack>

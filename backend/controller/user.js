@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
 
   if (existingEmail) {
     return res.status(400).json({
-      error: "This email is alreadt taken. You can log in to your account.",
+      error: "This email is already taken. You can log in to your account.",
     });
   }
 
@@ -67,8 +67,10 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({
       _id: newUser._id,
-      fullName: newUser.fullName,
       userName: newUser.userName,
+      fullName: newUser.fullName,
+      bio: newUser.bio,
+      profilePic: newUser.profilePic,
     });
   } else {
     res.status(400).json({ error: "Invalid user data" });

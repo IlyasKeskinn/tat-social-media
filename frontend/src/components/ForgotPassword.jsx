@@ -8,8 +8,12 @@ import {
   Button,
   Link,
 } from "@chakra-ui/react";
+import { useSetRecoilState } from "recoil";
+
+import authScreenAtom from "../atoms/authAtom";
 
 const ForgotPassword = () => {
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
       <Stack
@@ -68,7 +72,9 @@ const ForgotPassword = () => {
         <Flex justifyContent={"space-between"}>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              <Link color={"blue.400"}>Login Page</Link>
+              <Link color={"blue.400"} onClick={() => setAuthScreen("login")}>
+                Login Page
+              </Link>
             </Text>
           </Flex>
         </Flex>

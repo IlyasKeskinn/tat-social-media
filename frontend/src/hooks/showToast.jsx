@@ -1,21 +1,23 @@
-import { useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
 import { useCallback } from "react";
-const showToast = () => {
-  const toast = useToast();
-  const toastCall = useCallback(
-    ( title, desc, status, duration = 2000) => {
-      toast({
-        title: title,
-        description: desc,
-        status: status,
-        duration: duration,
-        isClosable: true,
-      });
-    },
-    [toast]
-  );
 
-  return toastCall;
+const useShowToast = () => {
+	const toast = useToast();
+
+	const showToast = useCallback(
+		(title, description, status) => {
+			toast({
+				title,
+				description,
+				status,
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+		[toast]
+	);
+
+	return showToast;
 };
 
-export default showToast;
+export default useShowToast;

@@ -10,6 +10,7 @@ import { ColorModeScript } from "@chakra-ui/react";
 import "@fontsource-variable/roboto-slab";
 import "@fontsource-variable/open-sans";
 import { HashRouter } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 const styles = {
   global: (props) => ({
     body: {
@@ -40,11 +41,13 @@ const theme = extendTheme({ config, styles, colors, fonts });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <HashRouter>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <App />
-      </ChakraProvider>
-    </HashRouter>
+    <RecoilRoot>
+      <HashRouter>
+        <ChakraProvider theme={theme}>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <App />
+        </ChakraProvider>
+      </HashRouter>
+    </RecoilRoot>
   </React.StrictMode>
 );

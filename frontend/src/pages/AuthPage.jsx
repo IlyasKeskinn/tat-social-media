@@ -1,10 +1,22 @@
 import Login from "../components/Login";
-import PasswordResetRequest from "../components/ForgotPassword";
-import ResetPassword from "../components/ResetPassword";
+import ForgotPassword from "../components/ForgotPassword";
 import SignUP from "../components/SignUP";
+import { useRecoilValue } from "recoil";
+import authScreenAtom from "../atoms/authAtom";
 
 const AuthPage = () => {
-  return <ResetPassword />;
+  const authScreenState = useRecoilValue(authScreenAtom);
+  if (authScreenState === "login") {
+    return <Login />;
+  }
+  if (authScreenState === "signup") {
+    return <SignUP />;
+  }
+  if (authScreenState === "forgotpassword") {
+    return <ForgotPassword />;
+  }
+
+  return <SignUP />;
 };
 
 export default AuthPage;

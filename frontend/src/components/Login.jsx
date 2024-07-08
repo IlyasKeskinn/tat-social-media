@@ -15,10 +15,14 @@ import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 
 import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+
+import authScreenAtom from "../atoms/authAtom";
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -102,13 +106,13 @@ const Login = () => {
         <Flex justifyContent={"space-between"}>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              <Link color={"blue.400"}>Forgot Password?</Link>
+              <Link color={"blue.400"}  onClick={() => {setAuthScreen("forgotpassword")}}>Forgot Password?</Link>
             </Text>
           </Flex>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
               Not a T.A.T member yet?{" "}
-              <Link color={"blue.400"}>Join the T.A.T</Link>
+              <Link color={"blue.400"} onClick={() => {setAuthScreen("signup")}}>Join the T.A.T</Link>
             </Text>
           </Flex>
         </Flex>
