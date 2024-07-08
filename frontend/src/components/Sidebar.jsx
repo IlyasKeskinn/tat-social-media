@@ -16,6 +16,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { FaRegMoon } from "react-icons/fa6";
 import { GoSun } from "react-icons/go";
 import MenuItem from "./MenuItem";
+import LogoutButton from "./LogoutButton";
 
 const Sidebar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -54,6 +55,7 @@ const Sidebar = () => {
           <MenuItem title={"Explore"} icon={MdOutlineExplore} />
           <MenuItem title={"Search"} icon={BsSearch} />
           <MenuItem title={"Message"} icon={AiOutlineMessage} />
+          <LogoutButton />
           <Spacer />
           <Button background={"transparent"} my={2} onClick={toggleColorMode}>
             {colorMode === "light" ? (

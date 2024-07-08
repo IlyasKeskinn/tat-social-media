@@ -41,7 +41,7 @@ const Login = () => {
   const showToast = useShowToast();
 
   const LOGIN_URL = "user/login";
-  const { status, responseData, isLoaading, error, postData } = useFetch(
+  const { status, responseData, isLoading, error, postData } = useFetch(
     LOGIN_URL,
     "POST"
   );
@@ -80,6 +80,7 @@ const Login = () => {
         p={{ base: 4, sm: 6, md: 8 }}
         spacing={{ base: 8 }}
         maxW={{ lg: "lg" }}
+        mx={3}
       >
         <Stack spacing={4}>
           <Heading
@@ -157,7 +158,7 @@ const Login = () => {
               boxShadow: "xl",
             }}
             type="submit"
-            isLoading={isLoaading}
+            isLoading={isLoading}
           >
             Log in
           </Button>
