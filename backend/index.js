@@ -19,9 +19,11 @@ const errorMiddlewares = require("./middlewares/erros.js");
 
 //routes import
 const userRoute = require("./routes/user.js");
+const postRoute = require("./routes/post.js");
 
 //routes
-app.use("/api", userRoute);
+app.use("/api/user", userRoute);
+app.use("/api/post", postRoute);
 app.use(errorMiddlewares);
 
 app.listen(port, () => {
