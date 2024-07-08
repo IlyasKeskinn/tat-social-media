@@ -43,6 +43,7 @@ const useFetch = (url, method = "GET") => {
         setStatus("ok");
         setData(data);
         setLoading(false);
+        setError("")
       } catch (error) {
         setStatus("error")
         setLoading(false);

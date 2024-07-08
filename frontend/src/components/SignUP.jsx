@@ -84,10 +84,12 @@ const SignUP = () => {
       setUserState(responseData);
       reset();
     }
+
     if (error) {
       showToast("Error", error.message, "error");
     }
   }, [status, error]);
+
   return (
     <Box position={"relative"}>
       <Container

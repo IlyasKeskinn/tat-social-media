@@ -14,15 +14,63 @@ import {
 import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
 import authScreenAtom from "../atoms/authAtom";
+import userAtom from "../atoms/userAtom";
+
+import useShowToast from "../hooks/showToast";
+import useFetch from "../hooks/useFetch";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(24, "Password must be at most 24 characters"),
+});
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const showToast = useShowToast();
+
+  const LOGIN_URL = "user/login";
+  const { status, responseData, isLoaading, error, postData } = useFetch(
+    LOGIN_URL,
+    "POST"
+  );
+
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+  const setUserState = useSetRecoilState(userAtom);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    postData(data);
+  };
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+    if (status === "ok") {
+      localStorage.setItem("tatuser", JSON.stringify(responseData));
+      setUserState(responseData);
+      reset();
+    }
+  }, [status, error]);
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -53,7 +101,7 @@ const Login = () => {
             exploring!
           </Text>
         </Stack>
-        <Box as={"form"} mt={10}>
+        <Box as={"form"} mt={10} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
             <Input
               placeholder="tatmember@example.com"
@@ -63,7 +111,12 @@ const Login = () => {
               _placeholder={{
                 color: "gray.500",
               }}
+              {...register("email")}
+              isInvalid={errors.email}
             />
+            {errors.email && (
+              <Text color="red.500">{errors.email.message}</Text>
+            )}
             <InputGroup>
               <Input
                 placeholder="password"
@@ -74,6 +127,8 @@ const Login = () => {
                 _placeholder={{
                   color: "gray.500",
                 }}
+                {...register("password")}
+                isInvalid={errors.password}
               />
               <InputRightElement>
                 <Button
@@ -87,6 +142,9 @@ const Login = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
+            {errors.password && (
+              <Text color="red.500">{errors.password.message}</Text>
+            )}
           </Stack>
           <Button
             fontFamily={"heading"}
@@ -99,6 +157,7 @@ const Login = () => {
               boxShadow: "xl",
             }}
             type="submit"
+            isLoading={isLoaading}
           >
             Log in
           </Button>
@@ -106,13 +165,27 @@ const Login = () => {
         <Flex justifyContent={"space-between"}>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              <Link color={"blue.400"}  onClick={() => {setAuthScreen("forgotpassword")}}>Forgot Password?</Link>
+              <Link
+                color={"blue.400"}
+                onClick={() => {
+                  setAuthScreen("forgotpassword");
+                }}
+              >
+                Forgot Password?
+              </Link>
             </Text>
           </Flex>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
               Not a T.A.T member yet?{" "}
-              <Link color={"blue.400"} onClick={() => {setAuthScreen("signup")}}>Join the T.A.T</Link>
+              <Link
+                color={"blue.400"}
+                onClick={() => {
+                  setAuthScreen("signup");
+                }}
+              >
+                Join the T.A.T
+              </Link>
             </Text>
           </Flex>
         </Flex>

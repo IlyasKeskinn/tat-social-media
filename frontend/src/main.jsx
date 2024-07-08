@@ -40,7 +40,6 @@ const fonts = {
 const theme = extendTheme({ config, styles, colors, fonts });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <RecoilRoot>
       <HashRouter>
         <ChakraProvider theme={theme}>
@@ -49,5 +48,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ChakraProvider>
       </HashRouter>
     </RecoilRoot>
-  </React.StrictMode>
 );
