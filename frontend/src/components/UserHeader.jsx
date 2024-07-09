@@ -84,7 +84,7 @@ const UserHeader = ({ user, posts }) => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          navigaye("/profile/edit/:ilyas");
+                          navigaye(`/profile/edit/${user.userName}`);
                         }}
                       >
                         Edit Profile

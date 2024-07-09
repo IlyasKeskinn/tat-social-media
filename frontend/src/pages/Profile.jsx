@@ -18,6 +18,7 @@ import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import UserNotFoundPage from "../components/UserNotFoundPage";
 
 const Profile = () => {
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
@@ -38,10 +39,13 @@ const Profile = () => {
       showToast("Error", error.message, "error");
     }
     if (statusCode == 200) {
-      console.log(responseData);
       setPost(responseData);
     }
   }, [responseData, error]);
+
+  if (statusCode === 404) {
+    return <UserNotFoundPage />;
+  }
 
   return isLoading && fetchingPost ? (
     <VStack alignItems={"center"} justifyContent={"center"} flex={1}>

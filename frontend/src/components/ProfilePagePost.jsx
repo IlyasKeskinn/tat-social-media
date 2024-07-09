@@ -4,7 +4,6 @@ import { FaHeart } from "react-icons/fa";
 import { FaCommentAlt } from "react-icons/fa";
 
 const ProfilePagePost = ({ post }) => {
-  console.log(post);
   return (
     <GridItem
       h={{ base: "150px", md: "200px", lg: "300px" }}

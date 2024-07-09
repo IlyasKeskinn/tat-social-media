@@ -8,6 +8,7 @@ import { ProtectedRoutes } from "./path/ProtectedRoutes";
 import userAtom from "./atoms/userAtom";
 import "./App.css";
 import { useRecoilState } from "recoil";
+import NotFoundPage from "./components/NotFoundPage";
 
 function App() {
   const user = useRecoilState(userAtom)[0];
@@ -22,6 +23,10 @@ function App() {
       </Route>
       <Route element={<ProtectedRoutes condition={!user} routes="/" />}>
         <Route path="/auth" element={<AuthPage />} />
+      </Route>
+
+      <Route path="" element={<MainLayout />}>
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
