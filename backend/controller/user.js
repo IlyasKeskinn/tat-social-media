@@ -113,7 +113,7 @@ const logout = async (req, res) => {
 const updateProfile = async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
-  const { fullName, bio } = req.body;
+  const { fullName, bio, userName } = req.body;
   let { profilePic } = req.body;
 
   const user = await User.findOne({ _id: id });
@@ -125,12 +125,21 @@ const updateProfile = async (req, res) => {
   if (id !== userId.toString()) {
     return res
       .status(400)
-      .json({ error: "Yoc cannot edit othes user's profile!" });
+      .json({ error: "You cannot edit othes user's profile!" });
   }
 
+  const existingUserName = await User.findOne({ userName: userName });
+
+  if (
+    existingUserName &&
+    existingUserName._id.toString() !== user._id.toString()
+  ) {
+    return res.status(400).json({ error: "Username already taken!" });
+  }
   user.fullName = fullName;
   user.bio = bio || "";
   user.profilePic = profilePic || "";
+  user.userName = userName;
 
   await user.save();
 

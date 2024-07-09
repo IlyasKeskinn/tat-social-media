@@ -13,7 +13,15 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+
+import { useRef } from "react";
+
+import usePrevImg from "../hooks/usePrevImg";
+
 const EditProfile = () => {
+  const fileRef = useRef(null);
+  const { handleImageChange, imgUrl } = usePrevImg();
+
   return (
     <Flex
       px={{ base: 0, md: 6, lg: 24 }}
@@ -48,7 +56,7 @@ const EditProfile = () => {
                   <Avatar
                     size={"lg"}
                     name="John Doe"
-                    src={"https://bit.ly/dan-abramov"}
+                    src={imgUrl}
                     rounded={"full"}
                     shadow={"xl"}
                     border={"1px solid"}
@@ -56,6 +64,7 @@ const EditProfile = () => {
                 </Box>
                 <Text fontSize={"md"}>@fidelio</Text>
               </Flex>
+              <Input type="file" display={"none"} ref={fileRef} onChange={handleImageChange} />
               <Center>
                 <Button
                   bg={"blue.400"}
@@ -64,26 +73,45 @@ const EditProfile = () => {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  onClick={() => {
+                    fileRef.current.click();
+                  }}
                 >
                   Change photo
                 </Button>{" "}
               </Center>
             </Stack>
           </FormControl>
-          <FormControl isRequired>
-            <FormLabel fontSize={"lg"} fontWeight={"bold"}>
-              Full name
-            </FormLabel>
-            <Input
-              placeholder="John Doe"
-              _placeholder={{ color: "gray.500" }}
-              type="text"
-              borderColor={useColorModeValue(
-                "blackAlpha.400",
-                "whiteAlpha.400"
-              )}
-            />
-          </FormControl>
+          <Flex gap={5}>
+            <FormControl>
+              <FormLabel fontSize={"lg"} fontWeight={"bold"}>
+                Full name
+              </FormLabel>
+              <Input
+                placeholder="John Doe"
+                _placeholder={{ color: "gray.500" }}
+                type="text"
+                borderColor={useColorModeValue(
+                  "blackAlpha.400",
+                  "whiteAlpha.400"
+                )}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel fontSize={"lg"} fontWeight={"bold"}>
+                Username
+              </FormLabel>
+              <Input
+                placeholder="JohnDoe"
+                _placeholder={{ color: "gray.500" }}
+                type="text"
+                borderColor={useColorModeValue(
+                  "blackAlpha.400",
+                  "whiteAlpha.400"
+                )}
+              />
+            </FormControl>
+          </Flex>
           <FormControl>
             <FormLabel fontSize={"lg"} fontWeight={"bold"}>
               Bio
@@ -92,20 +120,6 @@ const EditProfile = () => {
               placeholder="Bio..."
               _placeholder={{ color: "gray.500" }}
               resize={"none"}
-              borderColor={useColorModeValue(
-                "blackAlpha.400",
-                "whiteAlpha.400"
-              )}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel fontSize={"lg"} fontWeight={"bold"}>
-              Password
-            </FormLabel>
-            <Input
-              placeholder="password"
-              _placeholder={{ color: "gray.500" }}
-              type="password"
               borderColor={useColorModeValue(
                 "blackAlpha.400",
                 "whiteAlpha.400"
