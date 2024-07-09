@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 const useFetch = (url, method = "GET") => {
   const [responseData, setData] = useState([]);
-  const [status, setStatus] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [options, setOptions] = useState("");
+  const [statusCode, setStatusCode] = useState(null);
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const fetchURL = `${API_URL}/${url}`;
 
@@ -16,7 +16,7 @@ const useFetch = (url, method = "GET") => {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: 'include'
+      credentials: "include",
     });
   };
 
@@ -27,28 +27,28 @@ const useFetch = (url, method = "GET") => {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: 'include'
+      credentials: "include",
     });
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
+        setError("");
+
         const response = await fetch(fetchURL, { ...options });
 
+        setStatusCode(response.status);
+
         if (!response.ok) {
-          const { error } = await response.json();
-          throw new Error(error);
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.error || "An error occurred");
         }
+
         const data = await response.json();
-        setStatus("ok");
         setData(data);
-        setLoading(false);
-        setError("")
       } catch (error) {
-        setStatus("error")
-        setLoading(false);
         setError(error);
       } finally {
         setLoading(false);
@@ -65,7 +65,14 @@ const useFetch = (url, method = "GET") => {
     }
   }, [fetchURL, options, method]);
 
-  return {status,responseData, isLoading, error, postData, putData};
+  return {
+    responseData,
+    statusCode,
+    isLoading,
+    error,
+    postData,
+    putData,
+  };
 };
 
 export default useFetch;

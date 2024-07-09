@@ -4,6 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaCommentAlt } from "react-icons/fa";
 
 const ProfilePagePost = ({ post }) => {
+  console.log(post);
   return (
     <GridItem
       h={{ base: "150px", md: "200px", lg: "300px" }}
@@ -12,12 +13,12 @@ const ProfilePagePost = ({ post }) => {
     >
       <AspectRatio ratio={16 / 9} overflow={"hidden"} w={"full"} h={"full"}>
         <Image
-          src={post.image}
+          src={post.images[0]}
           w={"full"}
           h={"full"}
           loading="lazy"
           objectFit={"cover"}
-          objectPosition={"top"}
+          objectPosition={"center"}
         />
       </AspectRatio>
       <Box

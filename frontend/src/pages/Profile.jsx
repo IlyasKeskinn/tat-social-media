@@ -1,29 +1,66 @@
-import { Grid, VStack } from "@chakra-ui/react";
+import {
+  AbsoluteCenter,
+  Box,
+  Center,
+  Flex,
+  Grid,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
 import UserHeader from "../components/UserHeader";
 import ProfilePagePost from "../components/ProfilePagePost";
 
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import useShowToast from "../hooks/showToast";
+
+import useFetch from "../hooks/useFetch";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+
 const Profile = () => {
-  //TODO
-  const posts = [
-    { image: "./public/post_1.jpg" },
-    { image: "./public/post_2.jpg" },
-    { image: "./public/post_3.jpg" },
-    { image: "./public/post_4.jpg" },
-    { image: "./public/post_5.jpg" },
-    { image: "./public/post_6.jpg" },
-    { image: "./public/post_7.jpg" },
-    { image: "./public/post_8.jpg" },
-    { image: "./public/post_9.jpg" },
-  ];
-  return (
-    <VStack>
-      <UserHeader />
-      <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>
-        {posts.map((post, index) => {
-          return <ProfilePagePost key={index} post={post} />;
-        })}
-      </Grid>
+  const { responseData: user, isLoading, statusCode } = useGetUserProfile();
+  const userName = useParams().query;
+  const URL = `post/getuserPost/${userName}`;
+  const showToast = useShowToast();
+  const [posts, setPost] = useState([]);
+
+  const {
+    responseData,
+    isLoading: fetchingPost,
+    statusCode: postFetchStatusCode,
+    error,
+  } = useFetch(URL);
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+    if (statusCode == 200) {
+      console.log(responseData);
+      setPost(responseData);
+    }
+  }, [responseData, error]);
+
+  return isLoading && fetchingPost ? (
+    <VStack alignItems={"center"} justifyContent={"center"} flex={1}>
+      <Spinner />
+    </VStack>
+  ) : (
+    <VStack flex={1}>
+      <UserHeader posts={posts.length} user={user} />
+      {posts.length <= 0 ? (
+        <Text fontSize={"lg"} mt={"5"}>
+          User has not posts.
+        </Text>
+      ) : (
+        <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>
+          {posts.map((post, index) => {
+            return <ProfilePagePost key={index} post={post} />;
+          })}
+        </Grid>
+      )}
     </VStack>
   );
 };

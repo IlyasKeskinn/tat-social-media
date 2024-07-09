@@ -16,7 +16,7 @@ function App() {
       <Route element={<ProtectedRoutes condition={user} routes={"/auth"} />}>
         <Route path="" element={<MainLayout />}>
           <Route path="/" element={<Feed />} />
-          <Route path="profile/:username" element={<Profile />} />
+          <Route path="profile/:query" element={<Profile />} />
           <Route path="profile/edit/:username" element={<EditProfile />} />
         </Route>
       </Route>

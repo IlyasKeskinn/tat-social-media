@@ -14,9 +14,12 @@ import {
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { ShareSvg } from "./Actions";
+
 import showToast from "../hooks/showToast";
+
 import { useNavigate } from "react-router";
-const UserHeader = () => {
+
+const UserHeader = ({ user, posts }) => {
   const toast = showToast();
   const navigaye = useNavigate();
 
@@ -32,7 +35,7 @@ const UserHeader = () => {
   };
 
   return (
-    <VStack>
+    <VStack  w={"full"}>
       <Flex
         w={"full"}
         gap={4}
@@ -44,21 +47,21 @@ const UserHeader = () => {
             <Box>
               <Avatar
                 size={{ base: "xl", lg: "2xl" }}
-                name="John Doe"
-                src={"https://bit.ly/dan-abramov"}
+                name={user.fullName}
+                src={user.profilePic}
                 rounded={"full"}
                 shadow={"xl"}
                 border={"1px solid"}
               />
             </Box>
-            <Text fontSize={"md"}>@fidelio</Text>
+            <Text fontSize={"md"}>@{user.userName}</Text>
           </Flex>
           <VStack w={"full"} alignItems={"start"} gap={2} mx={6} my={2}>
             <Flex w={"full"} justifyContent={"space-between"}>
               <Flex direction={"column"} alignItems={"start"}>
                 <Flex alignItems={"center"} gap={4}>
                   <Text fontSize={{ base: "xl" }} fontWeight={"bold"}>
-                    Ilyas Keskin
+                  {user.fullName}
                   </Text>
                 </Flex>
               </Flex>
@@ -97,19 +100,19 @@ const UserHeader = () => {
               <Flex gap={4}>
                 <Text fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
-                    5421
+                  {user.followers?.length}
                   </Text>{" "}
                   followers
                 </Text>
                 <Text fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
-                    421
+                  {user.following?.length}
                   </Text>{" "}
                   following
                 </Text>
                 <Text fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
-                    21
+                    {posts}
                   </Text>{" "}
                   post
                 </Text>
@@ -136,9 +139,7 @@ const UserHeader = () => {
                 </Button>
               </Flex>
               <Text fontSize={"sm"}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptas omnis modi quo, repellendus commodi esse mollitia
-                dolores vitae aperiam officiis?
+              {user.bio}
               </Text>
             </Flex>
           </VStack>

@@ -18,8 +18,13 @@ import { GoSun } from "react-icons/go";
 import MenuItem from "./MenuItem";
 import LogoutButton from "./LogoutButton";
 
+import userAtom from "../atoms/userAtom";
+import { useRecoilValue } from "recoil";
+
 const Sidebar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const user = useRecoilValue(userAtom);
 
   return (
     <>
@@ -51,7 +56,7 @@ const Sidebar = () => {
             </Heading>
           </Flex>
           <MenuItem title={"feed"} to={"/"} icon={IoHomeOutline} />
-          <MenuItem title={"Profile"} to={"/profile/:ilyas"} icon={FaRegUser} />
+          <MenuItem title={"Profile"} to={`/profile/${user.userName}`} icon={FaRegUser} />
           <MenuItem title={"Explore"} icon={MdOutlineExplore} />
           <MenuItem title={"Search"} icon={BsSearch} />
           <MenuItem title={"Message"} icon={AiOutlineMessage} />

@@ -24,7 +24,7 @@ const getUserPost = async (req, res) => {
     return res.status(404).json({ error: "User not found!" });
   }
 
-  const posts = await Post.find({ postedBy: user._id }).sort({ createtAt: -1 });
+  const posts = await Post.find({ postedBy: user._id }).sort({ createdAt: -1 });
   res.json(posts);
 };
 
@@ -48,7 +48,7 @@ const getFeedPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { postedBy, text, tatmoji } = req.body;
-  let images = req.body;
+  let {images} = req.body;
   const signUser = req.user;
   if (!postedBy) {
     return res.status(400).json({ error: "UserId is required!" });

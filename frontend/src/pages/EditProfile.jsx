@@ -46,12 +46,12 @@ const EditProfile = () => {
   const UPDATE_URL = `user/update/${user._id}`;
 
   const showToast = useShowToast();
-  
+
   const fileRef = useRef(null);
   const navigate = useNavigate();
 
   const { handleImageChange, imgUrl } = usePrevImg();
-  const { status, putData, responseData, error, isLoading } = useFetch(
+  const { statusCode, putData, responseData, error, isLoading } = useFetch(
     UPDATE_URL,
     "PUT"
   );
@@ -70,7 +70,7 @@ const EditProfile = () => {
   });
 
   const onSubmit = (data) => {
-    const updateProfile = { ...data, profilePic : imgUrl };
+    const updateProfile = { ...data, profilePic: imgUrl };
     putData(updateProfile);
   };
 
@@ -78,12 +78,12 @@ const EditProfile = () => {
     if (error) {
       showToast("Error", error.message, "error");
     }
-    if (status === "ok") {
+    if (statusCode === 200) {
       setUser(responseData);
       showToast("Success", "Updated profile!", "success");
-      navigate(`/profile/${user._id}`)
+      navigate(`/profile/${user._id}`);
     }
-  }, [error, status]);
+  }, [error, statusCode]);
 
   return (
     <Flex

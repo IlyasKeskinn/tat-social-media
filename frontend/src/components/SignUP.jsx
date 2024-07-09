@@ -58,7 +58,7 @@ const SignUP = () => {
   const showToast = useShowToast();
 
   const REGISTER_URL = "user/register";
-  const { status, responseData, isLoading, error, postData } = useFetch(
+  const { statusCode, responseData, isLoading, error, postData } = useFetch(
     REGISTER_URL,
     "POST"
   );
@@ -79,7 +79,7 @@ const SignUP = () => {
   };
 
   useEffect(() => {
-    if (status === "ok") {
+    if (statusCode == 201) {
       localStorage.setItem("tatuser", JSON.stringify(responseData));
       setUserState(responseData);
       reset();
@@ -88,7 +88,8 @@ const SignUP = () => {
     if (error) {
       showToast("Error", error.message, "error");
     }
-  }, [status, error]);
+  }, [responseData, error]);
+
 
   return (
     <Box position={"relative"}>

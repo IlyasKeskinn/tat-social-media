@@ -41,7 +41,7 @@ const Login = () => {
   const showToast = useShowToast();
 
   const LOGIN_URL = "user/login";
-  const { status, responseData, isLoading, error, postData } = useFetch(
+  const { statusCode, responseData, isLoading, error, postData } = useFetch(
     LOGIN_URL,
     "POST"
   );
@@ -59,18 +59,23 @@ const Login = () => {
 
   const onSubmit = (data) => {
     postData(data);
+    if (statusCode == 200) {
+      localStorage.setItem("tatuser", JSON.stringify(responseData));
+      setUserState(responseData);
+      reset();
+    }
   };
 
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
     }
-    if (status === "ok") {
+    if (statusCode == 200) {
       localStorage.setItem("tatuser", JSON.stringify(responseData));
       setUserState(responseData);
       reset();
     }
-  }, [status, error]);
+  }, [error,responseData]);
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
