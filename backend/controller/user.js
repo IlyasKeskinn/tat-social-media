@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { generateTokenAndCookie } = require("../helpers/generateTokenAndCookie");
 const isValidEmail = require("../helpers/emailController");
 const { mongoose } = require("mongoose");
+const cloudinary = require("cloudinary");
 
 const getProfile = async (req, res) => {
   const { query } = req.params;
@@ -136,10 +137,19 @@ const updateProfile = async (req, res) => {
   ) {
     return res.status(400).json({ error: "Username already taken!" });
   }
-  user.fullName = fullName;
-  user.bio = bio || "";
-  user.profilePic = profilePic || "";
-  user.userName = userName;
+
+  if (profilePic) {
+    if (user.profilePic) {
+      await cloudinary.v2.uploader.destroy(user.profilePic.split("/").pop().split(".")[0])
+    }
+    const uploadResponse = await cloudinary.v2.uploader.upload(profilePic);
+    profilePic = uploadResponse.secure_url;
+  }
+
+  user.fullName = fullName || user.fullName;
+  user.bio = bio || user.bio;
+  user.profilePic = profilePic || user.profilePic;
+  user.userName = userName || user.userName;
 
   await user.save();
 

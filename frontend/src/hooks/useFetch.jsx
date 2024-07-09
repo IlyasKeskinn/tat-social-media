@@ -16,6 +16,7 @@ const useFetch = (url, method = "GET") => {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: 'include'
     });
   };
 
@@ -26,6 +27,7 @@ const useFetch = (url, method = "GET") => {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: 'include'
     });
   };
 

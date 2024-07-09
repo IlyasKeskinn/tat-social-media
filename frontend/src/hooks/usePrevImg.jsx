@@ -14,7 +14,24 @@ const usePrevImg = () => {
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        setImgUrl(reader.result);
+        const img = new Image();
+        img.src = reader.result;
+
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          ctx.drawImage(img, 0, 0);
+
+          const reducedQualityImg = canvas.toDataURL("image/jpeg", 0.6);
+
+          setImgUrl(reducedQualityImg);
+        };
+
+        // setImgUrl(reader.result);
       };
 
       reader.readAsDataURL(file);

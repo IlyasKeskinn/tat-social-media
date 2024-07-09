@@ -14,13 +14,76 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  userName: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(24, "Username must be at most 24 characters"),
+  fullName: z
+    .string()
+    .min(6, "Full name must be at least 6 characters")
+    .max(48, "Full name must be at most 48 characters"),
+  bio: z.string().max(300, "Bio must be at most 300 characters"),
+});
 
 import usePrevImg from "../hooks/usePrevImg";
+import useFetch from "../hooks/useFetch";
+import useShowToast from "../hooks/showToast";
+
+import { useRecoilState } from "recoil";
+import userAtom from "../atoms/userAtom";
+import { useNavigate } from "react-router";
 
 const EditProfile = () => {
+  const [user, setUser] = useRecoilState(userAtom);
+
+  const UPDATE_URL = `user/update/${user._id}`;
+
+  const showToast = useShowToast();
+  
   const fileRef = useRef(null);
+  const navigate = useNavigate();
+
   const { handleImageChange, imgUrl } = usePrevImg();
+  const { status, putData, responseData, error, isLoading } = useFetch(
+    UPDATE_URL,
+    "PUT"
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      fullName: user.fullName,
+      userName: user.userName,
+      bio: user.bio,
+    },
+  });
+
+  const onSubmit = (data) => {
+    const updateProfile = { ...data, profilePic : imgUrl };
+    putData(updateProfile);
+  };
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+    if (status === "ok") {
+      setUser(responseData);
+      showToast("Success", "Updated profile!", "success");
+      navigate(`/profile/${user._id}`)
+    }
+  }, [error, status]);
 
   return (
     <Flex
@@ -29,7 +92,7 @@ const EditProfile = () => {
       justifyContent={"center"}
       w={"100%"}
     >
-      <form style={{ width: "100%" }}>
+      <form style={{ width: "100%" }} onSubmit={handleSubmit(onSubmit)}>
         <Stack
           spacing={6}
           w={{ base: "100%", lg: "80%" }}
@@ -55,16 +118,21 @@ const EditProfile = () => {
                 <Box>
                   <Avatar
                     size={"lg"}
-                    name="John Doe"
-                    src={imgUrl}
+                    name={user.fullName}
+                    src={imgUrl || user.profilePic}
                     rounded={"full"}
                     shadow={"xl"}
                     border={"1px solid"}
                   />
                 </Box>
-                <Text fontSize={"md"}>@fidelio</Text>
+                <Text fontSize={"md"}>@{user.userName}</Text>
               </Flex>
-              <Input type="file" display={"none"} ref={fileRef} onChange={handleImageChange} />
+              <Input
+                type="file"
+                display={"none"}
+                ref={fileRef}
+                onChange={handleImageChange}
+              />
               <Center>
                 <Button
                   bg={"blue.400"}
@@ -76,6 +144,7 @@ const EditProfile = () => {
                   onClick={() => {
                     fileRef.current.click();
                   }}
+                  isDisabled={isLoading}
                 >
                   Change photo
                 </Button>{" "}
@@ -95,7 +164,12 @@ const EditProfile = () => {
                   "blackAlpha.400",
                   "whiteAlpha.400"
                 )}
+                {...register("fullName")}
+                isInvalid={errors.fullName}
               />
+              {errors.fullName && (
+                <Text color={"red.500"}>{errors.fullName.message}</Text>
+              )}
             </FormControl>
             <FormControl>
               <FormLabel fontSize={"lg"} fontWeight={"bold"}>
@@ -109,7 +183,11 @@ const EditProfile = () => {
                   "blackAlpha.400",
                   "whiteAlpha.400"
                 )}
+                {...register("userName")}
               />
+              {errors.userName && (
+                <Text color={"red.500"}>{errors.userName.message}</Text>
+              )}
             </FormControl>
           </Flex>
           <FormControl>
@@ -124,6 +202,7 @@ const EditProfile = () => {
                 "blackAlpha.400",
                 "whiteAlpha.400"
               )}
+              {...register("bio")}
             />
           </FormControl>
           <Stack
@@ -139,6 +218,7 @@ const EditProfile = () => {
                 bg: "blue.500",
               }}
               type="submit"
+              isLoading={isLoading}
             >
               Submit
             </Button>
