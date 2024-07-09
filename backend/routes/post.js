@@ -15,7 +15,7 @@ const {
 } = require("../controller/post");
 
 router.get("/getPost/:id", getPostById);
-router.get("/getuserPost/:username", getUserPost);
+router.get("/getuserPost/:query", getUserPost);
 router.get("/feedPosts", getFeedPosts);
 
 router.put("/likeUnlikePost/:id", isAuth, likeUnlikePost);

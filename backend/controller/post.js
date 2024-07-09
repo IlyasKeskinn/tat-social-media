@@ -16,9 +16,18 @@ const getPostById = async (req, res) => {
 };
 
 const getUserPost = async (req, res) => {
-  const { username } = req.params;
+  const { query } = req.params;
 
-  const user = await User.findOne({ userName: username });
+  let user;
+  if (mongoose.Types.ObjectId.isValid(query)) {
+    user = await User.findOne({ _id: query })
+      .select("-password")
+      .select("-updateAt");
+  } else {
+    user = await User.findOne({ userName: query })
+      .select("-password")
+      .select("updateAt");
+  }
 
   if (!user) {
     return res.status(404).json({ error: "User not found!" });
@@ -48,7 +57,7 @@ const getFeedPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { postedBy, text, tatmoji } = req.body;
-  let {images} = req.body;
+  let { images } = req.body;
   const signUser = req.user;
   if (!postedBy) {
     return res.status(400).json({ error: "UserId is required!" });

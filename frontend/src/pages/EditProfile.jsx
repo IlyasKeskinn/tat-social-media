@@ -78,12 +78,13 @@ const EditProfile = () => {
     if (error) {
       showToast("Error", error.message, "error");
     }
-    if (statusCode === 200) {
+    if (statusCode == 200) {
+      localStorage.setItem("tatuser", JSON.stringify(responseData));
       setUser(responseData);
       showToast("Success", "Updated profile!", "success");
       navigate(`/profile/${user._id}`);
     }
-  }, [error, statusCode]);
+  }, [error, responseData]);
 
   return (
     <Flex
