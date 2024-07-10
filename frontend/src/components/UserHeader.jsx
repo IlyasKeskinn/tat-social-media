@@ -26,8 +26,10 @@ import useFollowUnfollow from "../hooks/useFollowUnfollow";
 
 const UserHeader = ({ user, posts }) => {
   const toast = showToast();
-  const navigaye = useNavigate();
+  const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
+  const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
+  console.log(PROFILE_EDIT_URL);
 
   const { handleFollowUnfollow, isLoading, isUserFollowing } =
     useFollowUnfollow(user);
@@ -95,7 +97,7 @@ const UserHeader = ({ user, posts }) => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          navigaye(`/profile/edit/${user.userName}`);
+                          navigate(PROFILE_EDIT_URL);
                         }}
                       >
                         Edit Profile
@@ -135,6 +137,9 @@ const UserHeader = ({ user, posts }) => {
                     color={"white"}
                     _hover={{
                       bg: "blue.500",
+                    }}
+                    onClick={() => {
+                      navigate(PROFILE_EDIT_URL);
                     }}
                   >
                     Edit Profile

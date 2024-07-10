@@ -1,6 +1,7 @@
 import React from "react";
 import Post from "../components/Post";
 import { Flex, Text } from "@chakra-ui/react";
+import CreatePost from "../components/CreatePost";
 
 const Feed = () => {
   const posts = [
@@ -24,15 +25,16 @@ const Feed = () => {
   return (
     <>
       <Flex flex={2} alignItems={"center"} flexDirection={"column"}>
+        <CreatePost />
         {posts.map((post, index) => {
           return <Post key={index} post={post} />;
         })}
       </Flex>
       <Flex flex={2} display={{ base: "none", lg: "flex" }}>
-        <Text>
+        {/* <Text>
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis
           provident beatae fugiat?
-        </Text>
+        </Text> */}
       </Flex>
     </>
   );

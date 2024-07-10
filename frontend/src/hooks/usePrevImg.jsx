@@ -39,7 +39,7 @@ const usePrevImg = () => {
       showToast("Invalid Format", "Please chose an image!", "error");
     }
   };
-  return { imgUrl, handleImageChange };
+  return { imgUrl, handleImageChange,setImgUrl };
 };
 
 export default usePrevImg;
