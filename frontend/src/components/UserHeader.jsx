@@ -10,6 +10,7 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Grid,
 } from "@chakra-ui/react";
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -18,10 +19,20 @@ import { ShareSvg } from "./Actions";
 import showToast from "../hooks/showToast";
 
 import { useNavigate } from "react-router";
+import { useRecoilValue } from "recoil";
+
+import userAtom from "../atoms/userAtom";
+import useFollowUnfollow from "../hooks/useFollowUnfollow";
 
 const UserHeader = ({ user, posts }) => {
   const toast = showToast();
   const navigaye = useNavigate();
+  const currentUser = useRecoilValue(userAtom);
+
+  const { handleFollowUnfollow, isLoading, isUserFollowing } =
+    useFollowUnfollow(user);
+
+  const isProfileOwner = currentUser?._id === user?._id;
 
   const handleCopyProfileURL = () => {
     const profileURL = window.location.href;
@@ -35,7 +46,7 @@ const UserHeader = ({ user, posts }) => {
   };
 
   return (
-    <VStack  w={"full"}>
+    <VStack w={"full"}>
       <Flex
         w={"full"}
         gap={4}
@@ -61,7 +72,7 @@ const UserHeader = ({ user, posts }) => {
               <Flex direction={"column"} alignItems={"start"}>
                 <Flex alignItems={"center"} gap={4}>
                   <Text fontSize={{ base: "xl" }} fontWeight={"bold"}>
-                  {user.fullName}
+                    {user.fullName}
                   </Text>
                 </Flex>
               </Flex>
@@ -100,13 +111,13 @@ const UserHeader = ({ user, posts }) => {
               <Flex gap={4}>
                 <Text fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
-                  {user.followers?.length}
+                    {user.followers?.length}
                   </Text>{" "}
                   followers
                 </Text>
                 <Text fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
-                  {user.following?.length}
+                    {user.following?.length}
                   </Text>{" "}
                   following
                 </Text>
@@ -117,30 +128,46 @@ const UserHeader = ({ user, posts }) => {
                   post
                 </Text>
               </Flex>
-              <Flex gap={4}>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
-                >
-                  Follow
-                </Button>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
-                >
-                  Message
-                  <ShareSvg />
-                </Button>
-              </Flex>
-              <Text fontSize={"sm"}>
-              {user.bio}
-              </Text>
+              {isProfileOwner ? (
+                <Flex gap={4}>
+                  <Button
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                  >
+                    Edit Profile
+                  </Button>
+                </Flex>
+              ) : (
+                <Grid templateColumns={"repeat(2, 1fr)"} gap={4}>
+                  <Button
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    onClick={() => {
+                      handleFollowUnfollow();
+                    }}
+                    isLoading={isLoading}
+                  >
+                    {isUserFollowing ? "Unfollow" : "Follow"}
+                  </Button>
+                  <Button
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                  >
+                    Message
+                    <ShareSvg />
+                  </Button>
+                </Grid>
+              )}
+              <Text fontSize={"sm"}>{user.bio}</Text>
             </Flex>
           </VStack>
         </Flex>
