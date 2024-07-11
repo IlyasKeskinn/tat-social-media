@@ -123,7 +123,7 @@ const CreatePost = () => {
       >
         <Flex w={"full"} justifyContent={"space-between"}>
           <Flex>
-            <Avatar size={"md"} name="John Doe" src={""} />
+            <Avatar size={"md"} name={user.fullName} src={user.profilePic} />
           </Flex>
           <Flex w={"full"} justifyContent={"center"} alignItems={"center"}>
             <Button

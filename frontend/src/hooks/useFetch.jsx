@@ -37,7 +37,10 @@ const useFetch = (url, method = "GET") => {
         setLoading(true);
         setError("");
 
-        const response = await fetch(fetchURL, { ...options });
+        const response = await fetch(fetchURL, {
+          ...options,
+          credentials: "include",
+        });
 
         setStatusCode(response.status);
 

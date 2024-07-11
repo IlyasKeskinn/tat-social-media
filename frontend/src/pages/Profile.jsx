@@ -19,6 +19,7 @@ import useFetch from "../hooks/useFetch";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import UserNotFoundPage from "../components/UserNotFoundPage";
+import Loading from "../components/Loading";
 
 const Profile = () => {
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
@@ -48,9 +49,7 @@ const Profile = () => {
   }
 
   return isLoading && fetchingPost ? (
-    <VStack alignItems={"center"} justifyContent={"center"} flex={1}>
-      <Spinner />
-    </VStack>
+    <Loading />
   ) : (
     <VStack flex={1}>
       <UserHeader posts={posts.length} user={user} />

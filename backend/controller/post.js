@@ -40,8 +40,7 @@ const getUserPost = async (req, res) => {
 
 const getFeedPosts = async (req, res) => {
   const userId = req.user._id;
-
-  const currentUser = await User.find(userId);
+  const currentUser = await User.findOne(userId);
 
   if (!currentUser) {
     return res.status(403).json({ error: "Unauthorized!" });

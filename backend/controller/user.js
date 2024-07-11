@@ -123,8 +123,7 @@ const updateProfile = async (req, res) => {
     return res.status(404).json({ error: "User not found!" });
   }
 
-  console.log(id);
-  console.log(userId);
+
   if (id !== userId.toString()) {
     return res
       .status(400)

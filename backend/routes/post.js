@@ -16,7 +16,7 @@ const {
 
 router.get("/getPost/:id", getPostById);
 router.get("/getuserPost/:query", getUserPost);
-router.get("/feedPosts", getFeedPosts);
+router.get("/feedPosts", isAuth, getFeedPosts);
 
 router.put("/likeUnlikePost/:id", isAuth, likeUnlikePost);
 router.put("/makecomment/:id", isAuth, postComment);
