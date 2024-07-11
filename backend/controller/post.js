@@ -2,6 +2,7 @@ require("express-async-errors");
 const mongoose = require("mongoose");
 const { User } = require("../modules/user");
 const { Post } = require("../modules/post");
+const cloudinary = require("cloudinary");
 
 const getPostById = async (req, res) => {
   const postId = req.params.id;
@@ -79,7 +80,8 @@ const createPost = async (req, res) => {
   if (!images) {
     return res.status(400).json({ error: "Image is required!" });
   }
-
+  const SECURE_URL = (await cloudinary.v2.uploader.upload(images)).secure_url;
+  images = [SECURE_URL];
   const newPost = await Post({ postedBy, text, tatmoji, images });
   await newPost.save();
 

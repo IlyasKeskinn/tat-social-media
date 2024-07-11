@@ -29,7 +29,6 @@ const UserHeader = ({ user, posts }) => {
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
   const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
-  console.log(PROFILE_EDIT_URL);
 
   const { handleFollowUnfollow, isLoading, isUserFollowing } =
     useFollowUnfollow(user);
