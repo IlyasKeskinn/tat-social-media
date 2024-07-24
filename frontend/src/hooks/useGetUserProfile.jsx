@@ -3,11 +3,14 @@ import useFetch from "./useFetch";
 import { useEffect, useState } from "react";
 import useShowToast from "./showToast";
 
-const useGetUserProfile = () => {
-  const query = useParams().query;
+const useGetUserProfile = (userName) => {
+  let { query } = useParams();
+  if (typeof userName !== "undefined") {
+    query = userName;
+  }
   const URL = `user/profile/${query}`;
 
-  const { responseData, isLoading, error,statusCode } = useFetch(URL);
+  const { responseData, isLoading, error, statusCode } = useFetch(URL);
 
   const showToast = useShowToast();
 
@@ -17,7 +20,7 @@ const useGetUserProfile = () => {
     }
   }, [error, showToast]);
 
-  return { responseData, isLoading,statusCode };
+  return { responseData, isLoading, statusCode };
 };
 
 export default useGetUserProfile;

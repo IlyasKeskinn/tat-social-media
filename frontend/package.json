@@ -16,6 +16,7 @@
     "@fontsource-variable/open-sans": "^5.0.29",
     "@fontsource-variable/roboto-slab": "^5.0.20",
     "@hookform/resolvers": "^3.9.0",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

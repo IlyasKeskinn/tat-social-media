@@ -1,14 +1,21 @@
+import { useNavigate } from "react-router-dom";
+
 import { AspectRatio, GridItem, Image, Box, Flex } from "@chakra-ui/react";
 
 import { FaHeart } from "react-icons/fa";
 import { FaCommentAlt } from "react-icons/fa";
 
 const ProfilePagePost = ({ post }) => {
+  const navigate = useNavigate();
+
   return (
     <GridItem
       h={{ base: "150px", md: "200px", lg: "300px" }}
       position={"relative"}
       cursor={"pointer"}
+      onClick={() => {
+        navigate(`/post/${post._id}`);
+      }}
     >
       <AspectRatio ratio={16 / 9} overflow={"hidden"} w={"full"} h={"full"}>
         <Image
@@ -37,10 +44,10 @@ const ProfilePagePost = ({ post }) => {
       >
         <Flex alignItems={"center"} gap={2}>
           <Flex alignItems={"center"} gap={2}>
-            85 <FaHeart />
+            {post.likes.length} <FaHeart />
           </Flex>
           <Flex alignItems={"center"} gap={2}>
-            12 <FaCommentAlt />
+            {post.comments.length} <FaCommentAlt />
           </Flex>
         </Flex>
       </Box>

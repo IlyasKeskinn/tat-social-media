@@ -13,7 +13,7 @@ const getPostById = async (req, res) => {
     return res.status(404).json({ error: " Post not found!" });
   }
 
-  res.json(post);
+  res.status(200).json(post);
 };
 
 const getUserPost = async (req, res) => {
@@ -72,8 +72,8 @@ const createPost = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized to create post!" });
   }
 
-  if (!text || !tatmoji) {
-    return res.status(400).json({ error: "Text and tatmoji is required!" });
+  if (!tatmoji) {
+    return res.status(400).json({ error: "Tatmoji is required!" });
   }
 
   if (!images) {
