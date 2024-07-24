@@ -1,31 +1,16 @@
-import {
-  Flex,
-  Text,
-  Avatar,
-  Box,
-  Image,
-  AspectRatio,
-  Divider,
-  Menu,
-  MenuButton,
-  Portal,
-  MenuList,
-} from "@chakra-ui/react";
-
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { Flex, Text, Box, Image, AspectRatio, Divider } from "@chakra-ui/react";
 
 import Actions from "./Actions";
 
 import { Link as LinkRouter } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
 
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import PostOwnerActions from "./PostOwnerActions";
-import PostActions from "./PostActions";
 import Loading from "./Loading";
+import PostInfo from "./PostInfo";
+import PostAvatar from "./PostAvatar";
 
 const Post = ({ post, postedBy }) => {
   const postID = post._id;
@@ -56,13 +41,7 @@ const Post = ({ post, postedBy }) => {
       {user && (
         <Flex gap={3} mb={4} py={5} w={"full"}>
           <Flex direction={"column"} alignItems={"center"}>
-            <Flex gap={2} alignItems={"center"}>
-              <Avatar
-                size={"md"}
-                name={user?.fullName}
-                src={user?.profilePic}
-              />
-            </Flex>
+            <PostAvatar postedBy={user} />
             <Box w={"1px"} h={"full"} bg={"lightgrey"} my={2}></Box>
             <Box>
               <Text fontSize={"2xl"} align={"center"}>
@@ -71,45 +50,7 @@ const Post = ({ post, postedBy }) => {
             </Box>
           </Flex>
           <Flex flex={1} direction={"column"} gap={2}>
-            <Flex
-              w={"full"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Flex direction={"column"} alignItems={"start"}>
-                <Text fontSize={{ base: "md" }} fontWeight={"bold"}>
-                  {user?.fullName}
-                </Text>
-                <Text fontSize={"xs"}>@{user?.userName}</Text>
-              </Flex>
-
-              <Flex gap={4} alignItems={"center"}>
-                <Text fontSize={"xs"}>
-                  {formatDistanceToNow(new Date(post.createdAt))} ago 
-                </Text>
-                <Menu>
-                  <MenuButton>
-                    <HiOutlineDotsHorizontal
-                      cursor={"pointer"}
-                      fontSize={"24px"}
-                    />
-                  </MenuButton>
-                  <Portal>
-                    <MenuList>
-                      {postOwner ? (
-                        <>
-                          <PostOwnerActions postId={postID} />
-                        </>
-                      ) : (
-                        <>
-                          <PostActions postId={postID} postedBy={user} />
-                        </>
-                      )}
-                    </MenuList>
-                  </Portal>
-                </Menu>
-              </Flex>
-            </Flex>
+            <PostInfo postOwner={postOwner} post={post} postedBy={user} />
             <LinkRouter style={{ width: "100%" }} to={`/post/${postID}`}>
               <AspectRatio
                 ratio={4 / 3}
