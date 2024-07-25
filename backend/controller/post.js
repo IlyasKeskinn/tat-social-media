@@ -102,9 +102,13 @@ const deletePost = async (req, res) => {
   if (post.postedBy.toString() !== req.user._id.toString()) {
     returnres.status(401).json({ error: "Unauthorized to delete this post!" });
   }
+  const postImage = post.images[0];
 
   await Post.findByIdAndDelete(postId);
-  res.json({ messeage: "Post is successfully deleted!" });
+
+  cloudinary.v2.uploader.destroy(postImage.split("/").pop().split(".")[0]);
+
+  res.json({ messeage: "Post successfully deleted!" });
 };
 
 const likeUnlikePost = async (req, res) => {

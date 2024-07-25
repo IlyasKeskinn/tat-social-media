@@ -13,17 +13,13 @@ connectMongoDB();
 //cloudinary config
 const cloudinary = require("./config/cloudinaryConfig.js");
 
-
-
 const corsOptions = {
-  // origin: process.env.FRONTEND_SERVER,
-  origin : "http://localhost:5173",
-  credentials: true, 
+  origin: process.env.FRONTEND_SERVER,
+  credentials: true,
 };
 
-
 //middlewares
-app.use(express.json({limit : "20mb"}));
+app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true })); // To parse form data in the req.body
 app.use(cors(corsOptions));
 app.use(cookieParser());
