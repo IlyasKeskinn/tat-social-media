@@ -1,8 +1,6 @@
 import {
   Flex,
   Box,
-  Stack,
-  Center,
   Avatar,
   Button,
   useColorModeValue,

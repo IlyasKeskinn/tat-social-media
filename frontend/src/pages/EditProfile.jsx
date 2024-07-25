@@ -204,7 +204,9 @@ const EditProfile = () => {
                 "whiteAlpha.400"
               )}
               {...register("bio")}
+              isInvalid={errors.bio}
             />
+            {errors.bio && <Text color={"red.500"}>{errors.bio.message}</Text>}
           </FormControl>
           <Stack
             spacing={6}

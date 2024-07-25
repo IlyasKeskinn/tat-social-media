@@ -1,13 +1,4 @@
-import {
-  AbsoluteCenter,
-  Box,
-  Center,
-  Flex,
-  Grid,
-  Spinner,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Grid, Text, VStack } from "@chakra-ui/react";
 
 import UserHeader from "../components/UserHeader";
 import ProfilePagePost from "../components/ProfilePagePost";

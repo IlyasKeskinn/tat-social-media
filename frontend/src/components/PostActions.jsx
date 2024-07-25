@@ -1,6 +1,5 @@
 import { MenuItem } from "@chakra-ui/react";
 
-import { FiUserPlus } from "react-icons/fi";
 import { BsBookmarkStar } from "react-icons/bs";
 import { CiMedicalClipboard } from "react-icons/ci";
 import { MdBlock } from "react-icons/md";
@@ -15,10 +14,6 @@ const PostActions = ({ postId, postedBy }) => {
   return (
     <>
       <MenuItem fontSize={"lg"}>
-        <FiUserPlus style={{ marginRight: "8px" }} />
-        Follow {postedBy.userName}
-      </MenuItem>
-      <MenuItem fontSize={"lg"}>
         <BsBookmarkStar style={{ marginRight: "8px" }} />
         Save Bookmarks
       </MenuItem>
@@ -29,7 +24,7 @@ const PostActions = ({ postId, postedBy }) => {
         fontSize={"lg"}
       >
         <CiMedicalClipboard style={{ marginRight: "8px" }} />
-        Send the post.
+        Copy post url.
       </MenuItem>
 
       <MenuItem fontSize={"lg"}>
