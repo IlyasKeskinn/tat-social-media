@@ -13,12 +13,12 @@ import PostInfo from "./PostInfo";
 import PostAvatar from "./PostAvatar";
 import postAtom from "../atoms/postAtom";
 
-const Post = ({ post, postedBy }) => {
+const Post = ({ post }) => {
   const [user, setUser] = useState(null);
   const [postOwner, setPostOwner] = useState(null);
   const [posts, setPosts] = useRecoilState(postAtom);
 
-  const URL = `user/profile/${postedBy}`;
+  const URL = `user/profile/${post?.postedBy}`;
   const postID = post._id;
 
   const { responseData, isLoading, error, statusCode } = useFetch(URL);
@@ -42,7 +42,7 @@ const Post = ({ post, postedBy }) => {
   return (
     <>
       {isLoading && <Loading />}
-      {user && (
+      {user && post && (
         <Flex gap={3} mb={4} py={5} w={"full"}>
           <Flex direction={"column"} alignItems={"center"}>
             <PostAvatar postedBy={user} />
@@ -75,7 +75,7 @@ const Post = ({ post, postedBy }) => {
               </AspectRatio>
             </LinkRouter>
             <Text className="nonSelectableText">{post.text}</Text>
-            <Actions />
+            <Actions currentPost={post} />
             <Divider />
           </Flex>
         </Flex>

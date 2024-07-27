@@ -123,7 +123,7 @@ const UserPost = () => {
               />
             </AspectRatio>
             <Text className="nonSelectableText">{currentPost.text}</Text>
-            <Actions />
+            <Actions currentPost={currentPost} />
             <Divider />
           </Flex>
         </Flex>

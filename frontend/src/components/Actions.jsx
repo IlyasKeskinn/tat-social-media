@@ -1,11 +1,63 @@
 import { Flex, Box, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import postAtom from "../atoms/postAtom";
+import useFetch from "../hooks/useFetch";
+import useShowToast from "../hooks/showToast";
 
-const Actions = () => {
-  const [liked, setLiked] = useState(false);
+const Actions = ({ currentPost }) => {
+  const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;
+  const COMMENT_URL = `post/makecomment/${currentPost._id}`;
+  const user = useRecoilValue(userAtom);
+  const showToast = useShowToast();
+
+  const [liked, setLiked] = useState(currentPost.likes.includes(user?._id));
+  const [posts, setPosts] = useRecoilState(postAtom);
+
+  const {
+    isLoading: isLiking,
+    statusCode,
+    error,
+    putData,
+  } = useFetch(LIKE_URL, "PUT");
+
   const handleLiked = () => {
+    if (!user)
+      return showToast(
+        "Error",
+        "You must be logged in to like a post",
+        "error"
+      );
+    if (isLiking) {
+      return;
+    }
+    putData();
+    if (!liked) {
+      const updatedPosts = posts.map((post) => {
+        if (post._id === currentPost._id) {
+          return { ...post, likes: [...post.likes, user._id] };
+        }
+        return post;
+      });
+      setPosts(updatedPosts);
+    } else {
+      const updatedPosts = posts.map((post) => {
+        if (post._id === currentPost._id) {
+          return { ...post, likes: post.likes.filter((id) => id !== user._id) };
+        }
+        return post;
+      });
+      setPosts(updatedPosts);
+    }
     setLiked(!liked);
   };
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+  }, [error]);
   return (
     <Flex direction={"column"}>
       <Flex justifyContent={"space-between"} alignItems={"center"}>
@@ -110,11 +162,11 @@ const Actions = () => {
       </Flex>
       <Flex alignItems={"center"} gap={2}>
         <Text className="nonSelectableText" fontSize={"sm"} cursor={"pointer"}>
-          132 Likes
+          {currentPost.likes.length} Likes
         </Text>
         <Box w={1} h={1} bg={"gray"} rounded={"full"}></Box>
         <Text className="nonSelectableText" fontSize={"sm"} cursor={"pointer"}>
-          25 Comments
+          {currentPost.comments.length} Comments
         </Text>
       </Flex>
     </Flex>

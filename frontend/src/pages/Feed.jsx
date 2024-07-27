@@ -32,6 +32,7 @@ const Feed = () => {
     }
   }, [responseData, error, setPosts]);
 
+  console.log(posts);
   return (
     <>
       <Flex flex={2} alignItems={"center"} flexDirection={"column"}>
@@ -43,7 +44,7 @@ const Feed = () => {
         )}
         {isLoading && <Loading />}
         {posts.map((post, index) => {
-          return <Post key={index} post={post} postedBy={post.postedBy} />;
+          return <Post key={index} post={post} />;
         })}
       </Flex>
       <Flex flex={2} display={{ base: "none", lg: "flex" }}>
