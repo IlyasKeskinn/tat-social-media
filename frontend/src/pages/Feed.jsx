@@ -32,7 +32,6 @@ const Feed = () => {
     }
   }, [responseData, error, setPosts]);
 
-  console.log(posts);
   return (
     <>
       <Flex flex={2} alignItems={"center"} flexDirection={"column"}>

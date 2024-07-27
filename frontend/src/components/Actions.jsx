@@ -1,19 +1,39 @@
-import { Flex, Box, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import {
+  Flex,
+  Box,
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Divider,
+  Avatar,
+} from "@chakra-ui/react";
+
+import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postAtom from "../atoms/postAtom";
 import useFetch from "../hooks/useFetch";
 import useShowToast from "../hooks/showToast";
+import UserListModal from "./UserListModal";
 
 const Actions = ({ currentPost }) => {
   const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;
   const COMMENT_URL = `post/makecomment/${currentPost._id}`;
+
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
 
   const [liked, setLiked] = useState(currentPost.likes.includes(user?._id));
   const [posts, setPosts] = useRecoilState(postAtom);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
     isLoading: isLiking,
@@ -58,118 +78,137 @@ const Actions = ({ currentPost }) => {
       showToast("Error", error.message, "error");
     }
   }, [error]);
+
   return (
-    <Flex direction={"column"}>
-      <Flex justifyContent={"space-between"} alignItems={"center"}>
-        <Flex gap={2}>
-          <Box
-            my={2}
-            cursor={"pointer"}
-            onClick={() => {
-              handleLiked();
-            }}
-          >
-            <svg
-              aria-label="Like & Unlike"
-              width="24px"
-              height="24px"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              fill={liked ? "rgb(237, 73, 86)" : "transparent"}
-              xmlns="http://www.w3.org/2000/svg"
+    <>
+      <Flex direction={"column"}>
+        <Flex justifyContent={"space-between"} alignItems={"center"}>
+          <Flex gap={2}>
+            <Box
+              my={2}
+              cursor={"pointer"}
+              onClick={() => {
+                handleLiked();
+              }}
             >
-              <title>Like</title>
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
+              <svg
+                aria-label="Like & Unlike"
+                width="24px"
+                height="24px"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                fill={liked ? "rgb(237, 73, 86)" : "transparent"}
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>Like</title>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                ></path>
-                {liked !== true && (
+                ></g>
+                <g id="SVGRepo_iconCarrier">
                   <path
-                    opacity="0.5"
-                    d="M12 5.50073L10.5 8.5001L14 11.0001L11 14.5001L13 16.5001L12 20.5001"
+                    d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z"
                     stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   ></path>
-                )}
-              </g>
-            </svg>
-          </Box>
-          <Box my={2} cursor={"pointer"}>
-            <svg
-              aria-label="comment"
-              width="24px"
-              height="24px"
-              viewBox="0 0 32 32"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
-              fill="currentColor"
-            >
-              <title>Comment</title>
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                {" "}
+                  {liked !== true && (
+                    <path
+                      opacity="0.5"
+                      d="M12 5.50073L10.5 8.5001L14 11.0001L11 14.5001L13 16.5001L12 20.5001"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>
+                  )}
+                </g>
+              </svg>
+            </Box>
+            <Box my={2} cursor={"pointer"}>
+              <svg
+                aria-label="comment"
+                width="24px"
+                height="24px"
+                viewBox="0 0 32 32"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+                fill="currentColor"
+              >
                 <title>Comment</title>
-                <defs> </defs>{" "}
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                 <g
-                  id="Page-1"
-                  stroke="none"
-                  strokeWidth="1"
-                  fill="none"
-                  fillRule="evenodd"
-                  sketch:type="MSPage"
-                >
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
                   {" "}
+                  <title>Comment</title>
+                  <defs> </defs>{" "}
                   <g
-                    id="Icon-Set"
-                    sketch:type="MSLayerGroup"
-                    transform="translate(-360.000000, -255.000000)"
-                    fill="currentColor"
+                    id="Page-1"
+                    stroke="none"
+                    strokeWidth="1"
+                    fill="none"
+                    fillRule="evenodd"
+                    sketch:type="MSPage"
                   >
                     {" "}
-                    <path
-                      d="M390,277 C390,278.463 388.473,280 387,280 L379,280 L376,284 L373,280 L365,280 C363.527,280 362,278.463 362,277 L362,260 C362,258.537 363.527,257 365,257 L387,257 C388.473,257 390,258.537 390,260 L390,277 L390,277 Z M386.667,255 L365.333,255 C362.388,255 360,257.371 360,260.297 L360,277.187 C360,280.111 362.055,282 365,282 L371.639,282 L376,287.001 L380.361,282 L387,282 C389.945,282 392,280.111 392,277.187 L392,260.297 C392,257.371 389.612,255 386.667,255 L386.667,255 Z"
-                      id="comment-5"
-                      sketch:type="MSShapeGroup"
+                    <g
+                      id="Icon-Set"
+                      sketch:type="MSLayerGroup"
+                      transform="translate(-360.000000, -255.000000)"
+                      fill="currentColor"
                     >
                       {" "}
-                    </path>{" "}
+                      <path
+                        d="M390,277 C390,278.463 388.473,280 387,280 L379,280 L376,284 L373,280 L365,280 C363.527,280 362,278.463 362,277 L362,260 C362,258.537 363.527,257 365,257 L387,257 C388.473,257 390,258.537 390,260 L390,277 L390,277 Z M386.667,255 L365.333,255 C362.388,255 360,257.371 360,260.297 L360,277.187 C360,280.111 362.055,282 365,282 L371.639,282 L376,287.001 L380.361,282 L387,282 C389.945,282 392,280.111 392,277.187 L392,260.297 C392,257.371 389.612,255 386.667,255 L386.667,255 Z"
+                        id="comment-5"
+                        sketch:type="MSShapeGroup"
+                      >
+                        {" "}
+                      </path>{" "}
+                    </g>{" "}
                   </g>{" "}
-                </g>{" "}
-              </g>
-            </svg>
-          </Box>
+                </g>
+              </svg>
+            </Box>
+          </Flex>
+          <ShareSvg />
         </Flex>
-        <ShareSvg />
+        <Flex alignItems={"center"} gap={2}>
+          <Text
+            onClick={onOpen}
+            className="nonSelectableText"
+            fontSize={"sm"}
+            cursor={"pointer"}
+          >
+            {currentPost.likes.length} Likes
+          </Text>
+          <Box w={1} h={1} bg={"gray"} rounded={"full"}></Box>
+          <Text
+            className="nonSelectableText"
+            fontSize={"sm"}
+            cursor={"pointer"}
+          >
+            {currentPost.comments.length} Comments
+          </Text>
+        </Flex>
       </Flex>
-      <Flex alignItems={"center"} gap={2}>
-        <Text className="nonSelectableText" fontSize={"sm"} cursor={"pointer"}>
-          {currentPost.likes.length} Likes
-        </Text>
-        <Box w={1} h={1} bg={"gray"} rounded={"full"}></Box>
-        <Text className="nonSelectableText" fontSize={"sm"} cursor={"pointer"}>
-          {currentPost.comments.length} Comments
-        </Text>
-      </Flex>
-    </Flex>
+
+      {/* Like list */}
+      <UserListModal
+        isOpen={isOpen}
+        onClose={onClose}
+        likesArr={currentPost.likes}
+      />
+    </>
   );
 };
 

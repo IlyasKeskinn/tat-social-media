@@ -123,7 +123,6 @@ const updateProfile = async (req, res) => {
     return res.status(404).json({ error: "User not found!" });
   }
 
-
   if (id !== userId.toString()) {
     return res
       .status(400)
@@ -189,6 +188,17 @@ const followUnfollowUser = async (req, res) => {
   }
 };
 
+const fetchlikeUsers = async (req, res) => {
+  const likedUsersArray = req.body;
+
+  const likedUsers = await User.find({ _id: { $in: likedUsersArray } }).select(`profilePic userName fullName`);
+
+  if (!likedUsers) {
+    return res.status(404).json({ message: "No likes" });
+  }
+
+  res.status(200).json(likedUsers);
+};
 module.exports = {
   registerUser,
   signIn,
@@ -196,4 +206,5 @@ module.exports = {
   getProfile,
   logout,
   followUnfollowUser,
+  fetchlikeUsers,
 };
