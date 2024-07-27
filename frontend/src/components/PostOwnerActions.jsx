@@ -28,6 +28,7 @@ const PostOwnerActions = ({ postId }) => {
   const currentUser = useRecoilValue(userAtom);
   const copyPost = useCopyPost();
   const URL = `post/deletepost/${postId}`;
+  
   const { handleDelete, isLoading, deleted } = useDelete(
     postId,
     URL,

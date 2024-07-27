@@ -11,13 +11,19 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import UserNotFoundPage from "../components/UserNotFoundPage";
 import Loading from "../components/Loading";
+import { useRecoilState } from "recoil";
+import postAtom from "../atoms/postAtom";
 
 const Profile = () => {
+  const [posts, setPosts] = useRecoilState(postAtom);
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
   const userName = useParams().query;
   const URL = `post/getuserPost/${userName}`;
   const showToast = useShowToast();
-  const [posts, setPost] = useState([]);
+
+  useEffect(() => {
+    setPosts([]);
+  }, []);
 
   const {
     responseData,
@@ -29,9 +35,10 @@ const Profile = () => {
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
+      setPosts([]);
     }
     if (statusCode == 200) {
-      setPost(responseData);
+      setPosts(responseData);
     }
   }, [responseData, error]);
 
@@ -44,7 +51,7 @@ const Profile = () => {
   ) : (
     <VStack flex={1}>
       <UserHeader posts={posts.length} user={user} />
-      {posts.length <= 0 ? (
+      {!fetchingPost && !posts ? (
         <Text fontSize={"lg"} mt={"5"}>
           User has not posts.
         </Text>

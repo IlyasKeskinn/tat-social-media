@@ -6,18 +6,26 @@ import CreatePost from "../components/CreatePost";
 import useFetch from "../hooks/useFetch";
 import useShowToast from "../hooks/showToast";
 import Loading from "../components/Loading";
+import { useRecoilState } from "recoil";
+import postAtom from "../atoms/postAtom";
 
 const Feed = () => {
   const URL = `post/feedPosts`;
+
   const { responseData, statusCode, error, isLoading } = useFetch(URL);
 
   const showToast = useShowToast();
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useRecoilState(postAtom);
+
+  useEffect(() => {
+    setPosts([]);
+  }, []);
 
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
+      setPosts([]);
     }
     if (statusCode === 200) {
       setPosts(responseData);
@@ -35,7 +43,7 @@ const Feed = () => {
         )}
         {isLoading && <Loading />}
         {posts.map((post, index) => {
-          return <Post key={index} post={post} postedBy = {post.postedBy} />;
+          return <Post key={index} post={post} postedBy={post.postedBy} />;
         })}
       </Flex>
       <Flex flex={2} display={{ base: "none", lg: "flex" }}>

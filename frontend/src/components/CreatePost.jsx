@@ -34,7 +34,8 @@ import userAtom from "../atoms/userAtom";
 import { FaRegImage } from "react-icons/fa6";
 
 import { useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import postAtom from "../atoms/postAtom";
 
 const postSchema = z.object({
   text: z.string().max(500, "Post text must be at most 500 characters"),
@@ -47,6 +48,7 @@ const CreatePost = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { imgUrl, handleImageChange, setImgUrl } = usePrevImg();
+  const [posts, setPosts] = useRecoilState(postAtom);
 
   const { statusCode, responseData, error, isLoading, postData } = useFetch(
     URL,
@@ -86,6 +88,7 @@ const CreatePost = () => {
     }
     if (statusCode === 201) {
       showToast("Succesfully", "Post shared successfully", "success");
+      setPosts([responseData, ...posts]);
       setPostText("");
       setImgUrl("");
     }

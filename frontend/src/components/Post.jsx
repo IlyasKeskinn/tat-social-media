@@ -6,18 +6,22 @@ import { Link as LinkRouter } from "react-router-dom";
 
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import Loading from "./Loading";
 import PostInfo from "./PostInfo";
 import PostAvatar from "./PostAvatar";
+import postAtom from "../atoms/postAtom";
 
 const Post = ({ post, postedBy }) => {
-  const postID = post._id;
-  const URL = `user/profile/${postedBy}`;
   const [user, setUser] = useState(null);
-  const { responseData, isLoading, error, statusCode } = useFetch(URL);
   const [postOwner, setPostOwner] = useState(null);
+  const [posts, setPosts] = useRecoilState(postAtom);
+
+  const URL = `user/profile/${postedBy}`;
+  const postID = post._id;
+
+  const { responseData, isLoading, error, statusCode } = useFetch(URL);
   const currentUser = useRecoilValue(userAtom);
 
   useEffect(() => {

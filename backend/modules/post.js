@@ -28,12 +28,6 @@ const postSchema = mongoose.Schema(
         comment: {
           type: String,
         },
-        userProfilePictures: {
-          type: String,
-        },
-        username: {
-          type: String,
-        },
       },
     ],
   },

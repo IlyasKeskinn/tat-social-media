@@ -2,7 +2,7 @@ import { Button, Image, VStack, Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router";
 
-const NotFoundPage = () => {
+const NotFoundPage = ({ text }) => {
   const navigate = useNavigate();
   return (
     <VStack alignItems={"center"} justifyContent={"center"} flex={1}>
@@ -17,7 +17,7 @@ const NotFoundPage = () => {
         />
       </Box>
       <Flex direction={"column"} gap={4}>
-        <Text fontSize={"4xl"}>Page not found!</Text>
+        <Text fontSize={"4xl"}>{text}</Text>
         <Button
           size={"lg"}
           variant="outline"
