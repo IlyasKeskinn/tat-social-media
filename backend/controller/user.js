@@ -1,5 +1,5 @@
 require("express-async-errors");
-const { User } = require("../modules/user");
+const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { generateTokenAndCookie } = require("../helpers/generateTokenAndCookie");
 const isValidEmail = require("../helpers/emailController");
@@ -191,7 +191,9 @@ const followUnfollowUser = async (req, res) => {
 const fetchlikeUsers = async (req, res) => {
   const likedUsersArray = req.body;
 
-  const likedUsers = await User.find({ _id: { $in: likedUsersArray } }).select(`profilePic userName fullName`);
+  const likedUsers = await User.find({ _id: { $in: likedUsersArray } }).select(
+    `profilePic userName fullName`
+  );
 
   if (!likedUsers) {
     return res.status(404).json({ message: "No likes" });

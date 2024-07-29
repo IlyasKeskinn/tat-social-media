@@ -1,7 +1,7 @@
 require("express-async-errors");
 const mongoose = require("mongoose");
-const { User } = require("../modules/user");
-const { Post } = require("../modules/post");
+const { User } = require("../models/user");
+const { Post } = require("../models/post");
 const cloudinary = require("cloudinary");
 
 const getPostById = async (req, res) => {
@@ -108,7 +108,7 @@ const deletePost = async (req, res) => {
 
   cloudinary.v2.uploader.destroy(postImage.split("/").pop().split(".")[0]);
 
-  res.json({ messeage: "Post successfully deleted!" });
+  res.status(200).json({ messeage: "Post successfully deleted!" });
 };
 
 const likeUnlikePost = async (req, res) => {
@@ -139,12 +139,16 @@ const likeUnlikePost = async (req, res) => {
   }
 };
 
+const updatePost = async (req, res) => {};
+
 const postComment = async (req, res) => {
   const postId = req.params.id;
-  const { text } = req.body;
   const userId = req.user._id;
-  const profilePic = req.user.profilePic;
-  const username = req.user.username;
+  const text = req.body.text;
+
+  if (!userId) {
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
 
   if (!text) {
     return res.status(400).json({ error: "Text is required!" });
@@ -157,21 +161,97 @@ const postComment = async (req, res) => {
   }
 
   const comment = {
-    userId: userId,
+    commentBy: userId,
     comment: text,
-    profilePic: profilePic,
-    username: username,
   };
 
   post.comments.push(comment);
 
   await post.save();
 
-  res.status(201).json(comment);
+  const createdComment = post.comments[post.comments.length - 1];
+  res.status(201).json(createdComment);
 };
 
-const updatePost = async (req, res) => {};
+const getCommentsByPostId = async (req, res) => {
+  const postId = req.params.id;
 
+  const post = await Post.findById(postId)
+    .populate({
+      path: "comments",
+      populate: {
+        path: "replies.user",
+        select: "userName fullName profilePic",
+      },
+    })
+    .populate("comments.commentBy", "userName fullName profilePic");
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found" });
+  }
+  const comments = post.comments;
+
+  res.status(200).json(comments);
+};
+
+const postReply = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const user = req.user;
+  const text = req.body.text;
+
+  if (!user) {
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
+
+  if (!text) {
+    return res.status(400).json({ error: "Reply area is required" });
+  }
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  const reply = {
+    replyBy: user._id,
+    reply: text,
+  };
+
+  comment.replies.push(reply);
+  await post.save();
+
+  const createdReply = comment.replies[comment.replies.length - 1];
+
+  res.status(201).json(createdReply);
+};
+
+const getRepliesByCommentId = async (req, res) => {
+  const commentId = req.params.id;
+
+  const post = await Post.findOne({ "comments._id": commentId }).populate({
+    path: "comments.replies.replyBy",
+    select: "userName fullName profilePic",
+  });
+  if (!post) {
+    return res.status(404).json({ error: "Comment not found" });
+  }
+  // Find the specific comment and its replies
+  const comment = post.comments.id(commentId);
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found" });
+  }
+
+  // Return the replies
+  res.status(200).json(comment.replies);
+};
 module.exports = {
   getPostById,
   getUserPost,
@@ -180,4 +260,7 @@ module.exports = {
   deletePost,
   likeUnlikePost,
   postComment,
+  getCommentsByPostId,
+  postReply,
+  getRepliesByCommentId,
 };

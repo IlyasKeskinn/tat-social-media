@@ -14,15 +14,16 @@ connectMongoDB();
 const cloudinary = require("./config/cloudinaryConfig.js");
 
 const corsOptions = {
-  origin: process.env.FRONTEND_SERVER,
+  origin: process.env.FRONTEND_SERVER || 'http://localhost:5173',
   credentials: true,
 };
 
 //middlewares
-app.use(express.json({ limit: "20mb" }));
-app.use(express.urlencoded({ extended: true })); // To parse form data in the req.body
 app.use(cors(corsOptions));
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 
 //custom middlewares
 const errorMiddlewares = require("./middlewares/erros.js");

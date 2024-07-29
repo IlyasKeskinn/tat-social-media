@@ -33,7 +33,7 @@ const ProfilePreviewPopover = ({ userId }) => {
 
   useEffect(() => {
     if (user) {
-      setIsUserFollowing(user.followers?.includes(currentUser._id));
+      setIsUserFollowing(user.followers?.includes(currentUser?._id));
     }
   }, [user]);
 

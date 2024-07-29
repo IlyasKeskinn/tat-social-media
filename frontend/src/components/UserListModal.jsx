@@ -13,7 +13,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
-  Box,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
@@ -36,10 +35,10 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
   } = useFetch(LIKE_USERS_URL, "POST");
 
   useEffect(() => {
-    if (likesArr) {
+    if (isOpen) {
       likeUsersPostData(likesArr);
     }
-  }, [likesArr]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (fetchUsersError) {
@@ -76,9 +75,19 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
         <ModalHeader textAlign={"center"}>Likes</ModalHeader>
         <Divider />
         <ModalCloseButton />
-        <ModalBody maxH={"400px"} overflowY={"auto"} textAlign={"center"}>
+        <ModalBody
+          minH={"400px"}
+          maxH={"400px"}
+          overflowY={"auto"}
+          textAlign={"center"}
+        >
           {fetchingUsers && <Loading />}
-          {likeUsers.length <= 0 && <Text>No likes</Text>}
+          {likeUsers.length <= 0 && (
+            <>
+              <Text>No likes </Text>
+              <Text fontSize={"4xl"}>🥺</Text>
+            </>
+          )}
           {likedUsers.map((user) => (
             <Popover key={user._id} trigger="hover">
               <PopoverTrigger>

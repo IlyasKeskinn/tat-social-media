@@ -25,6 +25,7 @@ const useFetch = (url, method = "GET") => {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify(data),
       credentials: "include",
@@ -36,7 +37,6 @@ const useFetch = (url, method = "GET") => {
       try {
         setLoading(true);
         setError("");
-
         const response = await fetch(fetchURL, {
           ...options,
           credentials: "include",
