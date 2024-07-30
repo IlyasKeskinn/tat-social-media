@@ -51,7 +51,7 @@ const Profile = () => {
   ) : (
     <VStack gap={0} flex={1}>
       <UserHeader posts={posts.length} user={user} />
-      {!fetchingPost && !posts ? (
+      {!fetchingPost && posts.length <= 0 ? (
         <Text fontSize={"lg"} mt={"5"}>
           User has not posts.
         </Text>

@@ -40,7 +40,9 @@ const getUserPost = async (req, res) => {
 
 const getFeedPosts = async (req, res) => {
   const userId = req.user._id;
-  const currentUser = await User.findOne(userId);
+  const { page = 1, limit = 10 } = req.query; // Default page to 1 and limit to 10
+
+  const currentUser = await User.findById(userId);
 
   if (!currentUser) {
     return res.status(403).json({ error: "Unauthorized!" });
@@ -48,9 +50,11 @@ const getFeedPosts = async (req, res) => {
 
   const followingUsers = currentUser.following;
 
-  const feedPosts = await Post.find({ postedBy: { $in: followingUsers } }).sort(
-    { createdAt: -1 }
-  );
+  const skip = (page - 1) * limit;
+  const feedPosts = await Post.find({ postedBy: { $in: followingUsers } })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(parseInt(limit));
 
   res.status(200).json(feedPosts);
 };

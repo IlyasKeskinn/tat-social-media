@@ -8,12 +8,14 @@ import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import Loading from "./Loading";
 import PostInfo from "./PostInfo";
 import PostAvatar from "./PostAvatar";
 import postAtom from "../atoms/postAtom";
 
-const Post = ({ post }) => {
+import { memo } from "react";
+import PostSkeleton from "./PostSkeleton";
+
+const Post = memo(({ post }) => {
   const [user, setUser] = useState(null);
   const [postOwner, setPostOwner] = useState(null);
   const [posts, setPosts] = useRecoilState(postAtom);
@@ -41,7 +43,7 @@ const Post = ({ post }) => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {isLoading && <PostSkeleton />}
       {user && post && (
         <Flex gap={3} mb={4} py={5} w={"full"}>
           <Flex direction={"column"} alignItems={"center"}>
@@ -71,6 +73,7 @@ const Post = ({ post }) => {
                   h={"full"}
                   objectFit={"cover"}
                   objectPosition={"center"}
+                  loading="lazy"
                 />
               </AspectRatio>
             </LinkRouter>
@@ -82,6 +85,6 @@ const Post = ({ post }) => {
       )}
     </>
   );
-};
+});
 
 export default Post;

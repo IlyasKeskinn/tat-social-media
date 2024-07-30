@@ -11,6 +11,9 @@ import "@fontsource-variable/roboto-slab";
 import "@fontsource-variable/open-sans";
 import { HashRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 const styles = {
   global: (props) => ({
     body: {
@@ -39,13 +42,17 @@ const fonts = {
 
 const theme = extendTheme({ config, styles, colors, fonts });
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <RecoilRoot>
+  <RecoilRoot>
+    <QueryClientProvider client={queryClient}>
       <HashRouter>
         <ChakraProvider theme={theme}>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <App />
         </ChakraProvider>
       </HashRouter>
-    </RecoilRoot>
+    </QueryClientProvider>
+  </RecoilRoot>
 );
