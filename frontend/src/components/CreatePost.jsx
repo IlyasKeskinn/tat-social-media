@@ -165,7 +165,7 @@ const CreatePost = () => {
           <ModalContent>
             <ModalHeader>Share Post</ModalHeader>
             <ModalCloseButton />
-            <ModalBody minH={"500px"}>
+            <ModalBody minH={"400px"}>
               <FormControl mt={5}>
                 <Textarea
                   placeholder={`Some text...`}

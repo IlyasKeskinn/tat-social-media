@@ -9,7 +9,6 @@ import userAtom from "./atoms/userAtom";
 import "./App.css";
 import { useRecoilState } from "recoil";
 import NotFoundPage from "./components/NotFoundPage";
-import Post from "./components/Post";
 import UserPost from "./components/UserPost";
 
 function App() {

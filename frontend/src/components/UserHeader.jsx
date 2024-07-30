@@ -51,10 +51,10 @@ const UserHeader = ({ user, posts }) => {
       <Flex
         w={"full"}
         gap={4}
-        px={{ base: "2", lg: "24" }}
+        px={{ base: "0", lg: "24" }}
         alignItems={"start"}
       >
-        <Flex w={"full"} px={{ base: "2", lg: "12" }}>
+        <Flex w={"full"} px={{ base: "0", lg: "12" }}>
           <Flex direction={"column"} alignItems={"center"} gap={2}>
             <Box>
               <Avatar
@@ -197,7 +197,7 @@ const UserHeader = ({ user, posts }) => {
         >
           <Text fontWeight={"bold"}>Saved</Text>
         </Flex>
-      </Flex>{" "}
+      </Flex>
     </VStack>
   );
 };

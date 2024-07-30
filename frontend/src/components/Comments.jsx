@@ -120,7 +120,6 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
           }
           const data = await response.json();
           setComments(data);
-          console.log(data);
         } catch (error) {
           showToast("Error", error.message, "error");
         } finally {

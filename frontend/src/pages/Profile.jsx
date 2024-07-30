@@ -49,7 +49,7 @@ const Profile = () => {
   return isLoading && fetchingPost ? (
     <Loading />
   ) : (
-    <VStack flex={1}>
+    <VStack gap={0} flex={1}>
       <UserHeader posts={posts.length} user={user} />
       {!fetchingPost && !posts ? (
         <Text fontSize={"lg"} mt={"5"}>

@@ -52,7 +52,6 @@ const Comment = ({ comment }) => {
           }
           const data = await response.json();
           setReplies(data);
-          console.log(data);
         } catch (error) {
           showToast("Error", error.message, "error");
         } finally {
