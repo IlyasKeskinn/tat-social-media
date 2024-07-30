@@ -38,6 +38,7 @@ import Loading from "./Loading.jsx";
 import userAtom from "../atoms/userAtom.js";
 
 import Comment from "./Comment.jsx";
+import EmojiPickerBox from "./EmojiPickerBox.jsx";
 
 const schema = z.object({
   text: z.string().min(1, "cannot be sent empty"),
@@ -69,8 +70,6 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
   const [posts, setPosts] = useRecoilState(postAtom);
   const [fetchingComments, setFetchingComments] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const emojiPickerRef = useRef(null);
 
   // Handle new comment submission
   const onSubmit = () => {
@@ -133,30 +132,10 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
   }, [isOpen]);
 
   // Handle emoji picker
-  const onEmojiClick = (e) => {
-    setText(text + e.emoji);
+  const onEmojiClick = (emoji) => {
+    setText(text + emoji);
     setShowEmojiPicker(false);
   };
-
-  const handleClickOutside = (event) => {
-    if (
-      emojiPickerRef.current &&
-      !emojiPickerRef.current.contains(event.target)
-    ) {
-      setShowEmojiPicker(false);
-    }
-  };
-
-  useEffect(() => {
-    if (showEmojiPicker) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showEmojiPicker]);
 
   return (
     <Modal size={"lg"} isOpen={isOpen} onClose={onClose}>
@@ -166,8 +145,8 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
         <Divider />
         <ModalCloseButton />
         <ModalBody
-          minH={"500px"}
-          maxH={"500px"}
+          minH={"400px"}
+          maxH={"400px"}
           overflowY={"auto"}
           textAlign={"center"}
         >
@@ -230,30 +209,11 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
               </form>
             </Box>
           </Flex>
-          {showEmojiPicker && (
-            <Box
-              position="absolute"
-              bottom="60px"
-              right="30px"
-              ref={emojiPickerRef}
-            >
-              <Flex direction="column" position="relative">
-                <IconButton
-                  icon={<MdClose />}
-                  size="sm"
-                  position="absolute"
-                  top="0"
-                  right="0"
-                  zIndex="1"
-                  onClick={() => setShowEmojiPicker(false)}
-                />
-                <EmojiPicker
-                  theme={colorMode === "dark" ? "dark" : "light"}
-                  onEmojiClick={onEmojiClick}
-                />
-              </Flex>
-            </Box>
-          )}
+          <EmojiPickerBox
+            showEmojiPicker={showEmojiPicker}
+            setShowEmojiPicker={setShowEmojiPicker}
+            onEmojiSelect={onEmojiClick}
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>

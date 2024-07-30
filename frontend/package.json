@@ -16,6 +16,7 @@
     "@fontsource-variable/open-sans": "^5.0.29",
     "@fontsource-variable/roboto-slab": "^5.0.20",
     "@hookform/resolvers": "^3.9.0",
+    "@joeattardi/emoji-button": "^4.6.4",
     "date-fns": "^3.6.0",
     "emoji-picker-react": "^4.11.1",
     "framer-motion": "^11.2.4",

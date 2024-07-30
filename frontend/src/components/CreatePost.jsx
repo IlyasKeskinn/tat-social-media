@@ -36,6 +36,7 @@ import { FaRegImage } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import postAtom from "../atoms/postAtom";
+import EmojiPickerBox from "./EmojiPickerBox";
 
 const postSchema = z.object({
   text: z.string().max(500, "Post text must be at most 500 characters"),
@@ -46,19 +47,31 @@ const MAX_CHAR = 500;
 const CreatePost = () => {
   const URL = `post/createpost`;
 
+  // Chakra UI hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { imgUrl, handleImageChange, setImgUrl } = usePrevImg();
-  const [posts, setPosts] = useRecoilState(postAtom);
 
+  // Custom hooks
+  const { imgUrl, handleImageChange, setImgUrl } = usePrevImg();
   const { statusCode, responseData, error, isLoading, postData } = useFetch(
     URL,
     "POST"
   );
-
-  const user = useRecoilValue(userAtom);
-
   const showToast = useShowToast();
 
+  // Recoil state
+  const [posts, setPosts] = useRecoilState(postAtom);
+  const user = useRecoilValue(userAtom);
+
+  // useRef
+  const fileRef = useRef(null);
+
+  // useState
+  const [selectedTatmoji, setSelectedTatmoji] = useState("🥺");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
+  const [postText, setPostText] = useState("");
+
+  // react-hook-form
   const {
     register,
     handleSubmit,
@@ -67,49 +80,49 @@ const CreatePost = () => {
     resolver: zodResolver(postSchema),
   });
 
-  const fileRef = useRef(null);
+  // Handlers
+  const handleTextChange = (e) => {
+    const text = e.target.value;
+    if (text.length > MAX_CHAR) {
+      setPostText(text.slice(0, MAX_CHAR));
+      setRemainingChar(0);
+    } else {
+      setPostText(text);
+      setRemainingChar(MAX_CHAR - text.length);
+    }
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setSelectedTatmoji(emoji);
+  };
 
   const onSubmit = (data) => {
     if (!imgUrl) {
       showToast("Error", "Please select an image", "error");
+      return;
     }
     const dataPost = {
       postedBy: user._id,
       text: data.text,
-      tatmoji: "😀",
+      tatmoji: selectedTatmoji,
       images: imgUrl,
     };
     postData(dataPost);
   };
 
+  // useEffect
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
     }
     if (statusCode === 201) {
-      showToast("Succesfully", "Post shared successfully", "success");
+      showToast("Successfully", "Post shared successfully", "success");
       setPosts([responseData, ...posts]);
       setPostText("");
       setImgUrl("");
     }
   }, [responseData, error]);
 
-  const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
-  const [postText, setPostText] = useState("");
-
-  const handleTextChange = (e) => {
-    const text = e.target.value;
-
-    if (text.length > MAX_CHAR) {
-      const truncatedText = text.slice(0, MAX_CHAR);
-      setPostText(truncatedText);
-      setRemainingChar(0);
-      return;
-    } else {
-      setPostText(text);
-      setRemainingChar(MAX_CHAR - text.length);
-    }
-  };
   return (
     <>
       <Box
@@ -152,7 +165,7 @@ const CreatePost = () => {
           <ModalContent>
             <ModalHeader>Share Post</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            <ModalBody minH={"500px"}>
               <FormControl mt={5}>
                 <Textarea
                   placeholder={`Some text...`}
@@ -164,9 +177,7 @@ const CreatePost = () => {
                   )}
                   {...register("text")}
                   value={postText}
-                  onChange={(e) => {
-                    handleTextChange(e);
-                  }}
+                  onChange={handleTextChange}
                   isInvalid={errors.text}
                 />
                 {errors.text && (
@@ -188,13 +199,20 @@ const CreatePost = () => {
                   ref={fileRef}
                   onChange={handleImageChange}
                 />
-                <FaRegImage
-                  size={24}
-                  style={{ marginLeft: "5px", cursor: "pointer" }}
-                  onClick={() => {
-                    fileRef.current.click();
-                  }}
-                />
+                <Flex gap={4}>
+                  <Button onClick={() => fileRef.current.click()} size={"md"}>
+                    <FaRegImage size={24} />
+                  </Button>
+                  <Button
+                    size={"md"}
+                    variant={"outline"}
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  >
+                    <Box w={"24px"}>
+                      <Text fontSize={"2xl"}>{selectedTatmoji}</Text>
+                    </Box>
+                  </Button>
+                </Flex>
               </FormControl>
               {imgUrl && (
                 <AspectRatio
@@ -219,13 +237,16 @@ const CreatePost = () => {
                       right={2}
                       border={"1px"}
                       borderColor={"gray.500"}
-                      onClick={() => {
-                        setImgUrl("");
-                      }}
+                      onClick={() => setImgUrl("")}
                     />
                   </Flex>
                 </AspectRatio>
               )}
+              <EmojiPickerBox
+                showEmojiPicker={showEmojiPicker}
+                setShowEmojiPicker={setShowEmojiPicker}
+                onEmojiSelect={handleEmojiSelect}
+              />
             </ModalBody>
             <ModalFooter>
               <Button
