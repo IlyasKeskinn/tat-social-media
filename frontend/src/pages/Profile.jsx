@@ -1,29 +1,38 @@
-import { Grid, Text, VStack } from "@chakra-ui/react";
-
-import UserHeader from "../components/UserHeader";
-import ProfilePagePost from "../components/ProfilePagePost";
-
-import useGetUserProfile from "../hooks/useGetUserProfile";
-import useShowToast from "../hooks/showToast";
-
-import useFetch from "../hooks/useFetch";
+import { Grid, Text, VStack, Flex, Box } from "@chakra-ui/react";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import UserHeader from "../components/UserHeader";
+import ProfilePagePost from "../components/ProfilePagePost";
 import UserNotFoundPage from "../components/UserNotFoundPage";
 import Loading from "../components/Loading";
-import { useRecoilState } from "recoil";
 import postAtom from "../atoms/postAtom";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import useShowToast from "../hooks/showToast";
+import useFetch from "../hooks/useFetch";
+import { useInView } from "react-intersection-observer";
 
 const Profile = () => {
+  const API_URL = import.meta.env.VITE_BASE_API_URL;
+  const FETCH_BOOKMARKS_POST = `/bookmarks/getsavedPost`;
+
   const [posts, setPosts] = useRecoilState(postAtom);
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
+  const [showBookmark, setShowBookmark] = useState(false);
+  const { ref, inView } = useInView();
+
   const userName = useParams().query;
-  const URL = `post/getuserPost/${userName}`;
   const showToast = useShowToast();
+  const [tab, setTab] = useState("post");
+
+  const URL = `post/getuserPost/${userName}`;
 
   useEffect(() => {
-    setPosts([]);
-  }, []);
+    if (tab === "post") {
+      setPosts([]);
+    }
+  }, [tab]);
 
   const {
     responseData,
@@ -37,29 +46,93 @@ const Profile = () => {
       showToast("Error", error.message, "error");
       setPosts([]);
     }
-    if (statusCode == 200) {
+    if (statusCode === 200 && tab === "post") {
       setPosts(responseData);
     }
-  }, [responseData, error]);
+  }, [responseData, error, statusCode, tab]);
+
+  const fetchSavedPosts = async ({ pageParam = 1 }) => {
+    try {
+      const response = await fetch(
+        `${API_URL}${FETCH_BOOKMARKS_POST}?page=${pageParam}&limit=10`,
+        {
+          credentials: "include",
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      showToast("Error", error.message, "error");
+      return [];
+    }
+  };
+
+  const {
+    data: savedPostsData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status: savedPostsStatus,
+    error: savedPostsError,
+  } = useInfiniteQuery({
+    queryKey: ["savedPosts"],
+    queryFn: fetchSavedPosts,
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length > 0 ? allPages.length + 1 : undefined,
+    enabled: tab === "saved",
+    onError: (err) => {
+      showToast("Error", err.message, "error");
+    },
+  });
+
+  useEffect(() => {
+    if (inView && tab === "saved" && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, tab, hasNextPage]);
 
   if (statusCode === 404) {
     return <UserNotFoundPage />;
   }
 
-  return isLoading && fetchingPost ? (
+  const handleSaved = () => {
+    setTab("saved");
+  };
+  const handlePost = () => {
+    setTab("post");
+  };
+
+  const displayedPosts = tab === "post" ? posts : savedPostsData?.pages.flat() || [];
+
+  return isLoading || fetchingPost ? (
     <Loading />
   ) : (
     <VStack gap={0} flex={1}>
-      <UserHeader posts={posts.length} user={user} />
-      {!fetchingPost && posts.length <= 0 ? (
+      <UserHeader
+        posts={posts.length}
+        user={user}
+        handlePost={handlePost}
+        handleSaved={handleSaved}
+        tab={tab}
+      />
+      {savedPostsStatus === "loading" ? (
+        <Flex justifyContent="center" alignItems="center" height="200px">
+          <Loading />
+        </Flex>
+      ) : displayedPosts.length === 0 ? (
         <Text fontSize={"lg"} mt={"5"}>
-          User has not posts.
+          {tab === "post" ? "User has no posts." : "User has no saved posts."}
         </Text>
       ) : (
         <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>
-          {posts.map((post, index) => {
-            return <ProfilePagePost key={index} post={post} />;
-          })}
+          {displayedPosts.map((post, index) => (
+            <ProfilePagePost key={index} post={post} />
+          ))}
+          {isFetchingNextPage && <Loading />}
+          {tab === "saved" && <Box ref={ref} />}
         </Grid>
       )}
     </VStack>

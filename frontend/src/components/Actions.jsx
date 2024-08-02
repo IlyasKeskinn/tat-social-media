@@ -144,7 +144,6 @@ const Actions = ({ currentPost }) => {
       showToast("Error", "Something went wrong", "error");
     }
     if (bookmarkStatusCode === 200) {
-      console.log(responseData.message);
       showToast("Succesfully", responseData.message, "success");
     }
   }, [bookmarkError, responseData]);

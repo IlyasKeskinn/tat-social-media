@@ -1,5 +1,6 @@
 require("express-async-errors");
 const { BookmarkCollection } = require("../models/bookmarksCollection");
+const { Post } = require("../models/post");
 const { User } = require("../models/user");
 
 const createCollection = async (req, res) => {
@@ -24,7 +25,6 @@ const createCollection = async (req, res) => {
 const postBookmark = async (req, res) => {
   const userId = req.user._id;
   const postId = req.params.id;
-
 
   const currentUser = await User.findById(userId);
 
@@ -55,7 +55,32 @@ const postBookmark = async (req, res) => {
   }
 };
 
+const getSavedPost = async (req, res) => {
+  const currentUser = req.user;
+  const { page = 1, limit = 5 } = req.query; // Default page to 1 and limit to 10
+  const skip = (page - 1) * limit;
+
+  const user = await User.findById(currentUser._id).populate({
+    path: "bookmarksCollection",
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const postIds = user.bookmarksCollection[0].bookmarks;
+
+  const posts = await Post.find({ _id: { $in: postIds } })
+    .skip(skip)
+    .limit(parseInt(limit));
+
+  if (!posts) {
+    return res.status(404).json({ error: "Posts not found!" });
+  }
+  res.status(200).json(posts);
+};
 module.exports = {
   createCollection,
   postBookmark,
+  getSavedPost,
 };

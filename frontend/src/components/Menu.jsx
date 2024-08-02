@@ -146,7 +146,7 @@ export default Menu;
 export const ProfileAvatar = ({ user, isActive }) => (
   <Flex alignItems="center" justifyContent="center" w="48px" h="48px">
     <Avatar
-      border={isActive ? "1px solid white" : "none"}
+      border={isActive ? "1px solid teal" : "none"}
       size="sm"
       src={user.profilePic}
     />

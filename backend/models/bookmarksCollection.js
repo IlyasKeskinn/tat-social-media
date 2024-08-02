@@ -13,7 +13,7 @@ const bookmarkCollectionSchema = mongoose.Schema(
     },
     bookmarks: {
       type: [Schema.Types.ObjectId],
-      ref: "post",
+      ref: "Post",
       default: [],
     },
     isDefault: {

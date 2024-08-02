@@ -23,8 +23,9 @@ import { useRecoilValue } from "recoil";
 
 import userAtom from "../atoms/userAtom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
+import { useState } from "react";
 
-const UserHeader = ({ user, posts }) => {
+const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   const toast = showToast();
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
@@ -180,23 +181,32 @@ const UserHeader = ({ user, posts }) => {
         <Flex
           flex={1}
           borderBottom={"1.5px solid"}
-          borderColor={"currentColor"}
+          borderColor={`${tab === "post" ? "currentColor" : "gray"}`}
+          color={`${tab === "post" ? "currentColor" : "gray"}`}
           justifyContent={"center"}
           pb="3"
           cursor={"pointer"}
+          onClick={handlePost}
         >
           <Text fontWeight={"bold"}>Posts</Text>
         </Flex>
-        <Flex
-          flex={1}
-          borderBottom={"1px solid gray"}
-          justifyContent={"center"}
-          color={"gray"}
-          pb="3"
-          cursor={"pointer"}
-        >
-          <Text fontWeight={"bold"}>Saved</Text>
-        </Flex>
+        {isProfileOwner && (
+          <Flex
+            flex={1}
+            borderBottom={"1px solid"}
+            borderColor={`${tab === "saved" ? "currentColor" : "gray"}`}
+            color={`${tab === "saved" ? "currentColor" : "gray"}`}
+            justifyContent={"center"}
+            pb="3"
+            cursor={"pointer"}
+            onClick={handleSaved}
+          >
+            <Text fontWeight={"bold"}>
+              {" "}
+              Saved ({currentUser.bookmarksCollection.length})
+            </Text>
+          </Flex>
+        )}
       </Flex>
     </VStack>
   );
