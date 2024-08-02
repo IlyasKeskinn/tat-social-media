@@ -1,4 +1,5 @@
 const { mongoose } = require("mongoose");
+const { BookmarkCollection } = require("./bookmarksCollection");
 const userSchema = mongoose.Schema(
   {
     userName: {
@@ -33,6 +34,11 @@ const userSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
+    bookmarksCollection: {
+      type: [mongoose.Types.ObjectId],
+      ref: "BookmarkCollection",
+      default: [],
+    },
     isFrozen: {
       type: Boolean,
       default: false,
@@ -50,6 +56,26 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+userSchema.post("save", async function (doc) {
+  const defaultColleciton = await BookmarkCollection.findOne({
+    user: doc._id,
+    isDefault: true,
+  });
+
+  if (!defaultColleciton) {
+    const defaultColleciton = new BookmarkCollection({
+      user: doc._id,
+      title: "Bookmarks",
+      isDefault: true,
+    });
+
+    await defaultColleciton.save();
+
+    doc.bookmarksCollection.push(defaultColleciton._id);
+    await doc.save();
+  }
+});
 
 const User = mongoose.model("User", userSchema);
 

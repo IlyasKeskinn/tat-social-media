@@ -32,8 +32,12 @@ const registerUser = async (req, res) => {
 
   let fullName = `${firstName} ${lastName}`;
 
-  const existingUserName = await User.findOne({ userName });
-  const existingEmail = await User.findOne({ email });
+  const existingUserName = await User.findOne({
+    userName: { $regex: new RegExp(`^${userName}$`, "i") },
+  });
+  const existingEmail = await User.findOne({
+    email: { $regex: new RegExp(`^${email}$`, "i") },
+  });
   if (existingUserName) {
     return res.status(400).json({
       error: "This username is already taken. Please choose a different one.",
@@ -57,8 +61,8 @@ const registerUser = async (req, res) => {
 
   const newUser = new User({
     fullName: fullName,
-    userName: userName,
-    email: email,
+    userName: userName.toLowerCase(),
+    email: email.toLowerCase(),
     password: hashedPassword,
   });
 
@@ -72,6 +76,7 @@ const registerUser = async (req, res) => {
       fullName: newUser.fullName,
       bio: newUser.bio,
       profilePic: newUser.profilePic,
+      bookmarksCollection: newUser.bookmarksCollection[0].bookmarks,
     });
   } else {
     res.status(400).json({ error: "Invalid user data" });
@@ -81,7 +86,11 @@ const registerUser = async (req, res) => {
 const signIn = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const lowerCaseEmail = email.toLowerCase();
+
+  const user = await User.findOne({
+    email: { $regex: new RegExp(`^${lowerCaseEmail}$`, "i") },
+  }).populate("bookmarksCollection");
 
   if (!user) {
     return res
@@ -103,6 +112,7 @@ const signIn = async (req, res) => {
     fullName: user.fullName,
     bio: user.bio,
     profilePic: user.profilePic,
+    bookmarksCollection: user.bookmarksCollection[0].bookmarks,
   });
 };
 
@@ -129,7 +139,9 @@ const updateProfile = async (req, res) => {
       .json({ error: "You cannot edit othes user's profile!" });
   }
 
-  const existingUserName = await User.findOne({ userName: userName });
+  const existingUserName = await User.findOne({
+    userName: { $regex: new RegExp(`^${userName}$`, "i") },
+  });
 
   if (
     existingUserName &&
@@ -149,7 +161,7 @@ const updateProfile = async (req, res) => {
   }
 
   user.fullName = fullName || user.fullName;
-  user.bio = bio || user.bio;
+  user.bio = bio;
   user.profilePic = profilePic || user.profilePic;
   user.userName = userName || user.userName;
 

@@ -1,9 +1,4 @@
-import {
-  Flex,
-  Box,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Flex, Box, Text, useDisclosure } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -13,15 +8,20 @@ import useFetch from "../hooks/useFetch";
 import useShowToast from "../hooks/showToast";
 import UserListModal from "./UserListModal";
 import Comments from "./Comments";
+import { BookmarkSVG } from "./IconSvg";
 
 const Actions = ({ currentPost }) => {
   const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;
+  const BOOKMARK_URL = `bookmarks/postBookmark/${currentPost._id}`;
 
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const showToast = useShowToast();
 
   const [liked, setLiked] = useState(currentPost.likes.includes(user?._id));
   const [posts, setPosts] = useRecoilState(postAtom);
+  const [bookmarked, setBookmarked] = useState(
+    user.bookmarksCollection?.includes(currentPost._id)
+  );
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -36,6 +36,14 @@ const Actions = ({ currentPost }) => {
     error,
     putData,
   } = useFetch(LIKE_URL, "PUT");
+
+  const {
+    isLoading: isBookmarking,
+    statusCode: bookmarkStatusCode,
+    error: bookmarkError,
+    responseData,
+    postData,
+  } = useFetch(BOOKMARK_URL, "POST");
 
   const handleLiked = () => {
     if (!user)
@@ -67,12 +75,79 @@ const Actions = ({ currentPost }) => {
     }
     setLiked(!liked);
   };
+  const handleBookmark = () => {
+    if (!user) {
+      return showToast(
+        "Error",
+        "You must be logged in to like a post",
+        "error"
+      );
+    }
+    if (isBookmarking) {
+      return;
+    }
+
+    postData();
+
+    if (!bookmarked) {
+      setUser((prevUser) => {
+        const updatedBookmarksCollection =
+          prevUser.bookmarksCollection.includes(currentPost._id)
+            ? prevUser.bookmarksCollection
+            : [...prevUser.bookmarksCollection, currentPost._id];
+
+        localStorage.setItem(
+          "tatuser",
+          JSON.stringify({
+            ...prevUser,
+            bookmarksCollection: updatedBookmarksCollection,
+          })
+        );
+
+        return {
+          ...prevUser,
+          bookmarksCollection: updatedBookmarksCollection,
+        };
+      });
+    } else {
+      setUser((prevUser) => {
+        const updatedBookmarksCollection = prevUser.bookmarksCollection.filter(
+          (id) => id !== currentPost._id
+        );
+
+        localStorage.setItem(
+          "tatuser",
+          JSON.stringify({
+            ...prevUser,
+            bookmarksCollection: updatedBookmarksCollection,
+          })
+        );
+
+        return {
+          ...prevUser,
+          bookmarksCollection: updatedBookmarksCollection,
+        };
+      });
+    }
+
+    setBookmarked(!bookmarked);
+  };
 
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
     }
   }, [error]);
+
+  useEffect(() => {
+    if (bookmarkError) {
+      showToast("Error", "Something went wrong", "error");
+    }
+    if (bookmarkStatusCode === 200) {
+      console.log(responseData.message);
+      showToast("Succesfully", responseData.message, "success");
+    }
+  }, [bookmarkError, responseData]);
 
   return (
     <>
@@ -133,7 +208,18 @@ const Actions = ({ currentPost }) => {
               </svg>
             </Box>
           </Flex>
-          <ShareSvg />
+          <Flex gap={2}>
+            <Box
+              cursor={"pointer"}
+              onClick={() => {
+                handleBookmark();
+              }}
+              my={2}
+            >
+              <BookmarkSVG isActive={bookmarked} />
+            </Box>
+            <ShareSvg />
+          </Flex>
         </Flex>
         <Flex alignItems={"center"} gap={2}>
           <Text

@@ -140,8 +140,9 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
     <Modal size={"lg"} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader textAlign={"center"}>Comments</ModalHeader>
-        <Divider />
+        <ModalHeader m={4} textAlign={"center"}>
+          Comments
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody
           minH={"400px"}
@@ -151,7 +152,15 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
         >
           {fetchingComments && <Loading />}
           {!fetchingComments && comments.length <= 0 && (
-            <Text>No Comments 🧐</Text>
+            <Box
+              position={"absolute"}
+              top={"50%"}
+              left={"50%"}
+              transform="translate(-50%, -50%)"
+            >
+              <Text fontSize={"xl"}>No Comments </Text>
+              <Text fontSize={"3xl"}>🧐</Text>
+            </Box>
           )}
           {comments.length > 0 &&
             comments.map((comment) => {

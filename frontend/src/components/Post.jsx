@@ -73,7 +73,6 @@ const Post = memo(({ post }) => {
                   h={"full"}
                   objectFit={"cover"}
                   objectPosition={"center"}
-                  loading="lazy"
                 />
               </AspectRatio>
             </LinkRouter>

@@ -108,7 +108,7 @@ const deletePost = async (req, res) => {
   }
   const postImage = post.images[0];
 
-  await Post.findByIdAndDelete(postId);
+  await Post.findOneAndDelete({ _id: postId });
 
   cloudinary.v2.uploader.destroy(postImage.split("/").pop().split(".")[0]);
 
