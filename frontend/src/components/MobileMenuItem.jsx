@@ -2,7 +2,12 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const MobileMenuItem = ({ children, to }) => {
+const MobileMenuItem = ({ children, to, callbackFunction = () => {} }) => {
+  const handleClick = () => {
+    if (callbackFunction) {
+      callbackFunction();
+    }
+  };
 
   return (
     <Flex
@@ -13,6 +18,7 @@ const MobileMenuItem = ({ children, to }) => {
       aria-label="Home"
       w={"48px"}
       h={"48px"}
+      onClick={handleClick}
     >
       {children}
     </Flex>

@@ -291,8 +291,20 @@ export const ShareSvg = () => {
 };
 
 export const LikeButton = ({ liked, handleLiked, size = 24 }) => {
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    if (liked) {
+      setAnimate(true);
+      const timer = setTimeout(() => {
+        setAnimate(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [liked]);
+
   return (
-    <Box my={2} cursor={"pointer"} onClick={handleLiked}>
+    <Box my={2} cursor={"pointer"} onClick={handleLiked} position="relative">
       <svg
         aria-label="Like & Unlike"
         width={size}
@@ -301,6 +313,7 @@ export const LikeButton = ({ liked, handleLiked, size = 24 }) => {
         viewBox="0 0 24 24"
         fill={liked ? "rgb(237, 73, 86)" : "transparent"}
         xmlns="http://www.w3.org/2000/svg"
+        className={liked && animate ? "fill-animatio" : ""}
       >
         <title>Like</title>
         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>

@@ -7,6 +7,7 @@ import {
   Button,
   Spacer,
   Avatar,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { IoHomeOutline } from "react-icons/io5";
@@ -25,13 +26,19 @@ import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
 import { useLocation } from "react-router-dom";
 import { ExploreSVG, HomeSVG, SearchSVG, MessageSVG } from "./IconSvg";
+import { useRef } from "react";
+import SearchDrawer from "./SearchDrawer";
 
 const Menu = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
   const user = useRecoilValue(userAtom);
 
   const getActiveStatus = (path) => location.pathname === path;
+  const handleSearch = () => {
+    onOpen();
+  };
 
   return (
     <>
@@ -68,7 +75,11 @@ const Menu = () => {
             icon={FaRegUser}
           />
           <MenuItem title="Explore" icon={TbMapSearch} />
-          <MenuItem title="Search" icon={BsSearch} />
+          <MenuItem
+            callbackFunction={handleSearch}
+            title="Search"
+            icon={BsSearch}
+          />
           <MenuItem title="Message" icon={AiOutlineMessage} />
           <LogoutButton />
           <Spacer />
@@ -130,13 +141,14 @@ const Menu = () => {
         />
         <MobileMenuItem
           children={<SearchSVG isActive={getActiveStatus("/search")} />}
-          to="/search"
+          callbackFunction={handleSearch}
         />
         <MobileMenuItem
           children={<MessageSVG isActive={getActiveStatus("/message")} />}
           to="/message"
         />
       </Flex>
+      <SearchDrawer isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
   );
 };

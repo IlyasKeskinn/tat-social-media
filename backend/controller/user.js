@@ -60,9 +60,9 @@ const registerUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = new User({
-    fullName: fullName,
-    userName: userName.toLowerCase(),
-    email: email.toLowerCase(),
+    fullName: fullName.trim(),
+    userName: userName.toLowerCase().trim(),
+    email: email.toLowerCase().trim(),
     password: hashedPassword,
   });
 
@@ -160,10 +160,10 @@ const updateProfile = async (req, res) => {
     profilePic = uploadResponse.secure_url;
   }
 
-  user.fullName = fullName || user.fullName;
-  user.bio = bio;
+  user.fullName = fullName.trim() || user.fullName;
+  user.bio = bio.trim();
   user.profilePic = profilePic || user.profilePic;
-  user.userName = userName || user.userName;
+  user.userName = userName.trim() || user.userName;
 
   await user.save();
 
@@ -213,6 +213,35 @@ const fetchlikeUsers = async (req, res) => {
 
   res.status(200).json(likedUsers);
 };
+
+const searchUser = async (req, res) => {
+  const { query, limit = 10, page = 1 } = req.query;
+
+  const skip = (page - 1) * limit;
+
+  const users = await User.find({
+    $or: [
+      {
+        userName: { $regex: query.trim(), $options: "i" },
+      },
+      {
+        fullName: { $regex: query.trim(), $options: "i" },
+      },
+    ],
+  })
+    .sort({
+      userName: 1,
+      fullName: 1,
+    })
+    .skip(skip)
+    .limit(parseInt(limit));
+
+  // if (!users || users.length === 0) {
+  //   return res.status(404).json({ error: "Users not found!" });
+  // }
+
+  res.status(200).json(users);
+};
 module.exports = {
   registerUser,
   signIn,
@@ -221,4 +250,5 @@ module.exports = {
   logout,
   followUnfollowUser,
   fetchlikeUsers,
+  searchUser,
 };

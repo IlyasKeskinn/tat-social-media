@@ -124,7 +124,7 @@ const Profile = () => {
         </Flex>
       ) : displayedPosts.length === 0 ? (
         <Text fontSize={"lg"} mt={"5"}>
-          {tab === "post" ? "User has no posts." : "User has no saved posts."}
+          {tab === "post" ? `${userName} has no posts.` : `${userName} has no saved posts.`}
         </Text>
       ) : (
         <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>

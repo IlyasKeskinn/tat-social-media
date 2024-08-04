@@ -1,5 +1,4 @@
 import {
-  Flex,
   Text,
   Modal,
   ModalOverlay,
@@ -7,8 +6,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Divider,
-  Avatar,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -21,6 +18,7 @@ import useShowToast from "../hooks/showToast";
 import Loading from "./Loading";
 import { useNavigate } from "react-router";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
+import UserTile from "./UserTile";
 
 const UserListModal = ({ isOpen, onClose, likesArr }) => {
   const LIKE_USERS_URL = "user/fetchlikeduser";
@@ -53,21 +51,9 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
     }
   }, [likeUsers]);
 
-  const navigateProfile = (userName) => {
-    navigate(`/profile/${userName}`);
-  };
-
   //popoever
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const navigate = useNavigate();
-
-  const handlePopoverOpen = () => {
-    setPopoverOpen(true);
-  };
-
-  const handlePopoverClose = () => {
-    setPopoverOpen(false);
-  };
 
   return (
     <Modal size={"md"} isOpen={isOpen} onClose={onClose}>
@@ -98,23 +84,9 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
           {likedUsers.map((user) => (
             <Popover key={user._id} trigger="hover">
               <PopoverTrigger>
-                <Flex my={4} mx={2} gap={4} alignItems={"center"}>
-                  <Avatar
-                    cursor={"pointer"}
-                    onClick={() => navigateProfile(user.userName)}
-                    size={"md"}
-                    src={user.profilePic}
-                  />
-                  <Flex
-                    cursor={"pointer"}
-                    onClick={() => navigateProfile(user.userName)}
-                    direction={"column"}
-                    alignItems={"start"}
-                  >
-                    <Text fontSize={"md"}>{user.userName}</Text>
-                    <Text fontSize={"sm"}>{user.fullName}</Text>
-                  </Flex>
-                </Flex>
+                <Box>
+                  <UserTile user={user} />
+                </Box>
               </PopoverTrigger>
               <PopoverContent>
                 <PopoverBody>

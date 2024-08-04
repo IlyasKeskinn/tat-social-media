@@ -1,8 +1,14 @@
 import { Text, Flex, Box } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
-const MenuItem = ({ title, icon: Icon, to }) => {
+const MenuItem = ({ title, icon: Icon, to, callbackFunction = () => {} }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
+
+  const handleClick = () => {
+    if (callbackFunction) {
+      callbackFunction();
+    }
+  };
   return (
     <Link style={{ width: "100%" }} to={to}>
       <Box
@@ -13,6 +19,7 @@ const MenuItem = ({ title, icon: Icon, to }) => {
           borderColor: "gray.400",
           shadow: "lg",
         }}
+        onClick={handleClick}
         transition={"all 500ms"}
         shadow={isActive === true ? "lg" : "0"}
         border={"1px solid"}

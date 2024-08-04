@@ -8,6 +8,7 @@ const {
   updateProfile,
   followUnfollowUser,
   fetchlikeUsers,
+  searchUser,
 } = require("../controller/user");
 const isAuth = require("../middlewares/isAuth");
 
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.get("/profile/:query", getProfile);
 router.get("/logout", logout);
+router.get("/searchuser", searchUser);
 router.post("/fetchlikeduser/", fetchlikeUsers);
 
 router.post("/register", registerUser);
