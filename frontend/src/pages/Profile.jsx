@@ -17,9 +17,9 @@ const Profile = () => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const FETCH_BOOKMARKS_POST = `/bookmarks/getsavedPost`;
 
+
   const [posts, setPosts] = useRecoilState(postAtom);
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
-  const [showBookmark, setShowBookmark] = useState(false);
   const { ref, inView } = useInView();
 
   const userName = useParams().query;
@@ -34,12 +34,7 @@ const Profile = () => {
     }
   }, [tab]);
 
-  const {
-    responseData,
-    isLoading: fetchingPost,
-    statusCode: postFetchStatusCode,
-    error,
-  } = useFetch(URL);
+  const { responseData, isLoading: fetchingPost, error } = useFetch(URL);
 
   useEffect(() => {
     if (error) {
@@ -76,7 +71,6 @@ const Profile = () => {
     hasNextPage,
     isFetchingNextPage,
     status: savedPostsStatus,
-    error: savedPostsError,
   } = useInfiniteQuery({
     queryKey: ["savedPosts"],
     queryFn: fetchSavedPosts,
@@ -92,7 +86,7 @@ const Profile = () => {
     if (inView && tab === "saved" && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, tab, hasNextPage]);
+  }, [inView, tab, hasNextPage, fetchNextPage]);
 
   if (statusCode === 404) {
     return <UserNotFoundPage />;
@@ -105,7 +99,8 @@ const Profile = () => {
     setTab("post");
   };
 
-  const displayedPosts = tab === "post" ? posts : savedPostsData?.pages.flat() || [];
+  const displayedPosts =
+    tab === "post" ? posts : savedPostsData?.pages.flat() || [];
 
   return isLoading || fetchingPost ? (
     <Loading />
@@ -124,7 +119,9 @@ const Profile = () => {
         </Flex>
       ) : displayedPosts.length === 0 ? (
         <Text fontSize={"lg"} mt={"5"}>
-          {tab === "post" ? `${userName} has no posts.` : `${userName} has no saved posts.`}
+          {tab === "post"
+            ? `${userName} has no posts.`
+            : `${userName} has no saved posts.`}
         </Text>
       ) : (
         <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>

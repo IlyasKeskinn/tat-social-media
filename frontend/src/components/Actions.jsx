@@ -1,7 +1,7 @@
 import { Flex, Box, Text, useDisclosure } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
 import postAtom from "../atoms/postAtom";
 import useFetch from "../hooks/useFetch";
@@ -9,6 +9,7 @@ import useShowToast from "../hooks/showToast";
 import UserListModal from "./UserListModal";
 import Comments from "./Comments";
 import { BookmarkSVG } from "./IconSvg";
+import PropTypes from "prop-types";
 
 const Actions = ({ currentPost }) => {
   const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;
@@ -32,7 +33,6 @@ const Actions = ({ currentPost }) => {
 
   const {
     isLoading: isLiking,
-    statusCode,
     error,
     putData,
   } = useFetch(LIKE_URL, "PUT");
@@ -163,7 +163,6 @@ const Actions = ({ currentPost }) => {
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
                 fill="currentColor"
                 onClick={onOpenComment}
               >
@@ -184,12 +183,10 @@ const Actions = ({ currentPost }) => {
                     strokeWidth="1"
                     fill="none"
                     fillRule="evenodd"
-                    sketch:type="MSPage"
                   >
                     {" "}
                     <g
                       id="Icon-Set"
-                      sketch:type="MSLayerGroup"
                       transform="translate(-360.000000, -255.000000)"
                       fill="currentColor"
                     >
@@ -197,7 +194,6 @@ const Actions = ({ currentPost }) => {
                       <path
                         d="M390,277 C390,278.463 388.473,280 387,280 L379,280 L376,284 L373,280 L365,280 C363.527,280 362,278.463 362,277 L362,260 C362,258.537 363.527,257 365,257 L387,257 C388.473,257 390,258.537 390,260 L390,277 L390,277 Z M386.667,255 L365.333,255 C362.388,255 360,257.371 360,260.297 L360,277.187 C360,280.111 362.055,282 365,282 L371.639,282 L376,287.001 L380.361,282 L387,282 C389.945,282 392,280.111 392,277.187 L392,260.297 C392,257.371 389.612,255 386.667,255 L386.667,255 Z"
                         id="comment-5"
-                        sketch:type="MSShapeGroup"
                       >
                         {" "}
                       </path>{" "}
@@ -259,6 +255,10 @@ const Actions = ({ currentPost }) => {
 
 export default Actions;
 
+Actions.propTypes = {
+  currentPost: PropTypes.object.isRequired,
+}
+
 export const ShareSvg = () => {
   return (
     <Box my={2} cursor={"pointer"}>
@@ -313,7 +313,7 @@ export const LikeButton = ({ liked, handleLiked, size = 24 }) => {
         viewBox="0 0 24 24"
         fill={liked ? "rgb(237, 73, 86)" : "transparent"}
         xmlns="http://www.w3.org/2000/svg"
-        className={liked && animate ? "fill-animatio" : ""}
+        className={liked && animate ? "fill-animation" : ""}
       >
         <title>Like</title>
         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -344,4 +344,10 @@ export const LikeButton = ({ liked, handleLiked, size = 24 }) => {
       </svg>
     </Box>
   );
+};
+
+LikeButton.propTypes = {
+  liked: PropTypes.bool.isRequired,
+  handleLiked: PropTypes.func.isRequired,
+  size: PropTypes.number,
 };

@@ -60,7 +60,7 @@ const registerUser = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = new User({
-    fullName: fullName.trim(),
+    fullName: fullName.trim().toLowerCase(),
     userName: userName.toLowerCase().trim(),
     email: email.toLowerCase().trim(),
     password: hashedPassword,
@@ -160,7 +160,7 @@ const updateProfile = async (req, res) => {
     profilePic = uploadResponse.secure_url;
   }
 
-  user.fullName = fullName.trim() || user.fullName;
+  user.fullName = fullName.trim().toLowerCase() || user.fullName;
   user.bio = bio.trim();
   user.profilePic = profilePic || user.profilePic;
   user.userName = userName.trim() || user.userName;
@@ -222,10 +222,10 @@ const searchUser = async (req, res) => {
   const users = await User.find({
     $or: [
       {
-        userName: { $regex: query.trim(), $options: "i" },
+        userName: { $regex: query.trim().toLowerCase(), $options: "i" },
       },
       {
-        fullName: { $regex: query.trim(), $options: "i" },
+        fullName: { $regex: query.trim().toLowerCase(), $options: "i" },
       },
     ],
   })

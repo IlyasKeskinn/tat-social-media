@@ -7,10 +7,10 @@ import {
   PopoverBody,
 } from "@chakra-ui/react";
 
-import UserHeader from "./UserHeader";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
 
 const PostAvatar = ({ postedBy }) => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
@@ -54,6 +54,10 @@ const PostAvatar = ({ postedBy }) => {
       </PopoverContent>
     </Popover>
   );
+};
+
+PostAvatar.propTypes = {
+  postedBy: PropTypes.object.isRequired,
 };
 
 export default PostAvatar;

@@ -20,6 +20,7 @@ import PostActions from "./PostActions";
 import { useState } from "react";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
 import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
 
 const PostInfo = ({ post, postedBy, postOwner }) => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
@@ -82,6 +83,12 @@ const PostInfo = ({ post, postedBy, postOwner }) => {
       </Flex>
     </Flex>
   );
+};
+
+PostInfo.propTypes = {
+  post: PropTypes.object.isRequired,
+  postedBy: PropTypes.object.isRequired,
+  postOwner: PropTypes.bool.isRequired,
 };
 
 export default PostInfo;

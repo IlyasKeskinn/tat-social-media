@@ -7,6 +7,7 @@ import { MdOutlineReport } from "react-icons/md";
 import { MdOutlineReportOff } from "react-icons/md";
 
 import useCopyPost from "../hooks/useCopyPost";
+import PropTypes from "prop-types";
 
 const PostActions = ({ postId, postedBy }) => {
   const copyPost = useCopyPost();
@@ -41,6 +42,11 @@ const PostActions = ({ postId, postedBy }) => {
       </MenuItem>
     </>
   );
+};
+
+PostActions.propTypes = {
+  postId: PropTypes.string.isRequired,
+  postedBy: PropTypes.object.isRequired,
 };
 
 export default PostActions;

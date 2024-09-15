@@ -1,8 +1,13 @@
 import { Box, useColorMode } from "@chakra-ui/react";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-const EmojiPickerBox = ({showEmojiPicker, setShowEmojiPicker ,onEmojiSelect }) => {
+const EmojiPickerBox = ({
+  showEmojiPicker,
+  setShowEmojiPicker,
+  onEmojiSelect,
+}) => {
   const { colorMode } = useColorMode();
 
   const emojiPickerRef = useRef(null);
@@ -45,3 +50,9 @@ const EmojiPickerBox = ({showEmojiPicker, setShowEmojiPicker ,onEmojiSelect }) =
 };
 
 export default EmojiPickerBox;
+
+EmojiPickerBox.propTypes = {
+  showEmojiPicker: PropTypes.bool.isRequired,
+  setShowEmojiPicker: PropTypes.func.isRequired,
+  onEmojiSelect: PropTypes.func.isRequired,
+};

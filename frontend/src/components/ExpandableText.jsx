@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const ExpandableText = ({ children, limit = "160" }) => {
   const [isExpanded, setExpanded] = useState(false);
@@ -31,6 +32,11 @@ const ExpandableText = ({ children, limit = "160" }) => {
       </Text>
     </Box>
   );
+};
+
+ExpandableText.propTypes = {
+  children: PropTypes.string.isRequired,
+  limit: PropTypes.string,
 };
 
 export default ExpandableText;

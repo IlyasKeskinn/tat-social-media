@@ -1,12 +1,4 @@
-import {
-  Flex,
-  Text,
-  Avatar,
-  Box,
-  Image,
-  AspectRatio,
-  Divider,
-} from "@chakra-ui/react";
+import { Flex, Text, Box, Image, AspectRatio, Divider } from "@chakra-ui/react";
 
 import Actions from "./Actions";
 import PostInfo from "./PostInfo";
@@ -55,7 +47,7 @@ const UserPost = () => {
     if (postError) {
       showToast("Error", postError.message, "error");
     }
-  }, [postStatusCode, responseData, postError, showToast]);
+  }, [postStatusCode, responseData, postError, showToast, setPosts]);
 
   useEffect(() => {
     const fetchUser = async (userId) => {
@@ -78,7 +70,7 @@ const UserPost = () => {
     } else {
       setUserLoading(false);
     }
-  }, [currentPost, API_URL, currentUser?._id, showToast]);
+  }, [currentPost, currentUser?._id, showToast]);
 
   if (postLoading || userLoading) return <Loading />;
 

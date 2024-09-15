@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 export const HomeSVG = ({ isActive, width = "24px", height = "24px" }) => {
   return (
@@ -16,6 +16,12 @@ export const HomeSVG = ({ isActive, width = "24px", height = "24px" }) => {
   );
 };
 
+HomeSVG.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
+};
+
 export const ExploreSVG = ({ isActive, width = "24px", height = "24px" }) => {
   return (
     <svg
@@ -30,12 +36,17 @@ export const ExploreSVG = ({ isActive, width = "24px", height = "24px" }) => {
         stroke="currentColor"
         strokeWidth="2px"
         strokeLinecap="round"
-       strokeLinejoin="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 };
 
+ExploreSVG.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
+};
 export const SearchSVG = ({ isActive, width = "24px", height = "24px" }) => {
   return (
     <svg
@@ -56,8 +67,13 @@ export const SearchSVG = ({ isActive, width = "24px", height = "24px" }) => {
     </svg>
   );
 };
+SearchSVG.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
+};
 
-export const MessageSVG = ({ isActive, width = "24px", height = "24px" }) => {
+export const MessageSVG = ({ width = "24px", height = "24px" }) => {
   return (
     <svg
       aria-label="send"
@@ -85,6 +101,11 @@ export const MessageSVG = ({ isActive, width = "24px", height = "24px" }) => {
     </svg>
   );
 };
+MessageSVG.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
+};
 
 export const BookmarkSVG = ({ isActive, width = "24px", height = "24px" }) => {
   return (
@@ -101,8 +122,14 @@ export const BookmarkSVG = ({ isActive, width = "24px", height = "24px" }) => {
         fill={isActive ? "#B4D6CD" : "transparent"}
         strokeWidth="2"
         strokeLinecap="round"
-       strokeLinejoin="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
+};
+
+BookmarkSVG.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
 };

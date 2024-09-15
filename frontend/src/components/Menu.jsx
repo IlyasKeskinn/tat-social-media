@@ -25,9 +25,10 @@ import userAtom from "../atoms/userAtom";
 
 import { useRecoilValue } from "recoil";
 import { useLocation } from "react-router-dom";
-import { ExploreSVG, HomeSVG, SearchSVG, MessageSVG } from "./IconSvg";
-import { useRef } from "react";
+import { ExploreSVG, HomeSVG, MessageSVG, SearchSVG } from "./IconSvg";
 import SearchDrawer from "./SearchDrawer";
+
+import PropTypes from "prop-types";
 
 const Menu = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -80,7 +81,7 @@ const Menu = () => {
             title="Search"
             icon={BsSearch}
           />
-          <MenuItem title="Message" icon={AiOutlineMessage} />
+          <MenuItem title="Message" to={"/message"} icon={AiOutlineMessage} />
           <LogoutButton />
           <Spacer />
           <Button background="transparent" my={2} onClick={toggleColorMode}>
@@ -116,37 +117,28 @@ const Menu = () => {
         gap={8}
         bg={colorMode === "light" ? "#e6edf2" : "#1A2334"}
       >
-        <MobileMenuItem
-          children={<HomeSVG isActive={getActiveStatus("/")} />}
-          to="/"
-        />
-        <MobileMenuItem
-          children={
-            <ExploreSVG
-              width="30px"
-              height="30px"
-              isActive={getActiveStatus("/explore")}
-            />
-          }
-          to="/explore"
-        />
-        <MobileMenuItem
-          children={
-            <ProfileAvatar
-              user={user}
-              isActive={getActiveStatus(`/profile/${user.userName}`)}
-            />
-          }
-          to={`/profile/${user.userName}`}
-        />
-        <MobileMenuItem
-          children={<SearchSVG isActive={getActiveStatus("/search")} />}
-          callbackFunction={handleSearch}
-        />
-        <MobileMenuItem
-          children={<MessageSVG isActive={getActiveStatus("/message")} />}
-          to="/message"
-        />
+        <MobileMenuItem to="/">
+          <HomeSVG isActive={getActiveStatus("/")} />
+        </MobileMenuItem>
+        <MobileMenuItem to="/explore">
+          <ExploreSVG
+            width="30px"
+            height="30px"
+            isActive={getActiveStatus("/explore")}
+          />
+        </MobileMenuItem>
+        <MobileMenuItem to={`/profile/${user.userName}`}>
+          <ProfileAvatar
+            user={user}
+            isActive={getActiveStatus(`/profile/${user.userName}`)}
+          />
+        </MobileMenuItem>
+        <MobileMenuItem to="/message">
+          <MessageSVG isActive={getActiveStatus("/message")} />
+        </MobileMenuItem>
+        <MobileMenuItem callbackFunction={handleSearch}>
+          <SearchSVG isActive={getActiveStatus("/search")} />
+        </MobileMenuItem>
       </Flex>
       <SearchDrawer isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
     </>
@@ -164,3 +156,8 @@ export const ProfileAvatar = ({ user, isActive }) => (
     />
   </Flex>
 );
+
+ProfileAvatar.propTypes = {
+  user: PropTypes.object.isRequired,
+  isActive: PropTypes.bool.isRequired,
+};

@@ -51,7 +51,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm({
     resolver: zodResolver(schema),
@@ -75,7 +75,7 @@ const Login = () => {
       setUserState(responseData);
       reset();
     }
-  }, [error,responseData]);
+  }, [error, responseData]);
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>

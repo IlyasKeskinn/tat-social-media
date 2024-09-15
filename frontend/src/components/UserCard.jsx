@@ -1,11 +1,12 @@
 import { Avatar, Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
 
-const UserCard = ({ user , onClose = {}}) => {
+const UserCard = ({ user, onClose = {} }) => {
   const currentUser = useRecoilValue(userAtom);
 
   const PROFILE_URL = `/profile/${user.userName}`;
@@ -16,7 +17,6 @@ const UserCard = ({ user , onClose = {}}) => {
   const isProfileOwner = user._id === currentUser._id;
 
   const navigate = useNavigate();
-
 
   const {
     isLoading,
@@ -34,7 +34,7 @@ const UserCard = ({ user , onClose = {}}) => {
 
   useEffect(() => {
     if (error) {
-      showToast("Error", error.message, "error");
+      console.log(error);
     }
     if (followStatusCode === 200) {
       if (isUserFollowing) {
@@ -135,4 +135,8 @@ const UserCard = ({ user , onClose = {}}) => {
   );
 };
 
+UserCard.propTypes = {
+  user: PropTypes.object.isRequired,
+  onClose: PropTypes.func,
+};
 export default UserCard;

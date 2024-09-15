@@ -7,7 +7,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Divider,
   Button,
   ModalFooter,
   Input,
@@ -15,19 +14,17 @@ import {
   InputRightElement,
   Box,
   useColorMode,
-  IconButton,
   Icon,
   FormControl,
 } from "@chakra-ui/react";
-import EmojiPicker from "emoji-picker-react";
 
-import { MdClose, MdEmojiEmotions } from "react-icons/md";
+import { MdEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch.jsx";
 import useShowToast from "../hooks/showToast.jsx";
 
@@ -39,6 +36,8 @@ import userAtom from "../atoms/userAtom.js";
 
 import Comment from "./Comment.jsx";
 import EmojiPickerBox from "./EmojiPickerBox.jsx";
+
+import PropTypes from "prop-types";
 
 const schema = z.object({
   text: z.string().min(1, "cannot be sent empty"),
@@ -229,3 +228,9 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
 };
 
 export default Comments;
+
+Comments.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  currentPost: PropTypes.object.isRequired,
+};

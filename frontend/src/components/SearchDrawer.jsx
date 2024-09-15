@@ -16,6 +16,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Loading from "./Loading";
+import PropTypes from "prop-types";
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 
@@ -36,7 +37,7 @@ const getSearchUsers = async ({ queryKey, pageParam = 1 }) => {
   }
 };
 
-const SearchDrawer = ({ isOpen, onOpen, onClose }) => {
+const SearchDrawer = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState([]);
   const { ref, inView } = useInView();
@@ -120,6 +121,11 @@ const SearchDrawer = ({ isOpen, onOpen, onClose }) => {
       </DrawerContent>
     </Drawer>
   );
+};
+
+SearchDrawer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default SearchDrawer;

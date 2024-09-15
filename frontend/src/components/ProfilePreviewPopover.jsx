@@ -8,6 +8,8 @@ import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
 import Loading from "./Loading";
 
+import PropTypes from "prop-types";
+
 const ProfilePreviewPopover = ({ userId }) => {
   const navigate = useNavigate();
   const showToast = useShowToast();
@@ -140,4 +142,7 @@ const ProfilePreviewPopover = ({ userId }) => {
   );
 };
 
+ProfilePreviewPopover.propTypes = {
+  userId: PropTypes.string.isRequired,
+};
 export default ProfilePreviewPopover;

@@ -23,7 +23,7 @@ import { useRecoilValue } from "recoil";
 
 import userAtom from "../atoms/userAtom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
-import { useState } from "react";
+import PropTypes from "prop-types";
 
 const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   const toast = showToast();
@@ -212,4 +212,11 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   );
 };
 
+UserHeader.propTypes = {
+  user: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  handlePost: PropTypes.func.isRequired,
+  handleSaved: PropTypes.func.isRequired,
+  tab: PropTypes.string.isRequired,
+};
 export default UserHeader;

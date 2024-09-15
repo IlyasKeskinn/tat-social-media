@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useRecoilState } from "recoil";
@@ -66,7 +66,7 @@ const Feed = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   return (
     <>

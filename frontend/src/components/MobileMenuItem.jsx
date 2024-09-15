@@ -1,6 +1,6 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const MobileMenuItem = ({ children, to, callbackFunction = () => {} }) => {
   const handleClick = () => {
@@ -26,3 +26,9 @@ const MobileMenuItem = ({ children, to, callbackFunction = () => {} }) => {
 };
 
 export default MobileMenuItem;
+
+MobileMenuItem.propTypes = {
+  children: PropTypes.node.isRequired,
+  to: PropTypes.string.isRequired,
+  callbackFunction: PropTypes.func,
+};

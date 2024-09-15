@@ -15,6 +15,8 @@ import { useState } from "react";
 import { LikeButton } from "./Actions.jsx";
 import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.jsx";
 
+import PropTypes from "prop-types";
+
 const Reply = ({ reply }) => {
   const [liked, setLiked] = useState(false);
 
@@ -61,12 +63,7 @@ const Reply = ({ reply }) => {
           </Text>
         </Flex>
         <ExpandableText>{reply.reply}</ExpandableText>
-        <Text
-          fontSize={"sm"}
-          color={"gray.500"}
-          textAlign={"start"}
-          w={"50px"}
-        >
+        <Text fontSize={"sm"} color={"gray.500"} textAlign={"start"} w={"50px"}>
           {useFormatShortDistanceToNow(reply.createdAt)}
         </Text>
       </Flex>
@@ -82,6 +79,10 @@ const Reply = ({ reply }) => {
       </Flex>
     </Flex>
   );
+};
+
+Reply.propTypes = {
+  reply: PropTypes.object,
 };
 
 export default Reply;

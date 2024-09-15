@@ -1,7 +1,6 @@
 import { Button, Image, VStack, Box, Flex, Text } from "@chakra-ui/react";
-import React from "react";
 import { useNavigate } from "react-router";
-
+import PropTypes from "prop-types";
 const NotFoundPage = ({ text }) => {
   const navigate = useNavigate();
   return (
@@ -35,3 +34,7 @@ const NotFoundPage = ({ text }) => {
 };
 
 export default NotFoundPage;
+
+NotFoundPage.propTypes = {
+  text: PropTypes.string.isRequired,
+};

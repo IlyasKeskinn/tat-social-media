@@ -13,10 +13,7 @@ const useFollowUnfollow = (user) => {
     user.followers?.includes(currentUser._id)
   );
   const URL = `user/followUnfollow/${user._id}`;
-  const { statusCode, isLoading, error, putData, responseData } = useFetch(
-    URL,
-    "PUT"
-  );
+  const { statusCode, isLoading, error, putData } = useFetch(URL, "PUT");
 
   const handleFollowUnfollow = () => {
     putData();
@@ -34,7 +31,14 @@ const useFollowUnfollow = (user) => {
       }
       setUserFollowing(!isUserFollowing);
     }
-  }, [error, responseData]);
+  }, [
+    error,
+    currentUser._id,
+    isUserFollowing,
+    showToast,
+    statusCode,
+    user.followers,
+  ]);
 
   return { handleFollowUnfollow, isLoading, isUserFollowing };
 };

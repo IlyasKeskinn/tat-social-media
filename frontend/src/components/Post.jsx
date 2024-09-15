@@ -6,19 +6,17 @@ import { Link as LinkRouter } from "react-router-dom";
 
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {  useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import PostInfo from "./PostInfo";
 import PostAvatar from "./PostAvatar";
-import postAtom from "../atoms/postAtom";
-
 import { memo } from "react";
 import PostSkeleton from "./PostSkeleton";
+import PropTypes from "prop-types";
 
 const Post = memo(({ post }) => {
   const [user, setUser] = useState(null);
   const [postOwner, setPostOwner] = useState(null);
-  const [posts, setPosts] = useRecoilState(postAtom);
 
   const URL = `user/profile/${post?.postedBy}`;
   const postID = post._id;
@@ -85,5 +83,8 @@ const Post = memo(({ post }) => {
     </>
   );
 });
-
+Post.displayName = "Post";
+Post.propTypes = {
+  post: PropTypes.object.isRequired,
+};
 export default Post;

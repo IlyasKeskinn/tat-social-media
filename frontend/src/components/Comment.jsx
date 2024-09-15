@@ -20,6 +20,8 @@ import Reply from "./Reply.jsx";
 import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.jsx";
 import useShowToast from "../hooks/showToast.jsx";
 
+import PropTypes from "prop-types";
+
 const Comment = ({ comment }) => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const FETCH_REPLIES = `post/getreplies/${comment._id}`;
@@ -164,3 +166,7 @@ const Comment = ({ comment }) => {
 };
 
 export default Comment;
+
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+};

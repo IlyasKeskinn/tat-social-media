@@ -66,7 +66,7 @@ const SignUP = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm({
     resolver: zodResolver(schema),
@@ -89,7 +89,6 @@ const SignUP = () => {
       showToast("Error", error.message, "error");
     }
   }, [responseData, error]);
-
 
   return (
     <Box position={"relative"}>

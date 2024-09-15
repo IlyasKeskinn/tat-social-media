@@ -16,9 +16,9 @@ import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import useShowToast from "../hooks/showToast";
 import Loading from "./Loading";
-import { useNavigate } from "react-router";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
 import UserTile from "./UserTile";
+import PropTypes from "prop-types";
 
 const UserListModal = ({ isOpen, onClose, likesArr }) => {
   const LIKE_USERS_URL = "user/fetchlikeduser";
@@ -27,7 +27,6 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
 
   const {
     responseData: likeUsers,
-    statusCode: fetchUserStatusCode,
     error: fetchUsersError,
     postData: likeUsersPostData,
     isLoading: fetchingUsers,
@@ -50,10 +49,6 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
       setLikedUsers(likeUsers);
     }
   }, [likeUsers]);
-
-  //popoever
-  const [isPopoverOpen, setPopoverOpen] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <Modal size={"md"} isOpen={isOpen} onClose={onClose}>
@@ -101,4 +96,9 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
   );
 };
 
+UserListModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  likesArr: PropTypes.array.isRequired,
+};
 export default UserListModal;

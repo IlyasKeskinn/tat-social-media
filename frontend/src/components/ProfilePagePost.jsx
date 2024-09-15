@@ -4,6 +4,7 @@ import { AspectRatio, GridItem, Image, Box, Flex } from "@chakra-ui/react";
 
 import { FaHeart } from "react-icons/fa";
 import { FaCommentAlt } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const ProfilePagePost = ({ post }) => {
   const navigate = useNavigate();
@@ -53,6 +54,10 @@ const ProfilePagePost = ({ post }) => {
       </Box>
     </GridItem>
   );
+};
+
+ProfilePagePost.propTypes = {
+  post: PropTypes.object.isRequired,
 };
 
 export default ProfilePagePost;

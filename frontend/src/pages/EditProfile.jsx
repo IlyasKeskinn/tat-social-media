@@ -59,7 +59,7 @@ const EditProfile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {

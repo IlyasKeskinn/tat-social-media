@@ -1,5 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
-export const ProtectedRoutes = ({condition, routes = "/"}) => {
+import PropTypes from "prop-types";
+
+export const ProtectedRoutes = ({ condition, routes = "/" }) => {
   return (
     <div>
       {condition ? (
@@ -9,4 +11,9 @@ export const ProtectedRoutes = ({condition, routes = "/"}) => {
       )}
     </div>
   );
+};
+
+ProtectedRoutes.propTypes = {
+  condition: PropTypes.bool.isRequired,
+  routes: PropTypes.string,
 };

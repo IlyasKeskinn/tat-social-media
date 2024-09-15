@@ -1,5 +1,6 @@
 import { Avatar, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
 
 const UserTile = ({ user }) => {
   const navigate = useNavigate();
@@ -27,6 +28,10 @@ const UserTile = ({ user }) => {
       </Flex>
     </Flex>
   );
+};
+
+UserTile.propTypes = {
+  user: PropTypes.object.isRequired,
 };
 
 export default UserTile;

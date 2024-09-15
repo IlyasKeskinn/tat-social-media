@@ -23,12 +23,13 @@ import useDelete from "../hooks/useDelete";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
+import PropTypes from "prop-types";
 
 const PostOwnerActions = ({ postId }) => {
   const currentUser = useRecoilValue(userAtom);
   const copyPost = useCopyPost();
   const URL = `post/deletepost/${postId}`;
-  
+
   const { handleDelete, isLoading, deleted } = useDelete(
     postId,
     URL,
@@ -103,4 +104,7 @@ const PostOwnerActions = ({ postId }) => {
   );
 };
 
+PostOwnerActions.propTypes = {
+  postId: PropTypes.string.isRequired,
+};
 export default PostOwnerActions;

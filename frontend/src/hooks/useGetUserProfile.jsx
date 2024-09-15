@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import useFetch from "./useFetch";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useShowToast from "./showToast";
 
 const useGetUserProfile = (userName) => {

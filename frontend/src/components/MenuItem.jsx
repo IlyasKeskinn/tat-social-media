@@ -1,5 +1,6 @@
 import { Text, Flex, Box } from "@chakra-ui/react";
 import { Link, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 const MenuItem = ({ title, icon: Icon, to, callbackFunction = () => {} }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
@@ -41,3 +42,10 @@ const MenuItem = ({ title, icon: Icon, to, callbackFunction = () => {} }) => {
 };
 
 export default MenuItem;
+
+MenuItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
+  to: PropTypes.string.isRequired,
+  callbackFunction: PropTypes.func,
+};

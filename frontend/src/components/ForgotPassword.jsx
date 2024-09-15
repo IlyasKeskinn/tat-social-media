@@ -39,7 +39,7 @@ const ForgotPassword = () => {
             </Text>
           </Heading>
           <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-            You'll get an email with a reset link
+            You will get an email with a reset link
           </Text>
         </Stack>
         <Box as={"form"} mt={10}>

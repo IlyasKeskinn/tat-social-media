@@ -1,0 +1,18 @@
+@keyframes fillHeart {
+    0% {
+      fill: transparent;
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      fill: rgb(237, 73, 86);
+      transform: scale(1);
+    }
+  }
+  
+  .fill-animation {
+    animation: fillHeart 0.6s ease-in-out forwards, shake 0.2s ease-in-out 0.6s;
+  }
+  
