@@ -34,6 +34,14 @@ const userSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
+    blockedUsers: {
+      type: [mongoose.Types.ObjectId],
+      ref: "User",
+    },
+    blockedBy: {
+      type: [mongoose.Types.ObjectId],
+      ref: "User",
+    },
     bookmarksCollection: {
       type: [mongoose.Types.ObjectId],
       ref: "BookmarkCollection",
@@ -50,6 +58,10 @@ const userSchema = mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
+    },
+    privateProfile: {
+      type: Boolean,
+      default: false,
     },
   },
   {

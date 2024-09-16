@@ -245,6 +245,46 @@ const followUnfollowUser = async (req, res) => {
   }
 };
 
+const blockUnblockUser = async (req, res) => {
+  const currentUserId = req.user._id;
+  const { id } = req.params;
+
+  if (id === currentUserId.toString()) {
+    return res.status(400).json({ error: "You cannot block yoursefl! " });
+  }
+
+  const currentUser = await User.findById(currentUserId);
+  const modifyUser = await User.findById(id);
+
+  if (!currentUser || !modifyUser) {
+    return res.status(404).json({ error: "Users not found!" });
+  }
+
+  const isAlreadyBlocked = currentUser.blockedUsers.includes(id);
+
+  if (isAlreadyBlocked) {
+    await User.findByIdAndUpdate(id, { $pull: { blockedBy: currentUserId } });
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { blockedUsers: id },
+    });
+    res.status(200).json({
+      message: `${modifyUser.userName} was removed from the blocked list.`,
+    });
+  } else {
+    await User.findByIdAndUpdate(id, { $push: { blockedBy: currentUserId } });
+    await User.findByIdAndUpdate(currentUserId, {
+      $push: { blockedUsers: id },
+    });
+    if (currentUser.following.includes(id)) {
+      await User.findByIdAndUpdate(id, { $pull: { followers: currentUserId } });
+      await User.findByIdAndUpdate(currentUserId, { $pull: { following: id } });
+    }
+    res
+      .status(200)
+      .json({ message: `Added to ${modifyUser.userName}'s blocked list. ` });
+  }
+};
+
 const fetchlikeUsers = async (req, res) => {
   const likedUsersArray = req.body;
 
@@ -293,4 +333,5 @@ module.exports = {
   fetchlikeUsers,
   searchUser,
   suggestUsers,
+  blockUnblockUser,
 };

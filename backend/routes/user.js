@@ -10,6 +10,7 @@ const {
   fetchlikeUsers,
   searchUser,
   suggestUsers,
+  blockUnblockUser,
 } = require("../controller/user");
 const isAuth = require("../middlewares/isAuth");
 
@@ -26,5 +27,6 @@ router.post("/login", signIn);
 
 router.put("/update/:id", isAuth, updateProfile);
 router.put("/followUnfollow/:id", isAuth, followUnfollowUser);
+router.put("/blockUnblock/:id", isAuth, blockUnblockUser);
 
 module.exports = router;
