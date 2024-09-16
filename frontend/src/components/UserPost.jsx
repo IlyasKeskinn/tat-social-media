@@ -1,5 +1,4 @@
-import { Flex, Text, Box, Image, AspectRatio, Divider } from "@chakra-ui/react";
-
+import { Flex, Text, Box, Image, Divider } from "@chakra-ui/react";
 import Actions from "./Actions";
 import PostInfo from "./PostInfo";
 import useFetch from "../hooks/useFetch";
@@ -81,39 +80,41 @@ const UserPost = () => {
   return (
     <>
       {currentPost?._id && postedBy && (
-        <Flex gap={3} mb={4} py={5} w={"full"}>
+        <Flex gap={3} w={"100%"}>
           <Flex direction={"column"} alignItems={"center"}>
             <PostAvatar postedBy={postedBy} />
-            <Box w={"1px"} h={"full"} bg={"lightgrey"} my={2}></Box>
+            <Box w={"1px"} h={"full"} bg={"lightgrey"}></Box>
             <Box>
               <Text fontSize={"2xl"} align={"center"}>
                 {currentPost.tatmoji}
               </Text>
             </Box>
           </Flex>
-          <Flex flex={1} direction={"column"} gap={2}>
+          <Flex flex={1} direction={"column"} alignItems={"center"} gap={2}>
             <PostInfo
               postOwner={postOwner}
               post={currentPost}
               postedBy={postedBy}
             />
-            <AspectRatio
-              ratio={4 / 3}
-              border={"1px solid"}
-              borderColor={"gray.light"}
+            <Box
               borderRadius={6}
               overflow={"hidden"}
-              h={{ sm: "600px", md: "650px", lg: "700px" }}
               w={"100%"}
+              maxW="700px" // Adjust based on your design needs
+              maxH="700px" // Adjust based on your design needs
+              position="relative"
+              height="auto"
             >
               <Image
                 src={currentPost.images[0]}
-                w={"full"}
-                h={"full"}
-                objectFit={"cover"}
+                alt="Post Image"
+                objectFit={"contain"} // Ensures the entire image is visible
                 objectPosition={"center"}
+                width="100%"
+                height="100%"
+                minHeight="300px" // Ensures a minimum height if image is too small
               />
-            </AspectRatio>
+            </Box>
             <Text className="nonSelectableText">{currentPost.text}</Text>
             <Actions currentPost={currentPost} />
             <Divider />

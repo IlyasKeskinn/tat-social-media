@@ -1,12 +1,9 @@
-import { Flex, Text, Box, Image, AspectRatio, Divider } from "@chakra-ui/react";
-
+import { Flex, Text, Box, Image, Divider } from "@chakra-ui/react";
 import Actions from "./Actions";
-
 import { Link as LinkRouter } from "react-router-dom";
-
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
-import {  useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import PostInfo from "./PostInfo";
 import PostAvatar from "./PostAvatar";
@@ -56,8 +53,27 @@ const Post = memo(({ post }) => {
           <Flex flex={1} direction={"column"} gap={2}>
             <PostInfo postOwner={postOwner} post={post} postedBy={user} />
             <LinkRouter style={{ width: "100%" }} to={`/post/${postID}`}>
-              <AspectRatio
-                ratio={4 / 3}
+              <Box
+                borderRadius={6}
+                overflow={"hidden"}
+                w={"100%"}
+                maxW="700px" // Adjust based on your design needs
+                maxH="700px" // Adjust based on your design needs
+                position="relative"
+                height="auto"
+              >
+                <Image
+                  src={post.images[0]}
+                  alt="Post Image"
+                  objectFit={"contain"} // Ensures the entire image is visible
+                  objectPosition={"center"}
+                  width="100%"
+                  height="100%"
+                  minHeight="300px" // Ensures a minimum height if image is too small
+                />
+              </Box>
+              {/* <AspectRatio
+                ratio={1 / 4}
                 border={"1px solid"}
                 borderColor={"gray.light"}
                 borderRadius={6}
@@ -72,7 +88,7 @@ const Post = memo(({ post }) => {
                   objectFit={"cover"}
                   objectPosition={"center"}
                 />
-              </AspectRatio>
+              </AspectRatio> */}
             </LinkRouter>
             <Text className="nonSelectableText">{post.text}</Text>
             <Actions currentPost={post} />
