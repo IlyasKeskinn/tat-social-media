@@ -51,7 +51,10 @@ const UserPost = () => {
   useEffect(() => {
     const fetchUser = async (userId) => {
       try {
-        const response = await fetch(`${API_URL}/user/profile/${userId}`);
+        const response = await fetch(`${API_URL}/user/profile/${userId}`, {
+          method: "GET",
+          credentials: "include"
+        });
         if (response.status === 200) {
           const data = await response.json();
           setPostedBy(data);

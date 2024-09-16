@@ -16,10 +16,10 @@ const isAuth = require("../middlewares/isAuth");
 
 const router = express.Router();
 
-router.get("/profile/:query", getProfile);
+router.get("/profile/:query", isAuth, getProfile);
 router.get("/suggestUsers", isAuth, suggestUsers);
 router.get("/logout", logout);
-router.get("/searchuser", searchUser);
+router.get("/searchuser",isAuth, searchUser);
 router.post("/fetchlikeduser/", fetchlikeUsers);
 
 router.post("/register", registerUser);

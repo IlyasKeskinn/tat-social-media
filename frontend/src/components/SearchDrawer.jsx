@@ -25,7 +25,11 @@ const getSearchUsers = async ({ queryKey, pageParam = 1 }) => {
 
   try {
     const response = await fetch(
-      `${API_URL}/user/searchuser?query=${query}&page=${pageParam}`
+      `${API_URL}/user/searchuser?query=${query}&page=${pageParam}`,
+      {
+        method: "GET",
+        credentials: "include"
+      }
     );
     if (!response.ok) {
       throw new Error(response.status);

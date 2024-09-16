@@ -9,6 +9,7 @@ const cloudinary = require("cloudinary");
 const getProfile = async (req, res) => {
   const { query } = req.params;
 
+  const currentUserId = req.user._id;
   let user;
   if (mongoose.Types.ObjectId.isValid(query)) {
     user = await User.findOne({ _id: query })
@@ -20,11 +21,36 @@ const getProfile = async (req, res) => {
       .select("updateAt");
   }
 
+  const currentUser = await User.findById(currentUserId);
+
   if (!user) {
     return res.status(404).json({ error: "User not found!" });
   }
 
-  res.status(200).json(user);
+  const isBlockedByUser = await currentUser.blockedBy.includes(user._id);
+
+  if (isBlockedByUser) {
+    return res
+      .status(404)
+      .json({ error: `You are blocked by this ${user.userName}.` });
+  }
+
+  const isBlockingUser = currentUser.blockedUsers.includes(user._id);
+  if (isBlockingUser) {
+    return res.status(200).json({
+      _id: user._id,
+      profilePic: user.profilePic,
+      userName: "T.A.T",
+      fullName: "T.A.T",
+      bio: "",
+      followers: [],
+      post: [],
+      following: [],
+      blockedStatus : "blocked"
+    });
+  }
+
+  res.status(200).json({...user._doc , blockedStatus : "notBlock" });
 };
 
 const suggestUsers = async (req, res) => {
@@ -43,13 +69,16 @@ const suggestUsers = async (req, res) => {
   const followingIds = currentUser.following.map(
     (id) => new mongoose.Types.ObjectId(id)
   );
+  const blockedByIds = currentUser.blockedBy.map(
+    (id) => new mongoose.Types.ObjectId(id)
+  );
 
   const suggestedUsers = await User.aggregate([
     {
       $match: {
         $expr: {
           $and: [
-            { $not: { $in: ["$_id", followingIds] } },
+            { $not: { $in: ["$_id", [...followingIds, ...blockedByIds]] } },
             { $ne: ["$_id", currentUserId] },
           ],
         },
@@ -232,7 +261,15 @@ const followUnfollowUser = async (req, res) => {
     return res.status(400).json({ error: "Users not found!" });
   }
 
+  const isBlockingUser = currentUser.blockedUsers.includes(id);
+  const isBlockedByUser = currentUser.blockedBy.includes(id);
   const isFollowing = currentUser.following.includes(id);
+
+  if (isBlockedByUser || isBlockingUser) {
+    return res.status(400).json({
+      error: "Cannot follow/unfollow a blocked user!",
+    });
+  }
 
   if (isFollowing) {
     await User.findByIdAndUpdate(id, { $pull: { followers: currentUserId } });
@@ -263,22 +300,42 @@ const blockUnblockUser = async (req, res) => {
   const isAlreadyBlocked = currentUser.blockedUsers.includes(id);
 
   if (isAlreadyBlocked) {
-    await User.findByIdAndUpdate(id, { $pull: { blockedBy: currentUserId } });
-    await User.findByIdAndUpdate(currentUserId, {
-      $pull: { blockedUsers: id },
-    });
+    modifyUser.blockedBy = modifyUser.blockedBy.filter(
+      (userId) => userId.toString() !== currentUserId.toString()
+    );
+    currentUser.blockedUsers = currentUser.blockedUsers.filter(
+      (userId) => userId.toString() !== id.toString()
+    );
+
+    await currentUser.save();
+    await modifyUser.save();
+
     res.status(200).json({
       message: `${modifyUser.userName} was removed from the blocked list.`,
     });
   } else {
-    await User.findByIdAndUpdate(id, { $push: { blockedBy: currentUserId } });
-    await User.findByIdAndUpdate(currentUserId, {
-      $push: { blockedUsers: id },
-    });
+    currentUser.blockedUsers.push(id);
+    modifyUser.blockedBy.push(currentUserId);
+
     if (currentUser.following.includes(id)) {
-      await User.findByIdAndUpdate(id, { $pull: { followers: currentUserId } });
-      await User.findByIdAndUpdate(currentUserId, { $pull: { following: id } });
+      currentUser.following = currentUser.following.filter(
+        (userId) => userId.toString() !== id.toString()
+      );
+      modifyUser.followers = modifyUser.followers.filter(
+        (userId) => userId.toString() !== currentUserId.toString()
+      );
     }
+    if (modifyUser.following.includes(currentUserId)) {
+      currentUser.followers = currentUser.followers.filter(
+        (userId) => userId.toString() !== id.toString()
+      );
+      modifyUser.following = modifyUser.following.filter(
+        (userId) => userId.toString() !== currentUserId.toString()
+      );
+    }
+
+    await currentUser.save();
+    await modifyUser.save();
     res
       .status(200)
       .json({ message: `Added to ${modifyUser.userName}'s blocked list. ` });
@@ -301,6 +358,13 @@ const fetchlikeUsers = async (req, res) => {
 
 const searchUser = async (req, res) => {
   const { query, limit = 10, page = 1 } = req.query;
+  const currentUserId = req.user._id;
+
+  const currentUser = await User.findById(currentUserId);
+
+  const blockedIds = currentUser.blockedBy.map(
+    (id) => new mongoose.Types.ObjectId(id)
+  );
 
   const skip = (page - 1) * limit;
 
@@ -313,6 +377,12 @@ const searchUser = async (req, res) => {
         fullName: { $regex: query.trim().toLowerCase(), $options: "i" },
       },
     ],
+    $expr: {
+      $and: [
+        { $not: { $in: ["$_id", blockedIds] } },
+        { $ne: ["$_id", currentUserId] },
+      ],
+    },
   })
     .sort({
       userName: 1,
