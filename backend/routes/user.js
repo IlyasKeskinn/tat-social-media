@@ -9,12 +9,14 @@ const {
   followUnfollowUser,
   fetchlikeUsers,
   searchUser,
+  suggestUsers,
 } = require("../controller/user");
 const isAuth = require("../middlewares/isAuth");
 
 const router = express.Router();
 
 router.get("/profile/:query", getProfile);
+router.get("/suggestUsers", isAuth, suggestUsers);
 router.get("/logout", logout);
 router.get("/searchuser", searchUser);
 router.post("/fetchlikeduser/", fetchlikeUsers);

@@ -9,7 +9,7 @@ const MainLayout = () => {
       >
         <Stack spacing={{base : "0" , sm :8}} direction={"row"}>
           <Menu />
-          <Flex flex={5} py={4} my={4}>
+          <Flex flex={5} py={4} my={4} gap={5}>
             <Outlet />
           </Flex>
         </Stack>

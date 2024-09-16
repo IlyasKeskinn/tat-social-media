@@ -1,54 +1,21 @@
 import { Avatar, Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
+import useFollowUnfollow from "../hooks/useFollowUnfollow";
 
 const UserCard = ({ user, onClose = {} }) => {
   const currentUser = useRecoilValue(userAtom);
 
   const PROFILE_URL = `/profile/${user.userName}`;
-  const FOLLOW_URL = `user/followUnfollow/${user._id}`;
-
-  const [isUserFollowing, setIsUserFollowing] = useState(false);
 
   const isProfileOwner = user._id === currentUser._id;
 
   const navigate = useNavigate();
 
-  const {
-    isLoading,
-    error,
-    putData,
-    responseData: followData,
-    statusCode: followStatusCode,
-  } = useFetch(FOLLOW_URL, "PUT");
-
-  useEffect(() => {
-    if (user) {
-      setIsUserFollowing(user.followers?.includes(currentUser?._id));
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-    if (followStatusCode === 200) {
-      if (isUserFollowing) {
-        user.followers.pop();
-      } else {
-        user.followers.push(currentUser._id);
-      }
-      setIsUserFollowing(!isUserFollowing);
-    }
-  }, [followData]);
-
-  const handleFollowUnfollow = () => {
-    putData();
-  };
+  const { handleFollowUnfollow, isLoading, isUserFollowing } =
+    useFollowUnfollow(user);
 
   return (
     <VStack w={"full"}>
@@ -112,6 +79,7 @@ const UserCard = ({ user, onClose = {} }) => {
                   <Button
                     bg={"blue.400"}
                     color={"white"}
+                    w={24}
                     _hover={{
                       bg: "blue.500",
                     }}

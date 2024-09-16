@@ -27,6 +27,51 @@ const getProfile = async (req, res) => {
   res.status(200).json(user);
 };
 
+const suggestUsers = async (req, res) => {
+  const currentUserId = req.user._id;
+
+  if (!currentUserId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const currentUser = await User.findById(currentUserId);
+
+  if (!currentUserId) {
+    return res.status(404).json({ message: "Current user not found!" });
+  }
+
+  const followingIds = currentUser.following.map(
+    (id) => new mongoose.Types.ObjectId(id)
+  );
+
+  const suggestedUsers = await User.aggregate([
+    {
+      $match: {
+        $expr: {
+          $and: [
+            { $not: { $in: ["$_id", followingIds] } },
+            { $ne: ["$_id", currentUserId] },
+          ],
+        },
+      },
+    },
+    { $sample: { size: 3 } },
+
+    {
+      $project: {
+        _id: 1,
+        profilePic: 1,
+        userName: 1,
+        fullName: 1,
+        followers: 1,
+        following: 1,
+        bio: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json(suggestedUsers);
+};
 const registerUser = async (req, res) => {
   const { firstName, lastName, userName, password, email } = req.body;
 
@@ -204,7 +249,7 @@ const fetchlikeUsers = async (req, res) => {
   const likedUsersArray = req.body;
 
   const likedUsers = await User.find({ _id: { $in: likedUsersArray } }).select(
-    `profilePic userName fullName`
+    `profilePic userName fullName followers following`
   );
 
   if (!likedUsers) {
@@ -236,10 +281,6 @@ const searchUser = async (req, res) => {
     .skip(skip)
     .limit(parseInt(limit));
 
-  // if (!users || users.length === 0) {
-  //   return res.status(404).json({ error: "Users not found!" });
-  // }
-
   res.status(200).json(users);
 };
 module.exports = {
@@ -251,4 +292,5 @@ module.exports = {
   followUnfollowUser,
   fetchlikeUsers,
   searchUser,
+  suggestUsers,
 };

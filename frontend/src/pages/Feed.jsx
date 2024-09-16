@@ -9,6 +9,7 @@ import CreatePost from "../components/CreatePost";
 import Loading from "../components/Loading";
 import postAtom from "../atoms/postAtom";
 import useShowToast from "../hooks/showToast";
+import SuggestedUsers from "../components/SuggestedUsers";
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 
@@ -91,11 +92,8 @@ const Feed = () => {
           </>
         )}
       </Flex>
-      <Flex flex={2} display={{ base: "none", lg: "flex" }}>
-        {/* <Text>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis
-          provident beatae fugiat?
-        </Text> */}
+      <Flex flex={2} display={{ base: "none", lg: "flex" }} flexDirection={"column"} alignItems={"center"} alignContent={"center"}>
+        <SuggestedUsers />
       </Flex>
     </>
   );

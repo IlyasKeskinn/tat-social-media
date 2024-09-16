@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 import useShowToast from "./showToast";
-
 import { useRecoilValue } from "recoil";
-
 import userAtom from "../atoms/userAtom";
-
 const useFollowUnfollow = (user) => {
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
@@ -13,12 +10,13 @@ const useFollowUnfollow = (user) => {
     user.followers?.includes(currentUser._id)
   );
   const URL = `user/followUnfollow/${user._id}`;
-  const { statusCode, isLoading, error, putData } = useFetch(URL, "PUT");
-
+  const { statusCode, isLoading, error, putData, responseData } = useFetch(
+    URL,
+    "PUT"
+  );
   const handleFollowUnfollow = () => {
     putData();
   };
-
   useEffect(() => {
     if (error) {
       showToast("Error", error.message, "error");
@@ -31,16 +29,8 @@ const useFollowUnfollow = (user) => {
       }
       setUserFollowing(!isUserFollowing);
     }
-  }, [
-    error,
-    currentUser._id,
-    isUserFollowing,
-    showToast,
-    statusCode,
-    user.followers,
-  ]);
-
+  }, [error, responseData]);
   return { handleFollowUnfollow, isLoading, isUserFollowing };
 };
-
 export default useFollowUnfollow;
+

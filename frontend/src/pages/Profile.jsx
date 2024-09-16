@@ -32,7 +32,7 @@ const Profile = () => {
     if (tab === "post") {
       setPosts([]);
     }
-  }, [tab]);
+  }, [tab, setPosts]);
 
   const { responseData, isLoading: fetchingPost, error } = useFetch(URL);
 
@@ -44,7 +44,7 @@ const Profile = () => {
     if (statusCode === 200 && tab === "post") {
       setPosts(responseData);
     }
-  }, [responseData, error, statusCode, tab]);
+  }, [responseData, error, statusCode, tab, setPosts, showToast]);
 
   const fetchSavedPosts = async ({ pageParam = 1 }) => {
     try {
