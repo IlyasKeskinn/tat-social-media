@@ -4,19 +4,11 @@ import {
   Box,
   Avatar,
   Text,
-  Menu,
-  MenuButton,
-  Portal,
-  MenuList,
-  MenuItem,
   Button,
   Grid,
 } from "@chakra-ui/react";
 
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { ShareSvg } from "./Actions";
-
-import showToast from "../hooks/showToast";
 
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
@@ -24,9 +16,10 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
 import PropTypes from "prop-types";
+import ProfileActions from "./ProfileActions";
+import OwnerProfileActions from "./OwnerProfileActions";
 
 const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
-  const toast = showToast();
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
   const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
@@ -36,16 +29,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
 
   const isProfileOwner = currentUser?._id === user?._id;
 
-  const handleCopyProfileURL = () => {
-    const profileURL = window.location.href;
-    navigator.clipboard.writeText(profileURL).then(() => {
-      toast(
-        "Copied to clipboard",
-        "Profile URL has been copied successfully.",
-        "success"
-      );
-    });
-  };
+
 
   return (
     <VStack w={"full"}>
@@ -79,34 +63,11 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                 </Flex>
               </Flex>
               <Box>
-                <Menu>
-                  <MenuButton>
-                    <HiOutlineDotsHorizontal
-                      cursor={"pointer"}
-                      fontSize={"24px"}
-                    />
-                  </MenuButton>
-                  <Portal>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() => {
-                          handleCopyProfileURL();
-                        }}
-                      >
-                        Copy Profile URL
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          navigate(PROFILE_EDIT_URL);
-                        }}
-                      >
-                        Edit Profile
-                      </MenuItem>
-                      <MenuItem>Block this account!</MenuItem>
-                      <MenuItem>Report!</MenuItem>
-                    </MenuList>
-                  </Portal>
-                </Menu>
+                {isProfileOwner ?
+                  <OwnerProfileActions />
+                  :
+                  <ProfileActions />
+                }
               </Box>
             </Flex>
             <Flex direction={"column"} gap={5} my={5}>
