@@ -48,8 +48,6 @@ const Menu = () => {
         top={0}
         display={{ base: "none", md: "flex" }}
         flex={1}
-        py={4}
-        my={4}
         h="100vh"
       >
         <VStack
@@ -58,6 +56,8 @@ const Menu = () => {
           justifyContent="center"
           spacing={2}
           w="full"
+          py={4}
+          my={4}
         >
           <Flex w="full" alignItems="center" justifyContent="start">
             <Heading

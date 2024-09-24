@@ -11,6 +11,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import UserPost from "./components/UserPost";
 import "./App.css";
 import Conservations from "./pages/Conservations";
+import BlockedUsers from "./pages/BlockedUsers";
 
 function App() {
   const user = useRecoilState(userAtom)[0];
@@ -22,6 +23,7 @@ function App() {
           <Route path="/post/:postId" element={<UserPost />} />
           <Route path="profile/:query" element={<Profile />} />
           <Route path="profile/edit/:username" element={<EditProfile />} />
+          <Route path="/settings" element={<BlockedUsers />} />
           <Route path="/message" element={<Conservations />} />
         </Route>
       </Route>

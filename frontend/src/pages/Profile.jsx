@@ -110,7 +110,7 @@ const Profile = () => {
   return isLoading || fetchingPost ? (
     <Loading />
   ) : (
-    <VStack gap={0} flex={1}>
+    <VStack gap={0} flex={1} py={4}  my={4}>
       <UserHeader
         posts={posts.length}
         user={user}

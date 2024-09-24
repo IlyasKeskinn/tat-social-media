@@ -13,32 +13,22 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+import { FaChevronLeft } from "react-icons/fa";
 
 import { useEffect, useRef } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 
-const schema = z.object({
-  userName: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(24, "Username must be at most 24 characters"),
-  fullName: z
-    .string()
-    .min(6, "Full name must be at least 6 characters")
-    .max(48, "Full name must be at most 48 characters"),
-  bio: z.string().max(300, "Bio must be at most 300 characters"),
-});
 
 import usePrevImg from "../hooks/usePrevImg";
 import useFetch from "../hooks/useFetch";
 import useShowToast from "../hooks/showToast";
 
-import { useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
+import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router";
+import { editProfileSchema } from "../formSchemas/editProfileSchema";
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userAtom);
@@ -61,7 +51,7 @@ const EditProfile = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(editProfileSchema),
     defaultValues: {
       fullName: user.fullName,
       userName: user.userName,
@@ -102,6 +92,11 @@ const EditProfile = () => {
           p={6}
           mb={8}
         >
+          <Box cursor={"pointer"}
+            onClick={() => navigate(-1)}
+          >
+            <FaChevronLeft />
+          </Box>
           <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
             Profile Edit
           </Heading>
