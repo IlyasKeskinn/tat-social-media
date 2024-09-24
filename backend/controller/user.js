@@ -40,17 +40,17 @@ const getProfile = async (req, res) => {
     return res.status(200).json({
       _id: user._id,
       profilePic: user.profilePic,
-      userName: "T.A.T",
-      fullName: "T.A.T",
+      userName: user.userName,
+      fullName: user.fullName,
       bio: "",
       followers: [],
       post: [],
       following: [],
-      blockedStatus : "blocked"
+      blocked: true,
     });
   }
 
-  res.status(200).json({...user._doc , blockedStatus : "notBlock" });
+  res.status(200).json({ ...user._doc, blocket: false });
 };
 
 const suggestUsers = async (req, res) => {
@@ -73,12 +73,23 @@ const suggestUsers = async (req, res) => {
     (id) => new mongoose.Types.ObjectId(id)
   );
 
+  const blockedUserIds = currentUser.blockedUsers.map(
+    (id) => new mongoose.Types.ObjectId(id)
+  );
+
   const suggestedUsers = await User.aggregate([
     {
       $match: {
         $expr: {
           $and: [
-            { $not: { $in: ["$_id", [...followingIds, ...blockedByIds]] } },
+            {
+              $not: {
+                $in: [
+                  "$_id",
+                  [...followingIds, ...blockedByIds, ...blockedUserIds],
+                ],
+              },
+            },
             { $ne: ["$_id", currentUserId] },
           ],
         },

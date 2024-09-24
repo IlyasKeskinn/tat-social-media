@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 import UserHeader from "../components/UserHeader";
 import ProfilePagePost from "../components/ProfilePagePost";
 import UserNotFoundPage from "../components/UserNotFoundPage";
@@ -11,7 +12,7 @@ import postAtom from "../atoms/postAtom";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
-import { useInView } from "react-intersection-observer";
+import BlockedUserHeader from "../components/BlockedUserHeader";
 
 const Profile = () => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;
@@ -90,6 +91,10 @@ const Profile = () => {
 
   if (statusCode === 404) {
     return <UserNotFoundPage />;
+  }
+
+  if (user?.blocked) {
+    return <BlockedUserHeader user={user} />;
   }
 
   const handleSaved = () => {

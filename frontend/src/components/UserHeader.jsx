@@ -18,6 +18,7 @@ import useFollowUnfollow from "../hooks/useFollowUnfollow";
 import PropTypes from "prop-types";
 import ProfileActions from "./ProfileActions";
 import OwnerProfileActions from "./OwnerProfileActions";
+import useBlockUnblock from "../hooks/useBlockUnblock";
 
 const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   const navigate = useNavigate();
@@ -29,7 +30,12 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
 
   const isProfileOwner = currentUser?._id === user?._id;
 
+  const { handleBlockUnblock, isLoading: blockLoading } = useBlockUnblock(user);
 
+  const handleBlockButtonClick = () => {
+    if (blockLoading) return;
+    handleBlockUnblock();
+  };
 
   return (
     <VStack w={"full"}>
@@ -66,7 +72,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                 {isProfileOwner ?
                   <OwnerProfileActions />
                   :
-                  <ProfileActions />
+                  <ProfileActions user={user} />
                 }
               </Box>
             </Flex>
@@ -106,6 +112,18 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                     Edit Profile
                   </Button>
                 </Flex>
+              ) : user.blocked ? (
+                <Button
+                  bg={"red.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "red.500",
+                  }}
+                  onClick={handleBlockButtonClick}
+                  isLoading={blockLoading}
+                >
+                  Unblock
+                </Button>
               ) : (
                 <Grid templateColumns={"repeat(2, 1fr)"} gap={4}>
                   <Button

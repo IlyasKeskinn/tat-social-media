@@ -8,12 +8,20 @@ import {
 } from "@chakra-ui/react"
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import PropTypes from "prop-types"
 import useCopyProfile from "../hooks/useCopyProfile";
+import useBlockUnblock from "../hooks/useBlockUnblock";
 
 
-const ProfileActions = () => {
+const ProfileActions = ({ user }) => {
 
     const copyProfile = useCopyProfile();
+    const { handleBlockUnblock, isLoading } = useBlockUnblock(user)
+
+    const handleBlockMenuClick = () => {
+        if (isLoading) return;
+        handleBlockUnblock();
+    }
 
     return (
         <Menu>
@@ -25,8 +33,14 @@ const ProfileActions = () => {
             </MenuButton>
             <Portal>
                 <MenuList>
-                    <MenuItem>
-                        <Text color={"red.500"}>Block</Text>
+                    <MenuItem
+                        onClick={() => {
+                            handleBlockMenuClick();
+                        }}
+                    >
+                        <Text color={"red.500"}>
+                            {user.blocked ? "Unblock" : "Block"}
+                        </Text>
                     </MenuItem>
                     <MenuItem>
                         <Text color={"red.500"}>Report!</Text>
@@ -46,4 +60,8 @@ const ProfileActions = () => {
     )
 }
 
+
+ProfileActions.propTypes = {
+    user: PropTypes.object.isRequired,
+}
 export default ProfileActions
