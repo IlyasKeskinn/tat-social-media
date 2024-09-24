@@ -112,6 +112,25 @@ const suggestUsers = async (req, res) => {
 
   res.status(200).json(suggestedUsers);
 };
+
+const getBlockedUsers = async (req, res) => {
+  const currentUserId = req.user._id;
+
+  if (!currentUserId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const currentUser = await User.findById(currentUserId)
+    .select("blockedUsers")
+    .populate("blockedUsers", "profilePic userName fullName ");
+
+  if (!currentUser) {
+    return res.status(404).json({ error: "Current user not found!" });
+  }
+
+  res.status(200).json(currentUser.blockedUsers);
+};
+
 const registerUser = async (req, res) => {
   const { firstName, lastName, userName, password, email } = req.body;
 
@@ -415,4 +434,5 @@ module.exports = {
   searchUser,
   suggestUsers,
   blockUnblockUser,
+  getBlockedUsers,
 };
