@@ -1,11 +1,43 @@
-import { Box,Flex, Heading, Stack, Text } from "@chakra-ui/react"
-import { useRecoilValue } from "recoil"
-import userAtom from "../atoms/userAtom"
+import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
+import { API_USER_ROUTES } from "../constants/API_ROUTES"
 import BlockedUserTile from "../components/BlockedUserTile"
+import useFetch from "../hooks/useFetch"
+import { useEffect, useState } from "react"
+import useShowToast from "../hooks/showToast"
+import Loading from "../components/Loading"
 
 const BlockedUsers = () => {
-    const user = useRecoilValue(userAtom)
+    const [blockedUsers, setBlockedUsers] = useState([]);
+    const { responseData, isLoading, error, statusCode } = useFetch(API_USER_ROUTES.GET_BLOCKED_USERS);
+    const showToast = useShowToast();
 
+    useEffect(() => {
+        if (error) {
+            showToast("Error", error.message, "error");
+        }
+        if (statusCode === 200) {
+            setBlockedUsers(responseData);
+        }
+    }, [error, setBlockedUsers, statusCode, responseData, showToast]);
+
+
+    const renderContent = () => {
+        if (isLoading) {
+            return <Loading />;
+        }
+
+        if (blockedUsers.length > 0) {
+            return blockedUsers.map((blockedUser) => (
+                <BlockedUserTile user={blockedUser} key={blockedUser._id} />
+            ));
+        }
+
+        return (
+            <Box>
+                <Text>No blocked users</Text>
+            </Box>
+        );
+    };
     return (
         <Flex
             px={{ base: 0, md: 6, lg: 24 }}
@@ -38,7 +70,7 @@ const BlockedUsers = () => {
                 mb={6}
                 overflow={"auto"}
             >
-                <BlockedUserTile user={user} />
+                {renderContent()}
             </Stack>
         </Flex >
     )
