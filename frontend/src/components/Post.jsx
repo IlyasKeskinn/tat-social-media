@@ -72,23 +72,6 @@ const Post = memo(({ post }) => {
                   minHeight="300px" // Ensures a minimum height if image is too small
                 />
               </Box>
-              {/* <AspectRatio
-                ratio={1 / 4}
-                border={"1px solid"}
-                borderColor={"gray.light"}
-                borderRadius={6}
-                overflow={"hidden"}
-                h={{ sm: "600px", md: "650px", lg: "500px" }}
-                w={"100%"}
-              >
-                <Image
-                  src={post.images[0]}
-                  w={"full"}
-                  h={"full"}
-                  objectFit={"cover"}
-                  objectPosition={"center"}
-                />
-              </AspectRatio> */}
             </LinkRouter>
             <Text className="nonSelectableText">{post.text}</Text>
             <Actions currentPost={post} />

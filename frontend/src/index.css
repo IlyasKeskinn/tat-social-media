@@ -1,18 +1,42 @@
 @keyframes fillHeart {
-    0% {
-      fill: transparent;
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      fill: rgb(237, 73, 86);
-      transform: scale(1);
-    }
+  0% {
+    fill: transparent;
+    transform: scale(1);
   }
-  
-  .fill-animation {
-    animation: fillHeart 0.6s ease-in-out forwards, shake 0.2s ease-in-out 0.6s;
+  50% {
+    transform: scale(1.2);
   }
-  
+  100% {
+    fill: rgb(237, 73, 86);
+    transform: scale(1);
+  }
+}
+
+.fill-animation {
+  animation: fillHeart 0.6s ease-in-out forwards, shake 0.2s ease-in-out 0.6s;
+}
+
+.heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  animation: heartbeat 1s ease forwards;
+  opacity: 1;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}

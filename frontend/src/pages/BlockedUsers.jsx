@@ -47,7 +47,7 @@ const BlockedUsers = () => {
             w={"100%"}
             maxH={{ base: "80dvh", md: "100dvh" }}
         >
-            <Flex direction={"column"} gap={3} mb={4} py={5} w={"full"}>
+            <Flex direction={"column"} gap={3} mb={4} w={"full"}>
                 <Heading>
                     Blocked Users
                     <Text
