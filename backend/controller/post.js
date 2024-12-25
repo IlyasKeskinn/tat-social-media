@@ -143,7 +143,7 @@ const likeUnlikePost = async (req, res) => {
   }
 };
 
-const updatePost = async (req, res) => {};
+const updatePost = async (req, res) => { };
 
 const postComment = async (req, res) => {
   const postId = req.params.id;
@@ -177,6 +177,106 @@ const postComment = async (req, res) => {
   res.status(201).json(createdComment);
 };
 
+const likeUnlikeComment = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const userId = req.user._id;
+
+
+  if (!userId) {
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+  const comment = post.comments.id(commentId);
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+  const isLiked = comment.likes.includes(userId);
+  if (isLiked) {
+    comment.likes.pull(userId);
+    await post.save();
+    res.status(200).json({ messeage: "Comment unliked successfully." });
+  } else {
+    comment.likes.push(userId);
+    await post.save();
+    res.status(200).json({ messeage: "Comment liked successfully." });
+  }
+};
+
+
+const deleteComment = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const userId = req.user._id;
+
+  if (!postId) {
+    return res.status(400).json({ error: "Post id is required!" });
+  }
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  // Yalnızca post sahibi veya yorum sahibi silebilir
+  if (
+    post.postedBy.toString() !== userId.toString() ||
+    comment.commentBy.toString() !== userId.toString()
+  ) {
+    return res.status(401).json({ error: "Unauthorized to delete this comment!" });
+  }
+
+  // Yorumu sil
+  post.comments.pull(commentId);
+  await post.save();
+
+  res.status(200).json({ message: "Comment deleted successfully." });
+};
+
+
+
+const updateComment = async (req, res) => {
+    const postId = req.params.id;
+    const commentId = req.params.commentId;
+    const userId = req.user._id;
+    const text = req.body.text;
+  
+    if (!userId) {
+      return res.status(403).json({ error: "Unauthorized!" });
+    }
+  
+    if (!text) {
+      return res.status(400).json({ error: "Text is required!" });
+    }
+  
+    const post = await Post.findById(postId);
+  
+    if (!post) {
+      return res.status(404).json({ error: "Post not found!" });
+    }
+  
+    const comment = post.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found!" });
+    }
+  
+    comment.comment = text;
+  
+    await post.save();
+  
+    res.status(200).json(comment);
+ };
+
 const getCommentsByPostId = async (req, res) => {
   const postId = req.params.id;
 
@@ -198,7 +298,7 @@ const getCommentsByPostId = async (req, res) => {
   res.status(200).json(comments);
 };
 
-const postReply = async (req, res) => {
+const commentReply = async (req, res) => {
   const postId = req.params.id;
   const commentId = req.params.commentId;
   const user = req.user;
@@ -264,7 +364,10 @@ module.exports = {
   deletePost,
   likeUnlikePost,
   postComment,
+  likeUnlikeComment,
+  deleteComment,
+  updateComment,
   getCommentsByPostId,
-  postReply,
+  commentReply,
   getRepliesByCommentId,
 };

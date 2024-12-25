@@ -16,30 +16,65 @@ const replySchema = mongoose.Schema(
       ref: "User",
       default: [],
     },
+    isUpdated: {
+      type: Boolean,
+      default: false, 
+    },
+    updatedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const commentSchema = mongoose.Schema({
-  commentBy: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const commentSchema = mongoose.Schema(
+  {
+    commentBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    comment: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    likes: {
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+    },
+    replies: [replySchema],
+    isUpdated: {
+      type: Boolean,
+      default: false, // İlk oluşturulduğunda false
+    },
+    updatedAt: {
+      type: Date,
+      default: null, // Başlangıçta null
+    },
   },
-  comment: {
-    type: Schema.Types.String,
-    required: true,
-  },
-  likes: {
-    type: [Schema.Types.ObjectId],
-    ref: "User",
-  },
-  replies: [replySchema],
-},
-{
+  {
     timestamps: true,
-  });
+  }
+);
+
+// Güncelleme hook'u ekleyelim
+commentSchema.pre("save", function (next) {
+  if (this.isModified("comment")) { 
+    this.isUpdated = true;
+    this.updatedAt = Date.now();
+  }
+  next();
+});
+
+replySchema.pre("save", function (next) {
+  if (this.isModified("reply")) { 
+    this.isUpdated = true;
+    this.updatedAt = Date.now();
+  }
+  next();
+});
 
 module.exports = { commentSchema, replySchema };

@@ -12,8 +12,11 @@ const {
   deletePost,
   likeUnlikePost,
   postComment,
+  likeUnlikeComment,
+  deleteComment,
+  updateComment,
   getCommentsByPostId,
-  postReply,
+  commentReply,
   getRepliesByCommentId,
 } = require("../controller/post");
 
@@ -24,8 +27,11 @@ router.get("/getcomments/:id", getCommentsByPostId);
 router.get("/getreplies/:id", getRepliesByCommentId);
 
 router.put("/likeUnlikePost/:id", isAuth, likeUnlikePost);
+router.put("/likeUnlikeComment/:id/:commentId", isAuth, likeUnlikeComment);
 router.put("/makecomment/:id", isAuth, postComment);
-router.put("/:id/comments/:commentId", isAuth, postReply);
+router.put("/deletecomment/:id/:commentId", isAuth, deleteComment);
+router.put("/updatecomment/:id/:commentId", isAuth, updateComment);
+router.put("/:id/comments/:commentId", isAuth, commentReply);
 
 router.post("/createpost", isAuth, createPost);
 router.delete("/deletepost/:id", isAuth, deletePost);
