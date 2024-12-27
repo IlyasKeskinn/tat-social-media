@@ -21,21 +21,58 @@ import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.js
 import useShowToast from "../hooks/showToast.jsx";
 
 import PropTypes from "prop-types";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom.js";
+import useFetch from "../hooks/useFetch.jsx";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, post }) => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const FETCH_REPLIES = `post/getreplies/${comment._id}`;
+  const COMMENT_LIKE_URL = `post/likeunlikecomment/${post._id}/${comment._id}`;
 
-  const [liked, setLiked] = useState(false);
+
+  const user = useRecoilValue(userAtom);
+  const showToast = useShowToast();
+
+  const [liked, setLiked] = useState(
+    comment.likes.includes(user?._id)
+  );
   const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState([]);
   const [fetchingReply, setFetchingReply] = useState(false);
 
-  const showToast = useShowToast();
+
+  const {
+    isLoading: isLiking,
+    error,
+    putData,
+  } = useFetch(COMMENT_LIKE_URL, "PUT");
+
 
   const handleLiked = () => {
-    setLiked(!liked);
+    if (!user) {
+      return showToast(
+        "Error",
+        "You must be logged in to like a post",
+        "error"
+      );
+    }
+
+    if (isLiking) {
+      return;
+    }
+
+    putData();
+
+    if (!liked) {
+      setLiked(true);
+      comment.likes.push(user._id);
+    } else {
+      setLiked(false);
+      comment.likes = comment.likes.filter((id) => id !== user._id);
+    }
   };
+
 
   const navigate = useNavigate();
 
@@ -63,6 +100,12 @@ const Comment = ({ comment }) => {
       fetchReply();
     }
   }, [showReplies]);
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+  }, [error]);
 
   return (
     <Flex mb={6} mt={2} w={"full"}>
@@ -153,7 +196,7 @@ const Comment = ({ comment }) => {
           >
             <LikeButton size={"14"} liked={liked} handleLiked={handleLiked} />
             <Text fontSize={"xs"} color={"gray.500"}>
-              0
+              {comment.likes.length > 0 && comment.likes.length}
             </Text>
           </Flex>
         </Flex>
@@ -169,4 +212,5 @@ export default Comment;
 
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
 };

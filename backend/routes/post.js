@@ -45,7 +45,7 @@ router.put("/updatecomment/:id/:commentId", isAuth, updateComment);
 
 
 //replies
-router.get("/getreplies/:commentId", isAuth, getRepliesByCommentId);
+router.get("/getreplies/:commentId", getRepliesByCommentId);
 router.put("/addreply/:id/:commentId", isAuth, addReplyToComment);
 router.put("/deletereply/:id/:commentId/:replyId", isAuth, deleteReply);
 router.put("/updatereply/:id/:commentId/:replyId", isAuth, updateReply);

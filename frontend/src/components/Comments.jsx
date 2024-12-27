@@ -163,7 +163,7 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
           )}
           {comments.length > 0 &&
             comments.map((comment) => {
-              return <Comment key={comment._id} comment={comment} />;
+              return <Comment key={comment._id} comment={comment} post={currentPost} />;
             })}
         </ModalBody>
         <ModalFooter my={4}>
