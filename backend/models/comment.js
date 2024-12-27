@@ -62,7 +62,7 @@ const commentSchema = mongoose.Schema(
 
 // Güncelleme hook'u ekleyelim
 commentSchema.pre("save", function (next) {
-  if (this.isModified("comment")) { 
+  if (!this.isNew && this.isModified("comment")) { 
     this.isUpdated = true;
     this.updatedAt = Date.now();
   }
@@ -70,7 +70,7 @@ commentSchema.pre("save", function (next) {
 });
 
 replySchema.pre("save", function (next) {
-  if (this.isModified("reply")) { 
+  if (!this.isNew && this.isModified("reply")) { 
     this.isUpdated = true;
     this.updatedAt = Date.now();
   }

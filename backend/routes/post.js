@@ -16,24 +16,40 @@ const {
   deleteComment,
   updateComment,
   getCommentsByPostId,
-  commentReply,
   getRepliesByCommentId,
+  addReplyToComment,
+  updateReply,
+  deleteReply
 } = require("../controller/post");
 
+
+
+//post
 router.get("/getPost/:id", getPostById);
 router.get("/getuserPost/:query", getUserPost);
 router.get("/feedPosts", isAuth, getFeedPosts);
-router.get("/getcomments/:id", getCommentsByPostId);
-router.get("/getreplies/:id", getRepliesByCommentId);
 
 router.put("/likeUnlikePost/:id", isAuth, likeUnlikePost);
+
+router.post("/createpost", isAuth, createPost);
+
+router.delete("/deletepost/:id", isAuth, deletePost);
+
+
+//comments
+router.get("/getcomments/:id", getCommentsByPostId);
 router.put("/likeUnlikeComment/:id/:commentId", isAuth, likeUnlikeComment);
 router.put("/makecomment/:id", isAuth, postComment);
 router.put("/deletecomment/:id/:commentId", isAuth, deleteComment);
 router.put("/updatecomment/:id/:commentId", isAuth, updateComment);
-router.put("/:id/comments/:commentId", isAuth, commentReply);
 
-router.post("/createpost", isAuth, createPost);
-router.delete("/deletepost/:id", isAuth, deletePost);
+
+//replies
+router.get("/getreplies/:commentId", isAuth, getRepliesByCommentId);
+router.put("/addreply/:id/:commentId", isAuth, addReplyToComment);
+router.put("/deletereply/:id/:commentId/:replyId", isAuth, deleteReply);
+router.put("/updatereply/:id/:commentId/:replyId", isAuth, updateReply);
+
+
 
 module.exports = router;

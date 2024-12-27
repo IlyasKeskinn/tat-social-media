@@ -4,6 +4,8 @@ const { User } = require("../models/user");
 const { Post } = require("../models/post");
 const cloudinary = require("cloudinary");
 
+
+// post start
 const getPostById = async (req, res) => {
   const postId = req.params.id;
 
@@ -145,14 +147,13 @@ const likeUnlikePost = async (req, res) => {
 
 const updatePost = async (req, res) => { };
 
+//post end
+
+//comnent start
 const postComment = async (req, res) => {
   const postId = req.params.id;
   const userId = req.user._id;
   const text = req.body.text;
-
-  if (!userId) {
-    return res.status(403).json({ error: "Unauthorized!" });
-  }
 
   if (!text) {
     return res.status(400).json({ error: "Text is required!" });
@@ -205,8 +206,6 @@ const likeUnlikeComment = async (req, res) => {
     res.status(200).json({ messeage: "Comment liked successfully." });
   }
 };
-
-
 const deleteComment = async (req, res) => {
   const postId = req.params.id;
   const commentId = req.params.commentId;
@@ -228,7 +227,6 @@ const deleteComment = async (req, res) => {
     return res.status(404).json({ error: "Comment not found!" });
   }
 
-  // Yalnızca post sahibi veya yorum sahibi silebilir
   if (
     post.postedBy.toString() !== userId.toString() ||
     comment.commentBy.toString() !== userId.toString()
@@ -236,46 +234,47 @@ const deleteComment = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized to delete this comment!" });
   }
 
-  // Yorumu sil
   post.comments.pull(commentId);
   await post.save();
 
   res.status(200).json({ message: "Comment deleted successfully." });
 };
 
-
-
 const updateComment = async (req, res) => {
-    const postId = req.params.id;
-    const commentId = req.params.commentId;
-    const userId = req.user._id;
-    const text = req.body.text;
-  
-    if (!userId) {
-      return res.status(403).json({ error: "Unauthorized!" });
-    }
-  
-    if (!text) {
-      return res.status(400).json({ error: "Text is required!" });
-    }
-  
-    const post = await Post.findById(postId);
-  
-    if (!post) {
-      return res.status(404).json({ error: "Post not found!" });
-    }
-  
-    const comment = post.comments.id(commentId);
-    if (!comment) {
-      return res.status(404).json({ error: "Comment not found!" });
-    }
-  
-    comment.comment = text;
-  
-    await post.save();
-  
-    res.status(200).json(comment);
- };
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const userId = req.user._id;
+  const text = req.body.text;
+
+  if (!userId) {
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
+
+  if (!text) {
+    return res.status(400).json({ error: "Text is required!" });
+  }
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  if (comment.commentBy.toString() !== userId.toString()) {
+    return res.status(401).json({ error: "Unauthorized to update this comment!" });
+  }
+
+  comment.comment = text;
+
+  await post.save();
+
+  res.status(200).json(comment);
+};
 
 const getCommentsByPostId = async (req, res) => {
   const postId = req.params.id;
@@ -297,48 +296,12 @@ const getCommentsByPostId = async (req, res) => {
 
   res.status(200).json(comments);
 };
+//comnet end
 
-const commentReply = async (req, res) => {
-  const postId = req.params.id;
-  const commentId = req.params.commentId;
-  const user = req.user;
-  const text = req.body.text;
 
-  if (!user) {
-    return res.status(403).json({ error: "Unauthorized!" });
-  }
-
-  if (!text) {
-    return res.status(400).json({ error: "Reply area is required" });
-  }
-
-  const post = await Post.findById(postId);
-
-  if (!post) {
-    return res.status(404).json({ error: "Post not found!" });
-  }
-
-  const comment = post.comments.id(commentId);
-
-  if (!comment) {
-    return res.status(404).json({ error: "Comment not found!" });
-  }
-
-  const reply = {
-    replyBy: user._id,
-    reply: text,
-  };
-
-  comment.replies.push(reply);
-  await post.save();
-
-  const createdReply = comment.replies[comment.replies.length - 1];
-
-  res.status(201).json(createdReply);
-};
-
+// reply start
 const getRepliesByCommentId = async (req, res) => {
-  const commentId = req.params.id;
+  const commentId = req.params.commentId;
 
   const post = await Post.findOne({ "comments._id": commentId }).populate({
     path: "comments.replies.replyBy",
@@ -356,6 +319,124 @@ const getRepliesByCommentId = async (req, res) => {
   // Return the replies
   res.status(200).json(comment.replies);
 };
+
+const addReplyToComment = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const userId = req.user._id;
+  const text = req.body.text;
+
+  if (!postId || !commentId) {
+    return res.status(400).json({ error: "Both postId and commentId are required" });
+  }
+
+  if (!text) {
+    return res.status(400).json("Reply area is required");
+  }
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  const reply = {
+    replyBy: userId,
+    reply: text,
+  };
+
+  comment.replies.push(reply);
+  await post.save();
+
+  const createdReply = comment.replies[comment.replies.length - 1];
+  res.status(201).json(createdReply);
+
+
+}
+
+const deleteReply = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const replyId = req.params.replyId;
+  const userId = req.user._id;
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  const reply = comment.replies.id(replyId);
+
+  if (!reply) {
+    return res.status(404).json({ error: "Reply not found!" });
+  }
+
+  if (
+    post.postedBy.toString() !== userId.toString() || reply.replyBy.toString() !== userId.toString()) {
+    return res.status(401).json({ error: "Unauthorized to delete this reply!" });
+  }
+
+  comment.replies.pull(replyId);
+
+  await post.save();
+
+  res.status(200).json({ message: "Reply deleted successfully." });
+}
+
+const updateReply = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const replyId = req.params.replyId;
+  const text = req.body.text;
+
+  if (!text) {
+    return res.status(400).json({ error: "Reply area is required" });
+  }
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  const reply = comment.replies.id(replyId);
+
+  if (!reply) {
+    return res.status(404).json({ error: "Reply not found!" });
+  }
+
+  if (reply.replyBy.toString() !== req.user._id.toString()) {
+    return res.status(401).json({ error: "Unauthorized to update this reply!" });
+  }
+
+  reply.reply = text;
+
+  await post.save();
+
+  res.status(200).json(reply);
+}
+// reply end
+
 module.exports = {
   getPostById,
   getUserPost,
@@ -368,6 +449,8 @@ module.exports = {
   deleteComment,
   updateComment,
   getCommentsByPostId,
-  commentReply,
   getRepliesByCommentId,
+  addReplyToComment,
+  updateReply,
+  deleteReply
 };
