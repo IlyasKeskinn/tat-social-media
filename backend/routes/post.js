@@ -19,7 +19,8 @@ const {
   getRepliesByCommentId,
   addReplyToComment,
   updateReply,
-  deleteReply
+  deleteReply,
+  replyLikeUnlike,
 } = require("../controller/post");
 
 
@@ -49,6 +50,8 @@ router.get("/getreplies/:commentId", getRepliesByCommentId);
 router.put("/addreply/:id/:commentId", isAuth, addReplyToComment);
 router.put("/deletereply/:id/:commentId/:replyId", isAuth, deleteReply);
 router.put("/updatereply/:id/:commentId/:replyId", isAuth, updateReply);
+router.put("/replylikeunlike/:id/:commentId/:replyId", isAuth, replyLikeUnlike);
+
 
 
 

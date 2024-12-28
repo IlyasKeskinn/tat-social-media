@@ -11,20 +11,65 @@ import { useNavigate } from "react-router";
 
 import ProfilePreviewPopover from "./ProfilePreviewPopover.jsx";
 import ExpandableText from "./ExpandableText.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LikeButton } from "./Actions.jsx";
 import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.jsx";
-
+import useShowToast from "../hooks/showToast.jsx";
 import PropTypes from "prop-types";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom.js";
+import useFetch from "../hooks/useFetch.jsx";
 
-const Reply = ({ reply }) => {
-  const [liked, setLiked] = useState(false);
+const Reply = ({ reply, postId, commentId }) => {
+  console.log(reply);
+
+  const REPLY_LIKE_URL = `post/replylikeunlike/${postId}/${commentId}/${reply._id}`;
+
+  const user = useRecoilValue(userAtom);
+  const showToast = useShowToast();
+
+  const [liked, setLiked] = useState(
+    reply.likes.includes(user?._id)
+  );
+
+  const {
+    isLoading: isLiking,
+    error,
+    putData,
+  } = useFetch(REPLY_LIKE_URL, "PUT");
 
   const handleLiked = () => {
-    setLiked(!liked);
+    if (!user) {
+      return showToast(
+        "Error",
+        "You must be logged in to like a reply",
+        "error"
+      );
+    }
+
+    if (isLiking) {
+      return;
+    }
+
+    putData();
+
+    if (!liked) {
+      setLiked(true);
+      reply.likes.push(user._id);
+    } else {
+      setLiked(false);
+      reply.likes = reply.likes.filter((id) => id !== user._id);
+    }
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      showToast("Error", error.message, "error");
+    }
+  }, [error]);
+
   return (
     <Flex w={"full"} key={reply._id} alignItems={"start"} mt={2} mb={4} pl={5}>
       <Popover trigger="hover">
@@ -74,7 +119,7 @@ const Reply = ({ reply }) => {
       >
         <LikeButton size={"14"} liked={liked} handleLiked={handleLiked} />
         <Text fontSize={"xs"} color={"gray.500"}>
-          0
+          {reply.likes.length > 0 && reply.likes.length}
         </Text>
       </Flex>
     </Flex>
@@ -82,7 +127,9 @@ const Reply = ({ reply }) => {
 };
 
 Reply.propTypes = {
-  reply: PropTypes.object,
+  reply: PropTypes.object.isRequired,
+  postId: PropTypes.string.isRequired,
+  commentId: PropTypes.string.isRequired,
 };
 
 export default Reply;

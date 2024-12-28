@@ -202,7 +202,7 @@ const Comment = ({ comment, post }) => {
         </Flex>
         {showReplies &&
           comment.replies.length > 0 &&
-          replies.map((reply) => <Reply key={reply._id} reply={reply} />)}
+          replies.map((reply) => <Reply key={reply._id} reply={reply} postId={post._id} commentId={comment._id}/>)}
       </Flex>
     </Flex>
   );

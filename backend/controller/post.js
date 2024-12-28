@@ -435,6 +435,42 @@ const updateReply = async (req, res) => {
 
   res.status(200).json(reply);
 }
+
+const replyLikeUnlike = async (req, res) => {
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
+  const replyId = req.params.replyId;
+  const userId = req.user._id;
+
+  const post = await Post.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({ error: "Post not found!" });
+  }
+
+  const comment = post.comments.id(commentId);
+
+  if (!comment) {
+    return res.status(404).json({ error: "Comment not found!" });
+  }
+
+  const reply = comment.replies.id(replyId);
+
+  if (!reply) {
+    return res.status(404).json({ error: "Reply not found!" });
+  }
+
+  if (reply.likes.includes(userId)) {
+    reply.likes = reply.likes.filter((id) => id.toString() !== userId.toString());
+  } else {
+    reply.likes.push(userId);
+  }
+
+  await post.save();
+
+  res.status(200).json(reply);
+} 
+
 // reply end
 
 module.exports = {
@@ -452,5 +488,6 @@ module.exports = {
   getRepliesByCommentId,
   addReplyToComment,
   updateReply,
-  deleteReply
+  deleteReply,
+  replyLikeUnlike
 };
