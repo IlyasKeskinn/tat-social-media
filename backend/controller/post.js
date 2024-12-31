@@ -228,9 +228,11 @@ const deleteComment = async (req, res) => {
   }
 
   if (
-    post.postedBy.toString() !== userId.toString() ||
+    post.postedBy.toString() !== userId.toString() &&
     comment.commentBy.toString() !== userId.toString()
   ) {
+    console.log("buraya giriyor s");
+    
     return res.status(401).json({ error: "Unauthorized to delete this comment!" });
   }
 
@@ -386,7 +388,7 @@ const deleteReply = async (req, res) => {
   }
 
   if (
-    post.postedBy.toString() !== userId.toString() || reply.replyBy.toString() !== userId.toString()) {
+    post.postedBy.toString() !== userId.toString() && reply.replyBy.toString() !== userId.toString()) {
     return res.status(401).json({ error: "Unauthorized to delete this reply!" });
   }
 

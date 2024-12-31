@@ -8,8 +8,13 @@ import {
   Avatar,
   Box,
   Button,
+  Menu,
+  MenuButton,
+  MenuList,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
+
+
 
 import ProfilePreviewPopover from "./ProfilePreviewPopover.jsx";
 import ExpandableText from "./ExpandableText.jsx";
@@ -21,21 +26,29 @@ import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.js
 import useShowToast from "../hooks/showToast.jsx";
 
 import PropTypes from "prop-types";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom.js";
 import useFetch from "../hooks/useFetch.jsx";
+
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import CommentActions from "./CommentActions.jsx";
+import commentAtom from "../atoms/commentAtom.js";
+import useUpdate from "../hooks/useUpdate.jsx";
+
 
 const Comment = ({ comment, post }) => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const FETCH_REPLIES = `post/getreplies/${comment._id}`;
   const COMMENT_LIKE_URL = `post/likeunlikecomment/${post._id}/${comment._id}`;
+  const COMMENT_DELETE_URL = `post/deletecomment/${post._id}/${comment._id}`;
+  const [comments, setComments] = useRecoilState(commentAtom);
 
 
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
 
   const [liked, setLiked] = useState(
-    comment.likes.includes(user?._id)
+    comment.likes?.includes(user?._id) || false
   );
   const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState([]);
@@ -47,6 +60,36 @@ const Comment = ({ comment, post }) => {
     error,
     putData,
   } = useFetch(COMMENT_LIKE_URL, "PUT");
+
+  const { handleUpdate: deleteComment, isLoading, updated: deletedComment } = useUpdate(
+    comment._id,
+    COMMENT_DELETE_URL,
+    "Comment is successfully deleted!"
+  );
+
+  // const handleLiked = () => {
+  //   if (!user) {
+  //     return showToast(
+  //       "Error",
+  //       "You must be logged in to like a post",
+  //       "error"
+  //     );
+  //   }
+
+  //   if (isLiking) {
+  //     return;
+  //   }
+
+  //   putData();
+
+  //   if (!liked) {
+  //     setLiked(true);
+  //     comment.likes.push(user._id);
+  //   } else {
+  //     setLiked(false);
+  //     comment.likes = comment.likes.filter((id) => id !== user._id);
+  //   }
+  // };
 
 
   const handleLiked = () => {
@@ -64,13 +107,21 @@ const Comment = ({ comment, post }) => {
 
     putData();
 
-    if (!liked) {
-      setLiked(true);
-      comment.likes.push(user._id);
-    } else {
-      setLiked(false);
-      comment.likes = comment.likes.filter((id) => id !== user._id);
-    }
+    // Immutable şekilde comment.likes'ı güncelleyin
+    setComments((prevComments) =>
+      prevComments.map((c) =>
+        c._id === comment._id
+          ? {
+            ...c,
+            likes: liked
+              ? c.likes.filter((id) => id !== user._id)
+              : [...c.likes, user._id],
+          }
+          : c
+      )
+    );
+
+    setLiked(!liked);
   };
 
 
@@ -106,6 +157,28 @@ const Comment = ({ comment, post }) => {
       showToast("Error", error.message, "error");
     }
   }, [error]);
+
+
+  const handleDelete = () => {
+    if (isLoading) return;
+    deleteComment();
+  };
+
+  const handleEdit = () => {
+    console.log("Editing comment...");
+  };
+
+  const handleReport = () => {
+    console.log("Reporting comment...");
+  };
+
+
+  useEffect(() => {
+    if (deletedComment) {
+      setComments(comments.filter((c) => c._id !== comment._id));
+    }
+
+  }, [deletedComment])
 
   return (
     <Flex mb={6} mt={2} w={"full"}>
@@ -168,25 +241,42 @@ const Comment = ({ comment, post }) => {
               </Text>
             </Flex>
             <ExpandableText>{comment.comment}</ExpandableText>
-            <Flex>
-              <Text
-                textAlign={"start"}
-                fontSize={"sm"}
-                color={"gray.500"}
-                w={"50px"}
-              >
-                {useFormatShortDistanceToNow(comment.createdAt)}
-              </Text>
-              {comment.replies.length > 0 && (
+            <Flex w={"full"} gap={5} >
+              <Flex>
                 <Text
                   textAlign={"start"}
                   fontSize={"sm"}
                   color={"gray.500"}
-                  w={"100px"}
+                  minW={"50px"}
                 >
-                  {comment.replies.length} reply
+                  {useFormatShortDistanceToNow(comment.createdAt)}
                 </Text>
-              )}
+                {comment.replies.length > 0 && (
+                  <Text
+                    textAlign={"start"}
+                    fontSize={"sm"}
+                    color={"gray.500"}
+                    minW={"50px"}
+                  >
+                    {comment.replies.length} reply
+                  </Text>
+                )}
+              </Flex>
+              <Menu>
+                <MenuButton>
+                  <HiOutlineDotsHorizontal cursor={"pointer"} fontSize={"16ßpx"} />
+                </MenuButton>
+                <MenuList>
+                  <CommentActions
+                    userId={user._id}
+                    commentById={comment.commentBy._id}
+                    postById={post.postedBy}
+                    onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onReport={handleReport}
+                  />
+                </MenuList>
+              </Menu>
             </Flex>
           </Flex>
           <Flex
@@ -196,13 +286,13 @@ const Comment = ({ comment, post }) => {
           >
             <LikeButton size={"14"} liked={liked} handleLiked={handleLiked} />
             <Text fontSize={"xs"} color={"gray.500"}>
-              {comment.likes.length > 0 && comment.likes.length}
+              {(comment.likes && comment.likes.length > 0) && comment.likes.length}
             </Text>
           </Flex>
         </Flex>
         {showReplies &&
           comment.replies.length > 0 &&
-          replies.map((reply) => <Reply key={reply._id} reply={reply} postId={post._id} commentId={comment._id}/>)}
+          replies.map((reply) => <Reply key={reply._id} reply={reply} postId={post._id} commentId={comment._id} />)}
       </Flex>
     </Flex>
   );

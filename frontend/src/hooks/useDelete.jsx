@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router";
 import useShowToast from "./showToast";
-import postAtom from "../atoms/postAtom";
 import userAtom from "../atoms/userAtom";
 
 const useDelete = (req_body, URL, msg) => {
+
   const API_URL = import.meta.env.VITE_BASE_API_URL;
   const fetchURL = `${API_URL}/${URL}`;
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
-  const [posts, setPosts] = useRecoilState(postAtom);
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
@@ -28,7 +27,6 @@ const useDelete = (req_body, URL, msg) => {
       const data = await response.json();
 
       if (response.status === 200) {
-        setPosts(posts.filter((p) => p._id !== req_body));
         setDeleted(true);
         showToast("Success", msg, "success");
         navigate(`/profile/${currentUser.userName}`)
@@ -37,6 +35,7 @@ const useDelete = (req_body, URL, msg) => {
       }
     } catch (error) {
       showToast("Error", error.message, "error");
+      setDeleted(false);
     } finally {
       setLoading(false);
     }

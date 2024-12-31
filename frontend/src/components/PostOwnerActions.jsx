@@ -21,14 +21,17 @@ import useCopyPost from "../hooks/useCopyPost";
 import useDelete from "../hooks/useDelete";
 
 import { useNavigate } from "react-router";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import PropTypes from "prop-types";
+import postAtom from "../atoms/postAtom";
 
 const PostOwnerActions = ({ postId }) => {
   const currentUser = useRecoilValue(userAtom);
   const copyPost = useCopyPost();
   const URL = `post/deletepost/${postId}`;
+  const [posts, setPosts] = useRecoilState(postAtom);
+
 
   const { handleDelete, isLoading, deleted } = useDelete(
     postId,
@@ -40,6 +43,7 @@ const PostOwnerActions = ({ postId }) => {
 
   useEffect(() => {
     if (deleted) {
+      setPosts(posts.filter((p) => p._id !== postId));
       navigate(`/profile/${currentUser.userName}`);
     }
   }, [deleted]);

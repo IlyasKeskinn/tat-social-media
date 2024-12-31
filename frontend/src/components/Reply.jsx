@@ -21,8 +21,6 @@ import userAtom from "../atoms/userAtom.js";
 import useFetch from "../hooks/useFetch.jsx";
 
 const Reply = ({ reply, postId, commentId }) => {
-  console.log(reply);
-
   const REPLY_LIKE_URL = `post/replylikeunlike/${postId}/${commentId}/${reply._id}`;
 
   const user = useRecoilValue(userAtom);

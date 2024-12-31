@@ -21,6 +21,7 @@ import {
 import { MdEmojiEmotions } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -29,6 +30,7 @@ import useFetch from "../hooks/useFetch.jsx";
 import useShowToast from "../hooks/showToast.jsx";
 
 import postAtom from "../atoms/postAtom.js";
+import commentAtom from "../atoms/commentAtom.js";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import Loading from "./Loading.jsx";
@@ -65,7 +67,7 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const [text, setText] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useRecoilState(commentAtom);
   const [posts, setPosts] = useRecoilState(postAtom);
   const [fetchingComments, setFetchingComments] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
