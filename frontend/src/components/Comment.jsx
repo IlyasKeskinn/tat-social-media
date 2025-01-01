@@ -34,6 +34,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import CommentActions from "./CommentActions.jsx";
 import commentAtom from "../atoms/commentAtom.js";
 import useUpdate from "../hooks/useUpdate.jsx";
+import CommentInputForm from "./CommentInputForm.jsx";
 
 
 const Comment = ({ comment, post }) => {
@@ -42,6 +43,9 @@ const Comment = ({ comment, post }) => {
   const COMMENT_LIKE_URL = `post/likeunlikecomment/${post._id}/${comment._id}`;
   const COMMENT_DELETE_URL = `post/deletecomment/${post._id}/${comment._id}`;
   const [comments, setComments] = useRecoilState(commentAtom);
+  const [isEditing, setIsEditing] = useState(false);
+  const [initialText, setInitialText] = useState(comment.comment); // Set the initial text to the comment's text
+
 
 
   const user = useRecoilValue(userAtom);
@@ -50,6 +54,7 @@ const Comment = ({ comment, post }) => {
   const [liked, setLiked] = useState(
     comment.likes?.includes(user?._id) || false
   );
+
   const [showReplies, setShowReplies] = useState(false);
   const [replies, setReplies] = useState([]);
   const [fetchingReply, setFetchingReply] = useState(false);
@@ -67,31 +72,6 @@ const Comment = ({ comment, post }) => {
     "Comment is successfully deleted!"
   );
 
-  // const handleLiked = () => {
-  //   if (!user) {
-  //     return showToast(
-  //       "Error",
-  //       "You must be logged in to like a post",
-  //       "error"
-  //     );
-  //   }
-
-  //   if (isLiking) {
-  //     return;
-  //   }
-
-  //   putData();
-
-  //   if (!liked) {
-  //     setLiked(true);
-  //     comment.likes.push(user._id);
-  //   } else {
-  //     setLiked(false);
-  //     comment.likes = comment.likes.filter((id) => id !== user._id);
-  //   }
-  // };
-
-
   const handleLiked = () => {
     if (!user) {
       return showToast(
@@ -107,7 +87,6 @@ const Comment = ({ comment, post }) => {
 
     putData();
 
-    // Immutable şekilde comment.likes'ı güncelleyin
     setComments((prevComments) =>
       prevComments.map((c) =>
         c._id === comment._id
@@ -165,7 +144,8 @@ const Comment = ({ comment, post }) => {
   };
 
   const handleEdit = () => {
-    console.log("Editing comment...");
+    setIsEditing(true);
+    setInitialText(comment.comment); // Set the comment's current text as the initial text for editing
   };
 
   const handleReport = () => {
@@ -240,7 +220,27 @@ const Comment = ({ comment, post }) => {
                 @{comment.commentBy.userName}
               </Text>
             </Flex>
-            <ExpandableText>{comment.comment}</ExpandableText>
+            {isEditing ? (
+              <CommentInputForm
+                currentPost={post}
+                isEditing={isEditing}
+                initialText={initialText}
+                comment={comment}
+                setComments={setComments}
+                onUpdate={(updatedComment) => {
+                  // Update the comment with the new text
+                  setComments((prevComments) =>
+                    prevComments.map((c) =>
+                      c._id === comment._id ? { ...c, comment: updatedComment.comment } : c
+                    )
+                  );
+                  setIsEditing(false); // Exit editing mode
+                }}
+              />
+            ) : (
+              <ExpandableText>{comment.comment && comment.comment}</ExpandableText>
+            )}
+
             <Flex w={"full"} gap={5} >
               <Flex>
                 <Text
