@@ -1,18 +1,10 @@
-import {
-    Menu,
-    MenuButton,
-    Portal,
-    MenuList,
-    MenuItem,
-    Text,
-} from "@chakra-ui/react"
-
+import { Menu, MenuButton, Portal, MenuList, MenuItem, Text, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
-import useCopyProfile from "../hooks/useCopyProfile";
-import userAtom from "../atoms/userAtom";
 
+import useCopyProfile from "../../hooks/useCopyProfile";
+import userAtom from "../../atoms/userAtom";
 
 
 const OwnerProfileActions = () => {

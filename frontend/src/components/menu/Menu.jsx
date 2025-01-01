@@ -1,34 +1,21 @@
-import {
-  Flex,
-  VStack,
-  Heading,
-  Divider,
-  useColorMode,
-  Button,
-  Spacer,
-  Avatar,
-  useDisclosure,
-} from "@chakra-ui/react";
-
-import { IoHomeOutline } from "react-icons/io5";
+import { Flex, VStack, Heading, Divider, useColorMode, Button, Spacer, Avatar, useDisclosure, } from "@chakra-ui/react";
 import { FaRegUser, FaRegMoon } from "react-icons/fa";
+import { AiOutlineMessage } from "react-icons/ai";
+import { IoHomeOutline } from "react-icons/io5";
+import { useLocation } from "react-router-dom";
 import { TbMapSearch } from "react-icons/tb";
 import { BsSearch } from "react-icons/bs";
-import { AiOutlineMessage } from "react-icons/ai";
-import { GoSun } from "react-icons/go";
-
-import MenuItem from "./MenuItem";
-import MobileMenuItem from "./MobileMenuItem";
-import LogoutButton from "./LogoutButton";
-
-import userAtom from "../atoms/userAtom";
-
 import { useRecoilValue } from "recoil";
-import { useLocation } from "react-router-dom";
-import { ExploreSVG, HomeSVG, MessageSVG, SearchSVG } from "./IconSvg";
-import SearchDrawer from "./SearchDrawer";
-
+import { GoSun } from "react-icons/go";
 import PropTypes from "prop-types";
+
+import { ExploreSVG, HomeSVG, MessageSVG, SearchSVG } from "../shared/IconSvg";
+import SearchDrawer from "../shared/SearchDrawer";
+import LogoutButton from "../auth/LogoutButton";
+import MobileMenuItem from "./MobileMenuItem";
+import userAtom from "../../atoms/userAtom";
+import MenuItem from "./MenuItem";
+
 
 const Menu = () => {
   const { colorMode, toggleColorMode } = useColorMode();

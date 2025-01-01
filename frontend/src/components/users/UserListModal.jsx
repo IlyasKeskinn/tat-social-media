@@ -13,9 +13,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
-import useShowToast from "../hooks/showToast";
-import Loading from "./Loading";
+import useFetch from "../../hooks/useFetch";
+import useShowToast from "../../hooks/showToast";
+import Loading from "../shared/Loading";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
 import UserTile from "./UserTile";
 import PropTypes from "prop-types";

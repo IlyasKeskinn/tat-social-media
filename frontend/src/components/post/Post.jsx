@@ -1,15 +1,17 @@
 import { Flex, Text, Box, Image, Divider } from "@chakra-ui/react";
-import Actions from "./Actions";
 import { Link as LinkRouter } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
-import PostInfo from "./PostInfo";
-import PostAvatar from "./PostAvatar";
-import { memo } from "react";
-import PostSkeleton from "./PostSkeleton";
 import PropTypes from "prop-types";
+import { memo } from "react";
+
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+import PostSkeleton from "./PostSkeleton";
+import Actions from "../shared/Actions";
+import PostAvatar from "./PostAvatar";
+import PostInfo from "./PostInfo";
+
 
 const Post = memo(({ post }) => {
   const [user, setUser] = useState(null);

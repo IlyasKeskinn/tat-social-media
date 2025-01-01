@@ -1,8 +1,9 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
-import UserTile from "./UserTile"
-import useShowToast from "../hooks/showToast";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
+
+import useShowToast from "../../hooks/showToast";
+import useFetch from "../../hooks/useFetch";
+import UserTile from "./UserTile";
 
 
 const SuggestedUsers = () => {

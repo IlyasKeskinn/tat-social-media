@@ -1,16 +1,8 @@
-import {
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Input,
-  Button,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Flex, Stack, Heading, Text, Input, Button, Link, } from "@chakra-ui/react";
 import { useSetRecoilState } from "recoil";
 
-import authScreenAtom from "../atoms/authAtom";
+import authScreenAtom from "../../atoms/authAtom";
+
 
 const ForgotPassword = () => {
   const setAuthScreen = useSetRecoilState(authScreenAtom);

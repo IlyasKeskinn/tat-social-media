@@ -1,28 +1,13 @@
-import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Box,
-} from "@chakra-ui/react";
-
-
+import { Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Box, } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import useShowToast from "../hooks/showToast.jsx";
-
-import commentAtom from "../atoms/commentAtom.js";
 import { useRecoilState } from "recoil";
-
-import Loading from "./Loading.jsx";
-
-import Comment from "./Comment.jsx";
-
 import PropTypes from "prop-types";
+
 import CommentInputForm from "./CommentInputForm.jsx";
+import useShowToast from "../../hooks/showToast.jsx";
+import commentAtom from "../../atoms/commentAtom.js";
+import Loading from "../shared/Loading.jsx";
+import Comment from "./Comment.jsx";
 
 
 const Comments = ({ isOpen, onClose, currentPost }) => {

@@ -1,18 +1,20 @@
 import { Grid, Text, VStack, Flex, Box } from "@chakra-ui/react";
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import UserHeader from "../components/UserHeader";
-import ProfilePagePost from "../components/ProfilePagePost";
-import UserNotFoundPage from "../components/UserNotFoundPage";
-import Loading from "../components/Loading";
-import postAtom from "../atoms/postAtom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useRecoilState } from "recoil";
+
+import BlockedUserHeader from "../components/profile/BlockedUserHeader";
+import UserNotFoundPage from "../components/notfound/UserNotFoundPage";
+import ProfilePagePost from "../components/post/ProfilePagePost";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import UserHeader from "../components/profile/UserHeader";
+import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
-import BlockedUserHeader from "../components/BlockedUserHeader";
+import postAtom from "../atoms/postAtom";
+
 
 const Profile = () => {
   const API_URL = import.meta.env.VITE_BASE_API_URL;

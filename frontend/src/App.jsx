@@ -1,17 +1,20 @@
-import { Route, Routes } from "react-router-dom";
-import MainLayout from "./layouts/MainLayout";
-import Feed from "./pages/Feed";
-import Profile from "./pages/Profile";
-import EditProfile from "./pages/EditProfile";
-import AuthPage from "./pages/AuthPage";
-import { ProtectedRoutes } from "./path/ProtectedRoutes";
-import userAtom from "./atoms/userAtom";
-import { useRecoilState } from "recoil";
-import NotFoundPage from "./components/NotFoundPage";
-import UserPost from "./components/UserPost";
 import "./App.css";
+
+import { Route, Routes } from "react-router-dom";
+import { useRecoilState } from "recoil";
+
+import NotFoundPage from "./components/notfound/NotFoundPage";
+import { ProtectedRoutes } from "./path/ProtectedRoutes";
+import UserPost from "./components/profile/UserPost";
 import Conservations from "./pages/Conservations";
 import BlockedUsers from "./pages/BlockedUsers";
+import MainLayout from "./layouts/MainLayout";
+import EditProfile from "./pages/EditProfile";
+import userAtom from "./atoms/userAtom";
+import AuthPage from "./pages/AuthPage";
+import Profile from "./pages/Profile";
+import Feed from "./pages/Feed";
+
 
 function App() {
   const user = useRecoilState(userAtom)[0];

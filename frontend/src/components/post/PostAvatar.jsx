@@ -7,7 +7,7 @@ import {
   PopoverBody,
 } from "@chakra-ui/react";
 
-import ProfilePreviewPopover from "./ProfilePreviewPopover";
+import ProfilePreviewPopover from "../users/ProfilePreviewPopover";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";

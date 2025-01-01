@@ -9,8 +9,8 @@ import {
 
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import PropTypes from "prop-types"
-import useCopyProfile from "../hooks/useCopyProfile";
-import useBlockUnblock from "../hooks/useBlockUnblock";
+import useCopyProfile from "../../hooks/useCopyProfile";
+import useBlockUnblock from "../../hooks/useBlockUnblock";
 
 
 const ProfileActions = ({ user }) => {

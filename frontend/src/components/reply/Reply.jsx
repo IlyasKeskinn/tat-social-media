@@ -9,16 +9,16 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 
-import ProfilePreviewPopover from "./ProfilePreviewPopover.jsx";
-import ExpandableText from "./ExpandableText.jsx";
+import ProfilePreviewPopover from "../users/ProfilePreviewPopover.jsx";
+import ExpandableText from "../shared/ExpandableText.jsx";
 import { useEffect, useState } from "react";
-import { LikeButton } from "./Actions.jsx";
-import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.jsx";
-import useShowToast from "../hooks/showToast.jsx";
+import { LikeButton } from "../shared/Actions.jsx";
+import useFormatShortDistanceToNow from "../../hooks/useFormatShortDistanceToNow.jsx";
+import useShowToast from "../../hooks/showToast.jsx";
 import PropTypes from "prop-types";
 import { useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom.js";
-import useFetch from "../hooks/useFetch.jsx";
+import userAtom from "../../atoms/userAtom.js";
+import useFetch from "../../hooks/useFetch.jsx";
 
 const Reply = ({ reply, postId, commentId }) => {
   const REPLY_LIKE_URL = `post/replylikeunlike/${postId}/${commentId}/${reply._id}`;

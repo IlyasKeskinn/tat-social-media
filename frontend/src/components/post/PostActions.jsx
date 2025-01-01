@@ -6,7 +6,7 @@ import { MdBlock } from "react-icons/md";
 import { MdOutlineReport } from "react-icons/md";
 import { MdOutlineReportOff } from "react-icons/md";
 
-import useCopyPost from "../hooks/useCopyPost";
+import useCopyPost from "../../hooks/useCopyPost";
 import PropTypes from "prop-types";
 
 const PostActions = ({ postId, postedBy }) => {

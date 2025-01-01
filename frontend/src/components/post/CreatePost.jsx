@@ -1,42 +1,18 @@
-import {
-  Flex,
-  Box,
-  Avatar,
-  Button,
-  useColorModeValue,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  FormControl,
-  Textarea,
-  Text,
-  Input,
-  Image,
-  AspectRatio,
-  CloseButton,
-} from "@chakra-ui/react";
-
-import usePrevImg from "../hooks/usePrevImg";
-import useFetch from "../hooks/useFetch";
-import useShowToast from "../hooks/showToast";
-
-import { useForm } from "react-hook-form";
+import { Flex, Box, Avatar, Button, useColorModeValue, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, Textarea, Text, Input, Image, AspectRatio, CloseButton, } from "@chakra-ui/react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useRef, useState } from "react";
+import { FaRegImage } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import userAtom from "../atoms/userAtom";
+import EmojiPickerBox from "../shared/EmojiPickerBox";
+import useShowToast from "../../hooks/showToast";
+import usePrevImg from "../../hooks/usePrevImg";
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+import postAtom from "../../atoms/postAtom";
 
-import { FaRegImage } from "react-icons/fa6";
-
-import { useEffect, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import postAtom from "../atoms/postAtom";
-import EmojiPickerBox from "./EmojiPickerBox";
 
 const postSchema = z.object({
   text: z.string().max(500, "Post text must be at most 500 characters"),

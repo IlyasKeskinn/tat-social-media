@@ -1,34 +1,18 @@
-import {
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Container,
-  Input,
-  Button,
-  SimpleGrid,
-  useBreakpointValue,
-  Link,
-  InputRightElement,
-  InputGroup,
-} from "@chakra-ui/react";
-
-import { LuEyeOff } from "react-icons/lu";
-import { LuEye } from "react-icons/lu";
-
+import { Box, Flex, Stack, Heading, Text, Container, Input, Button, SimpleGrid, useBreakpointValue, Link, InputRightElement, InputGroup, } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-
-import authScreenAtom from "../atoms/authAtom";
-import userAtom from "../atoms/userAtom";
-
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { LuEyeOff } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import * as z from "zod";
 
-import useFetch from "../hooks/useFetch";
-import useShowToast from "../hooks/showToast";
+import authScreenAtom from "../../atoms/authAtom";
+import useShowToast from "../../hooks/showToast";
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+
+
 const schema = z.object({
   firstName: z
     .string()

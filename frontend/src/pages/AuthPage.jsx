@@ -1,8 +1,10 @@
-import Login from "../components/Login";
-import ForgotPassword from "../components/ForgotPassword";
-import SignUP from "../components/SignUP";
 import { useRecoilValue } from "recoil";
+
+import ForgotPassword from "../components/auth/ForgotPassword";
+import SignUP from "../components/auth/SignUP";
 import authScreenAtom from "../atoms/authAtom";
+import Login from "../components/auth/Login";
+
 
 const AuthPage = () => {
   const authScreenState = useRecoilValue(authScreenAtom);

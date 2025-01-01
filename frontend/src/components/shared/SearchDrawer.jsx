@@ -1,22 +1,13 @@
-import {
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  Input,
-  DrawerFooter,
-  Button,
-  Box,
-} from "@chakra-ui/react";
-import UserCard from "../components/UserCard";
-import useShowToast from "../hooks/showToast";
+import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, Button, Box, } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import Loading from "./Loading";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+
+import useShowToast from "../../hooks/showToast";
+import UserCard from "../users/UserCard";
+import Loading from "./Loading";
+
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 

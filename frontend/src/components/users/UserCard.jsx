@@ -1,9 +1,9 @@
 import { Avatar, Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
+import userAtom from "../../atoms/userAtom";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
-import useFollowUnfollow from "../hooks/useFollowUnfollow";
+import useFollowUnfollow from "../../hooks/useFollowUnfollow";
 
 const UserCard = ({ user, onClose = {} }) => {
   const currentUser = useRecoilValue(userAtom);

@@ -1,15 +1,16 @@
 import { Flex, Box, Text, useDisclosure } from "@chakra-ui/react";
-
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import userAtom from "../atoms/userAtom";
-import postAtom from "../atoms/postAtom";
-import useFetch from "../hooks/useFetch";
-import useShowToast from "../hooks/showToast";
-import UserListModal from "./UserListModal";
-import Comments from "./Comments";
-import { BookmarkSVG } from "./IconSvg";
 import PropTypes from "prop-types";
+
+import UserListModal from "../users/UserListModal";
+import useShowToast from "../../hooks/showToast";
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+import postAtom from "../../atoms/postAtom";
+import Comments from "../comment/Comments";
+import { BookmarkSVG } from "./IconSvg";
+
 
 const Actions = ({ currentPost }) => {
   const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;

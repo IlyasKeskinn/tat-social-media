@@ -1,16 +1,18 @@
 import { Flex, Text, Box, Image, Divider } from "@chakra-ui/react";
-import Actions from "./Actions";
-import PostInfo from "./PostInfo";
-import useFetch from "../hooks/useFetch";
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
-import useShowToast from "../hooks/showToast";
-import Loading from "./Loading";
-import PostAvatar from "./PostAvatar";
-import postAtom from "../atoms/postAtom";
-import NotFoundPage from "./NotFoundPage";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+
+import useShowToast from "../../hooks/showToast";
+import PostAvatar from "../post/PostAvatar";
+import NotFoundPage from "../notfound/NotFoundPage";
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+import postAtom from "../../atoms/postAtom";
+import PostInfo from "../post/PostInfo";
+import Loading from "../shared/Loading";
+import Actions from "../shared/Actions";
+
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 

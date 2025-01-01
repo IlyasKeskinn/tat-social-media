@@ -1,15 +1,16 @@
-import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useRecoilState } from "recoil";
-import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
-import Post from "../components/Post";
-import CreatePost from "../components/CreatePost";
-import Loading from "../components/Loading";
-import postAtom from "../atoms/postAtom";
+import SuggestedUsers from "../components/users/SuggestedUsers";
+import CreatePost from "../components/post/CreatePost";
+import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
-import SuggestedUsers from "../components/SuggestedUsers";
+import Post from "../components/post/Post";
+import postAtom from "../atoms/postAtom";
+
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 

@@ -1,26 +1,14 @@
-import {
-  Flex,
-  Text,
-  Menu,
-  MenuButton,
-  Portal,
-  MenuList,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-} from "@chakra-ui/react";
+import { Flex, Text, Menu, MenuButton, Portal, MenuList, Popover, PopoverTrigger, PopoverContent, PopoverBody, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-
 import { formatDistanceToNow } from "date-fns";
+import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
+import { useState } from "react";
 
+import ProfilePreviewPopover from "../users/ProfilePreviewPopover";
 import PostOwnerActions from "./PostOwnerActions";
 import PostActions from "./PostActions";
 
-import { useState } from "react";
-import ProfilePreviewPopover from "./ProfilePreviewPopover";
-import { useNavigate } from "react-router";
-import PropTypes from "prop-types";
 
 const PostInfo = ({ post, postedBy, postOwner }) => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);

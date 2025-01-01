@@ -1,10 +1,13 @@
-import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react"
-import { API_USER_ROUTES } from "../constants/API_ROUTES"
-import BlockedUserTile from "../components/BlockedUserTile"
-import useFetch from "../hooks/useFetch"
-import { useEffect, useState } from "react"
-import useShowToast from "../hooks/showToast"
-import Loading from "../components/Loading"
+import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+
+import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import useShowToast from "../hooks/showToast";
+import Loading from "../components/shared/Loading";
+import useFetch from "../hooks/useFetch";
+import BlockedUserTile from "../components/profile/BlockedUserTile"
+
+
 
 const BlockedUsers = () => {
     const [blockedUsers, setBlockedUsers] = useState([]);

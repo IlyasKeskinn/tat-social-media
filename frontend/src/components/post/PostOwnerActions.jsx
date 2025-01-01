@@ -1,30 +1,17 @@
-import {
-  MenuItem,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Flex,
-} from "@chakra-ui/react";
+import { MenuItem, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Flex, } from "@chakra-ui/react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { CiMedicalClipboard } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router";
+import { GoPencil } from "react-icons/go";
+import PropTypes from "prop-types";
 import { useEffect } from "react";
 
-import { MdDeleteOutline } from "react-icons/md";
-import { GoPencil } from "react-icons/go";
-import { CiMedicalClipboard } from "react-icons/ci";
+import useCopyPost from "../../hooks/useCopyPost";
+import useDelete from "../../hooks/useDelete";
+import userAtom from "../../atoms/userAtom";
+import postAtom from "../../atoms/postAtom";
 
-import useCopyPost from "../hooks/useCopyPost";
-import useDelete from "../hooks/useDelete";
-
-import { useNavigate } from "react-router";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
-import PropTypes from "prop-types";
-import postAtom from "../atoms/postAtom";
 
 const PostOwnerActions = ({ postId }) => {
   const currentUser = useRecoilValue(userAtom);

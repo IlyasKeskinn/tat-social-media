@@ -1,24 +1,15 @@
-import {
-  VStack,
-  Flex,
-  Box,
-  Avatar,
-  Text,
-  Button,
-  Grid,
-} from "@chakra-ui/react";
-
-import { ShareSvg } from "./Actions";
-
+import { VStack, Flex, Box, Avatar, Text, Button, Grid, } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
-
-import userAtom from "../atoms/userAtom";
-import useFollowUnfollow from "../hooks/useFollowUnfollow";
 import PropTypes from "prop-types";
-import ProfileActions from "./ProfileActions";
+
+import useFollowUnfollow from "../../hooks/useFollowUnfollow";
+import useBlockUnblock from "../../hooks/useBlockUnblock";
 import OwnerProfileActions from "./OwnerProfileActions";
-import useBlockUnblock from "../hooks/useBlockUnblock";
+import ProfileActions from "./ProfileActions";
+import { ShareSvg } from "../shared/Actions";
+import userAtom from "../../atoms/userAtom";
+
 
 const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   const navigate = useNavigate();
@@ -182,7 +173,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
           >
             <Text fontWeight={"bold"}>
               {" "}
-              Saved ({currentUser.bookmarksCollection.length})
+              Saved ({currentUser.bookmarksCollection ? currentUser.bookmarksCollection.length : 0})
             </Text>
           </Flex>
         )}

@@ -1,40 +1,22 @@
-import {
-  Flex,
-  Text,
-  Popover,
-  PopoverContent,
-  PopoverBody,
-  PopoverTrigger,
-  Avatar,
-  Box,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router";
-
-
-
-import ProfilePreviewPopover from "./ProfilePreviewPopover.jsx";
-import ExpandableText from "./ExpandableText.jsx";
-import { useEffect, useState } from "react";
-import { LikeButton } from "./Actions.jsx";
-import Reply from "./Reply.jsx";
-
-import useFormatShortDistanceToNow from "../hooks/useFormatShortDistanceToNow.jsx";
-import useShowToast from "../hooks/showToast.jsx";
-
-import PropTypes from "prop-types";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom.js";
-import useFetch from "../hooks/useFetch.jsx";
-
+import { Flex, Text, Popover, PopoverContent, PopoverBody, PopoverTrigger, Avatar, Box, Button, Menu, MenuButton, MenuList, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import CommentActions from "./CommentActions.jsx";
-import commentAtom from "../atoms/commentAtom.js";
-import useUpdate from "../hooks/useUpdate.jsx";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import PropTypes from "prop-types";
+
+import useFormatShortDistanceToNow from "../../hooks/useFormatShortDistanceToNow.jsx";
+import ProfilePreviewPopover from "../users/ProfilePreviewPopover.jsx";
 import CommentInputForm from "./CommentInputForm.jsx";
+import useShowToast from "../../hooks/showToast.jsx";
+import commentAtom from "../../atoms/commentAtom.js";
+import ExpandableText from "../shared/ExpandableText.jsx";
+import useUpdate from "../../hooks/useUpdate.jsx";
+import CommentActions from "./CommentActions.jsx";
+import useFetch from "../../hooks/useFetch.jsx";
+import userAtom from "../../atoms/userAtom.js";
+import { LikeButton } from "../shared/Actions.jsx";
+import Reply from "../reply/Reply.jsx";
 
 
 const Comment = ({ comment, post }) => {

@@ -1,29 +1,18 @@
-import {
-    Flex,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Button,
-    Box,
-    Icon,
-    FormControl,
-    useColorMode,
-} from "@chakra-ui/react";
-
-import { useForm } from "react-hook-form";
+import { Flex, Input, InputGroup, InputRightElement, Button, Box, Icon, FormControl, useColorMode, } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useState, useEffect } from "react";
-import useFetch from "../hooks/useFetch.jsx";
-import useShowToast from "../hooks/showToast.jsx";
-
 import { MdEmojiEmotions } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { IoSend } from "react-icons/io5";
-import PropTypes from "prop-types";
-
-import EmojiPickerBox from "./EmojiPickerBox";
 import { useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom.js";
+import PropTypes from "prop-types";
+import * as z from "zod";
+
+import EmojiPickerBox from "../shared/EmojiPickerBox.jsx";
+import useShowToast from "../../hooks/showToast.jsx";
+import useFetch from "../../hooks/useFetch.jsx";
+import userAtom from "../../atoms/userAtom.js";
+
 
 const schema = z.object({
     text: z.string().min(1, "cannot be sent empty"),

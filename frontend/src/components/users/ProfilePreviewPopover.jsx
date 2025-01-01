@@ -3,10 +3,10 @@ import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
 import { useState, useEffect } from "react";
 
-import userAtom from "../atoms/userAtom";
-import useShowToast from "../hooks/showToast";
-import useFetch from "../hooks/useFetch";
-import Loading from "./Loading";
+import userAtom from "../../atoms/userAtom";
+import useShowToast from "../../hooks/showToast";
+import useFetch from "../../hooks/useFetch";
+import Loading from "../shared/Loading";
 
 import PropTypes from "prop-types";
 

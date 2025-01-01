@@ -1,31 +1,17 @@
-import {
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Input,
-  Button,
-  Link,
-  InputGroup,
-  InputRightElement,
-} from "@chakra-ui/react";
-
-import { LuEyeOff } from "react-icons/lu";
-import { LuEye } from "react-icons/lu";
-
+import { Box, Flex, Stack, Heading, Text, Input, Button, Link, InputGroup, InputRightElement, } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-
-import authScreenAtom from "../atoms/authAtom";
-import userAtom from "../atoms/userAtom";
-
-import useShowToast from "../hooks/showToast";
-import useFetch from "../hooks/useFetch";
-
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { LuEyeOff } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import * as z from "zod";
+
+import authScreenAtom from "../../atoms/authAtom";
+import useShowToast from "../../hooks/showToast";
+import userAtom from "../../atoms/userAtom";
+import useFetch from "../../hooks/useFetch";
+
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),

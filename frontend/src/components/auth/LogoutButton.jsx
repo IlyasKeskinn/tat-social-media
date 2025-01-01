@@ -1,28 +1,11 @@
-import {
-  Flex,
-  PopoverTrigger,
-  Popover,
-  PopoverContent,
-  PopoverHeader,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverBody,
-  PopoverFooter,
-  Portal,
-  Button,
-  Box,
-  Text,
-  ButtonGroup,
-  useDisclosure,
-} from "@chakra-ui/react";
-
+import { Flex, PopoverTrigger, Popover, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody, PopoverFooter, Portal, Button, Box, Text, ButtonGroup, useDisclosure, } from "@chakra-ui/react";
 import { AiOutlineLogout } from "react-icons/ai";
-
 import { useEffect, useState } from "react";
-
-import userAtom from "../atoms/userAtom";
 import { useSetRecoilState } from "recoil";
-import useShowToast from "../hooks/showToast";
+
+import useShowToast from "../../hooks/showToast";
+import userAtom from "../../atoms/userAtom";
+
 
 const LogoutButton = () => {
   const BASE_URL = import.meta.env.VITE_BASE_API_URL;

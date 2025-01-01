@@ -1,6 +1,9 @@
 import { Box, Container, Flex, Stack } from "@chakra-ui/react";
 import { Outlet } from "react-router";
-import Menu from "../components/Menu";
+
+import Menu from "../components/menu/Menu";
+
+
 const MainLayout = () => {
   return (
     <Box position={"relative"} w={"full"}>

@@ -1,6 +1,8 @@
-import { Avatar, Box, Button, Flex, Text } from '@chakra-ui/react'
-import useBlockUnblock from "../hooks/useBlockUnblock"
-import PropTypes from "prop-types"
+import { Avatar, Box, Button, Flex, Text } from '@chakra-ui/react';
+import PropTypes from "prop-types";
+
+import useBlockUnblock from "../../hooks/useBlockUnblock";
+
 
 const BlockedUserTile = ({ user }) => {
     const { handleBlockUnblock, isLoading: blockLoading } = useBlockUnblock(user);
