@@ -11,13 +11,14 @@ import PostSkeleton from "./PostSkeleton";
 import Actions from "../shared/Actions";
 import PostAvatar from "./PostAvatar";
 import PostInfo from "./PostInfo";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 
 const Post = memo(({ post }) => {
   const [user, setUser] = useState(null);
   const [postOwner, setPostOwner] = useState(null);
 
-  const URL = `user/profile/${post?.postedBy}`;
+  const URL = API_USER_ROUTES.GET_PROFILE(post?.postedBy)
   const postID = post._id;
 
   const { responseData, isLoading, error, statusCode } = useFetch(URL);

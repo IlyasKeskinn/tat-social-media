@@ -19,9 +19,10 @@ import Loading from "../shared/Loading";
 import ProfilePreviewPopover from "./ProfilePreviewPopover";
 import UserTile from "./UserTile";
 import PropTypes from "prop-types";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 const UserListModal = ({ isOpen, onClose, likesArr }) => {
-  const LIKE_USERS_URL = "user/fetchlikeduser";
+  const LIKE_USERS_URL = API_USER_ROUTES.FETCH_LIKED_USERS;
   const [likedUsers, setLikedUsers] = useState([]);
   const showToast = useShowToast();
 

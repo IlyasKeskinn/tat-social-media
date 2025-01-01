@@ -11,6 +11,7 @@ import authScreenAtom from "../../atoms/authAtom";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
 
 const schema = z.object({
@@ -26,7 +27,8 @@ const Login = () => {
   const handleClick = () => setShow(!show);
   const showToast = useShowToast();
 
-  const LOGIN_URL = "user/login";
+  const LOGIN_URL = API_AUTH_ROUTES.LOGIN;
+  
   const { statusCode, responseData, isLoading, error, postData } = useFetch(
     LOGIN_URL,
     "POST"

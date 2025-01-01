@@ -12,6 +12,7 @@ import EmojiPickerBox from "../shared/EmojiPickerBox.jsx";
 import useShowToast from "../../hooks/showToast.jsx";
 import useFetch from "../../hooks/useFetch.jsx";
 import userAtom from "../../atoms/userAtom.js";
+import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 
 
 const schema = z.object({
@@ -31,8 +32,8 @@ const CommentInputForm = ({
     const currentUser = useRecoilValue(userAtom);
 
     const COMMENT_URL = isEditing
-        ? `post/updatecomment/${currentPost._id}/${comment._id}`
-        : `post/makecomment/${currentPost._id}`;
+        ? API_COMMENT_ROUTES.UPDATE_COMMENT(currentPost._id, comment._id)
+        : API_COMMENT_ROUTES.MAKE_COMMENT(currentPost._id);
 
     const { responseData, isLoading, statusCode, error, putData } = useFetch(
         COMMENT_URL,

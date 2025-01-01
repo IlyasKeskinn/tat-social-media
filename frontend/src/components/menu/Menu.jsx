@@ -49,9 +49,13 @@ const Menu = () => {
           <Flex w="full" alignItems="center" justifyContent="start">
             <Heading
               textAlign="start"
-              fontSize="5xl" 
+              fontSize="5xl"
               fontWeight="semibold"
               mb={12}
+              cursor={"pointer"}
+              onClick={() => {
+                window.location.href = "/";
+              }}
             >
               T.A.T
             </Heading>

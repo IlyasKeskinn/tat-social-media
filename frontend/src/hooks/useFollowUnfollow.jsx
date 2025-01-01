@@ -10,7 +10,7 @@ const useFollowUnfollow = (user) => {
   const [isUserFollowing, setUserFollowing] = useState(
     user.followers?.includes(currentUser._id)
   );
-  const URL = `${API_USER_ROUTES.FOLLOW_UNFOLLOW}/${user._id}`;
+  const URL = API_USER_ROUTES.FOLLOW_UNFOLLOW(user._id);
   const { statusCode, isLoading, error, putData, responseData } = useFetch(
     URL,
     "PUT"

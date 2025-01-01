@@ -19,9 +19,10 @@ import PropTypes from "prop-types";
 import { useRecoilValue } from "recoil";
 import userAtom from "../../atoms/userAtom.js";
 import useFetch from "../../hooks/useFetch.jsx";
+import { API_REPLY_ROUTES } from "../../constants/API_ROUTES.js";
 
 const Reply = ({ reply, postId, commentId }) => {
-  const REPLY_LIKE_URL = `post/replylikeunlike/${postId}/${commentId}/${reply._id}`;
+  const REPLY_LIKE_URL = API_REPLY_ROUTES.LIKE_UNLIKE_REPLY(postId, commentId, reply._id);
 
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();

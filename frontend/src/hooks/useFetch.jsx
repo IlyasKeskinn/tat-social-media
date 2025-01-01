@@ -6,8 +6,6 @@ const useFetch = (url, method = "GET") => {
   const [error, setError] = useState("");
   const [options, setOptions] = useState("");
   const [statusCode, setStatusCode] = useState(null);
-  const API_URL = import.meta.env.VITE_BASE_API_URL;
-  const fetchURL = `${API_URL}/${url}`;
 
   const postData = (data) => {
     setOptions({
@@ -37,7 +35,7 @@ const useFetch = (url, method = "GET") => {
       try {
         setLoading(true);
         setError("");
-        const response = await fetch(fetchURL, {
+        const response = await fetch(url, {
           ...options,
           credentials: "include",
         });
@@ -66,7 +64,7 @@ const useFetch = (url, method = "GET") => {
     if (method === "PUT" && options) {
       fetchData(options);
     }
-  }, [fetchURL, options, method]);
+  }, [url, options, method]);
 
   return {
     responseData,

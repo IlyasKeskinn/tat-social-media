@@ -12,6 +12,7 @@ import usePrevImg from "../../hooks/usePrevImg";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
 import postAtom from "../../atoms/postAtom";
+import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const postSchema = z.object({
@@ -21,7 +22,7 @@ const postSchema = z.object({
 const MAX_CHAR = 500;
 
 const CreatePost = () => {
-  const URL = `post/createpost`;
+  const URL = API_POST_ROUTES.MAKE_POST;
 
   // Chakra UI hooks
   const { isOpen, onOpen, onClose } = useDisclosure();

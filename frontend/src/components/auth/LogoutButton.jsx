@@ -5,12 +5,11 @@ import { useSetRecoilState } from "recoil";
 
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
 
 const LogoutButton = () => {
-  const BASE_URL = import.meta.env.VITE_BASE_API_URL;
-  const LOGOUT_URL = "/user/logout";
-  const URL = BASE_URL + LOGOUT_URL;
+  const LOGOUT_URL = API_AUTH_ROUTES.LOGOUT;
 
   const userState = useSetRecoilState(userAtom);
   const showToast = useShowToast();
@@ -23,7 +22,7 @@ const LogoutButton = () => {
   const handleClick = async () => {
     try {
       setLoading(true);
-      const response = await fetch(URL, {
+      const response = await fetch(LOGOUT_URL, {
         method: "GET",
         "Content-type": "application/json",
       });

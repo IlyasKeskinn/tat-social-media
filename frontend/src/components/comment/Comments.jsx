@@ -8,13 +8,13 @@ import useShowToast from "../../hooks/showToast.jsx";
 import commentAtom from "../../atoms/commentAtom.js";
 import Loading from "../shared/Loading.jsx";
 import Comment from "./Comment.jsx";
+import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 
 
 const Comments = ({ isOpen, onClose, currentPost }) => {
   const showToast = useShowToast();
 
-  const API_URL = import.meta.env.VITE_BASE_API_URL;
-  const FETCH_COMMENTS = `post/getcomments/${currentPost._id}`;
+  const FETCH_COMMENTS = API_COMMENT_ROUTES.FETCH_COMMENTS(currentPost._id);
 
   const [comments, setComments] = useRecoilState(commentAtom);
 
@@ -26,7 +26,7 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
       setFetchingComments(true);
       const fetchComments = async () => {
         try {
-          const response = await fetch(`${API_URL}/${FETCH_COMMENTS}`);
+          const response = await fetch(FETCH_COMMENTS);
           if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
           }

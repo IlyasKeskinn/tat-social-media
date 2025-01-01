@@ -3,8 +3,6 @@ import useShowToast from "./showToast";
 
 const useUpdate = (req_body, URL, msg) => {
 
-    const API_URL = import.meta.env.VITE_BASE_API_URL;
-    const fetchURL = `${API_URL}/${URL}`;
     const showToast = useShowToast();
 
     const [isLoading, setLoading] = useState(false);
@@ -13,7 +11,7 @@ const useUpdate = (req_body, URL, msg) => {
     const handleUpdate = async () => {
         try {
             setLoading(true);
-            const response = await fetch(fetchURL, {
+            const response = await fetch(URL, {
                 method: "PUT",
                 body: JSON.stringify(req_body),
                 credentials: "include",

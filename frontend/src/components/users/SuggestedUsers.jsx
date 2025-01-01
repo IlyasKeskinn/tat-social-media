@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import useShowToast from "../../hooks/showToast";
 import useFetch from "../../hooks/useFetch";
 import UserTile from "./UserTile";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 
 const SuggestedUsers = () => {
     const showToast = useShowToast();
 
-    const suggestUsersURL = `user/suggestUsers`
+    const suggestUsersURL = API_USER_ROUTES.SUGGEST_USERS;
     const [suggestedUsers, setSuggestedUsers] = useState([]);
 
 

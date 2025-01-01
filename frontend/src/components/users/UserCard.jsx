@@ -8,6 +8,8 @@ import useFollowUnfollow from "../../hooks/useFollowUnfollow";
 const UserCard = ({ user, onClose = {} }) => {
   const currentUser = useRecoilValue(userAtom);
 
+
+  //navigation url
   const PROFILE_URL = `/profile/${user.userName}`;
 
   const isProfileOwner = user._id === currentUser._id;

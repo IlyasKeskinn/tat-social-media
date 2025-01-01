@@ -11,6 +11,7 @@ import authScreenAtom from "../../atoms/authAtom";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
 
 const schema = z.object({
@@ -41,7 +42,7 @@ const SignUP = () => {
 
   const showToast = useShowToast();
 
-  const REGISTER_URL = "user/register";
+  const REGISTER_URL = API_AUTH_ROUTES.REGISTER;
   const { statusCode, responseData, isLoading, error, postData } = useFetch(
     REGISTER_URL,
     "POST"

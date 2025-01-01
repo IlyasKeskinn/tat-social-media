@@ -12,6 +12,7 @@ import postAtom from "../../atoms/postAtom";
 import PostInfo from "../post/PostInfo";
 import Loading from "../shared/Loading";
 import Actions from "../shared/Actions";
+import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
@@ -24,7 +25,7 @@ const UserPost = () => {
   const [postedBy, setPostedBy] = useState([]);
   const [userLoading, setUserLoading] = useState(true);
 
-  const POST_URL = `post/getPost/${postId}`;
+  const POST_URL = API_POST_ROUTES.GET_POST(postId);
   const [posts, setPosts] = useRecoilState(postAtom);
   const [postOwner, setPostOwner] = useState(null);
 

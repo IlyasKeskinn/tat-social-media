@@ -10,14 +10,12 @@ import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
 import Post from "../components/post/Post";
 import postAtom from "../atoms/postAtom";
-
-
-const API_URL = import.meta.env.VITE_BASE_API_URL;
+import { API_POST_ROUTES } from "../constants/API_ROUTES";
 
 const fetchFeedPosts = async ({ pageParam = 1 }) => {
   try {
     const response = await fetch(
-      `${API_URL}/post/feedPosts?page=${pageParam}&limit=10`,
+      API_POST_ROUTES.FEED_POSTS(pageParam),
       { credentials: "include" }
     );
 

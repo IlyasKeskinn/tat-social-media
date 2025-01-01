@@ -6,8 +6,6 @@ import userAtom from "../atoms/userAtom";
 
 const useDelete = (req_body, URL, msg) => {
 
-  const API_URL = import.meta.env.VITE_BASE_API_URL;
-  const fetchURL = `${API_URL}/${URL}`;
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const navigate = useNavigate();
@@ -18,7 +16,7 @@ const useDelete = (req_body, URL, msg) => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const response = await fetch(fetchURL, {
+      const response = await fetch(URL, {
         method: "DELETE",
         body: JSON.stringify(req_body),
         credentials: "include",

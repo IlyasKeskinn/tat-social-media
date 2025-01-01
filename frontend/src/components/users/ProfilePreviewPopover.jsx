@@ -9,13 +9,17 @@ import useFetch from "../../hooks/useFetch";
 import Loading from "../shared/Loading";
 
 import PropTypes from "prop-types";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 const ProfilePreviewPopover = ({ userId }) => {
   const navigate = useNavigate();
   const showToast = useShowToast();
 
-  const URL = `user/profile/${userId}`;
-  const FOLLOW_URL = `user/followUnfollow/${userId}`;
+  //endpoints
+  const URL = API_USER_ROUTES.GET_PROFILE(userId);
+  const FOLLOW_URL = API_USER_ROUTES.FOLLOW_UNFOLLOW(userId);
+
+  //navigation url 
   const PROFILE_URL = `/profile/${userId}`;
 
   const currentUser = useRecoilValue(userAtom);

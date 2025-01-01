@@ -7,7 +7,7 @@ import { API_USER_ROUTES } from "../constants/API_ROUTES";
 const useBlockUnblock = (user) => {
     const showToast = useShowToast()
 
-    const URL = `${API_USER_ROUTES.BLOCK_UNBLOCK}/${user._id}`;
+    const URL = API_USER_ROUTES.BLOCK_UNBLOCK(user._id);
     const { statusCode, isLoading, error, putData } = useFetch(
         URL,
         "PUT"

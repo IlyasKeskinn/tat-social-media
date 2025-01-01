@@ -10,11 +10,12 @@ import useFetch from "../../hooks/useFetch";
 import postAtom from "../../atoms/postAtom";
 import Comments from "../comment/Comments";
 import { BookmarkSVG } from "./IconSvg";
+import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const Actions = ({ currentPost }) => {
-  const LIKE_URL = `post/likeUnlikePost/${currentPost._id}`;
-  const BOOKMARK_URL = `bookmarks/postBookmark/${currentPost._id}`;
+  const LIKE_URL = API_POST_ROUTES.LIKE_UNLIKE_POST(currentPost._id);
+  const BOOKMARK_URL = API_BOOKMARK_ROUTES.BOOKMARK_POST(currentPost._id);
 
   const [user, setUser] = useRecoilState(userAtom);
   const showToast = useShowToast();

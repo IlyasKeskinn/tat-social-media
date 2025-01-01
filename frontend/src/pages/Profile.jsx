@@ -14,22 +14,23 @@ import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
 import postAtom from "../atoms/postAtom";
+import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
 
 
 const Profile = () => {
-  const API_URL = import.meta.env.VITE_BASE_API_URL;
-  const FETCH_BOOKMARKS_POST = `/bookmarks/getsavedPost`;
+  const userName = useParams().query;
+
+  const URL = API_POST_ROUTES.GET_POSTS_BY_USER(userName);
 
 
   const [posts, setPosts] = useRecoilState(postAtom);
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
   const { ref, inView } = useInView();
 
-  const userName = useParams().query;
   const showToast = useShowToast();
   const [tab, setTab] = useState("post");
 
-  const URL = `post/getuserPost/${userName}`;
+
 
   useEffect(() => {
     setTab("post");
@@ -56,7 +57,7 @@ const Profile = () => {
   const fetchSavedPosts = async ({ pageParam = 1 }) => {
     try {
       const response = await fetch(
-        `${API_URL}${FETCH_BOOKMARKS_POST}?page=${pageParam}&limit=10`,
+        API_BOOKMARK_ROUTES.FETCH_SAVED_POSTS(pageParam),
         {
           credentials: "include",
         }

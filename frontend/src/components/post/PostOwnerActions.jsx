@@ -11,12 +11,13 @@ import useCopyPost from "../../hooks/useCopyPost";
 import useDelete from "../../hooks/useDelete";
 import userAtom from "../../atoms/userAtom";
 import postAtom from "../../atoms/postAtom";
+import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const PostOwnerActions = ({ postId }) => {
   const currentUser = useRecoilValue(userAtom);
   const copyPost = useCopyPost();
-  const URL = `post/deletepost/${postId}`;
+  const URL = API_POST_ROUTES.DELETE_POST(postId);
   const [posts, setPosts] = useRecoilState(postAtom);
 
 

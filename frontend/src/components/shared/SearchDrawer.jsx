@@ -7,16 +7,15 @@ import PropTypes from "prop-types";
 import useShowToast from "../../hooks/showToast";
 import UserCard from "../users/UserCard";
 import Loading from "./Loading";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
-
-const API_URL = import.meta.env.VITE_BASE_API_URL;
 
 const getSearchUsers = async ({ queryKey, pageParam = 1 }) => {
   const [, query] = queryKey;
 
   try {
     const response = await fetch(
-      `${API_URL}/user/searchuser?query=${query}&page=${pageParam}`,
+      API_USER_ROUTES.SEARCH_USER(query, pageParam),
       {
         method: "GET",
         credentials: "include"

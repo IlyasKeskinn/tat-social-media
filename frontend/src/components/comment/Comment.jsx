@@ -17,13 +17,14 @@ import useFetch from "../../hooks/useFetch.jsx";
 import userAtom from "../../atoms/userAtom.js";
 import { LikeButton } from "../shared/Actions.jsx";
 import Reply from "../reply/Reply.jsx";
+import { API_COMMENT_ROUTES, API_REPLY_ROUTES } from "../../constants/API_ROUTES.js";
 
 
 const Comment = ({ comment, post }) => {
-  const API_URL = import.meta.env.VITE_BASE_API_URL;
-  const FETCH_REPLIES = `post/getreplies/${comment._id}`;
-  const COMMENT_LIKE_URL = `post/likeunlikecomment/${post._id}/${comment._id}`;
-  const COMMENT_DELETE_URL = `post/deletecomment/${post._id}/${comment._id}`;
+  const FETCH_REPLIES = API_REPLY_ROUTES.FETCH_REPLIES(comment._id);
+  const COMMENT_LIKE_URL = API_COMMENT_ROUTES.LIKE_UNLIKE_COMMENT(post._id, comment._id);
+  const COMMENT_DELETE_URL = API_COMMENT_ROUTES.DELETE_COMMENT(post._id, comment._id);
+
   const [comments, setComments] = useRecoilState(commentAtom);
   const [isEditing, setIsEditing] = useState(false);
   const [initialText, setInitialText] = useState(comment.comment); // Set the initial text to the comment's text
@@ -97,7 +98,7 @@ const Comment = ({ comment, post }) => {
       setFetchingReply(true);
       const fetchReply = async () => {
         try {
-          const response = await fetch(`${API_URL}/${FETCH_REPLIES}`);
+          const response = await fetch(FETCH_REPLIES);
           if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
           }

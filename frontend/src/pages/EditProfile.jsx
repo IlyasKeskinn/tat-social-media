@@ -29,11 +29,12 @@ import userAtom from "../atoms/userAtom";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router";
 import { editProfileSchema } from "../formSchemas/editProfileSchema";
+import { API_USER_ROUTES } from "../constants/API_ROUTES";
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userAtom);
 
-  const UPDATE_URL = `user/update/${user._id}`;
+  const UPDATE_URL = API_USER_ROUTES.UPDATE_USER(user._id);
 
   const showToast = useShowToast();
 
