@@ -423,6 +423,9 @@ const searchUser = async (req, res) => {
 
   res.status(200).json(users);
 };
+
+
+
 module.exports = {
   registerUser,
   signIn,

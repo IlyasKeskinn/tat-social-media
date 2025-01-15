@@ -31,11 +31,13 @@ const errorMiddlewares = require("./middlewares/erros.js");
 const userRoute = require("./routes/user.js");
 const postRoute = require("./routes/post.js");
 const bookmarksRoute = require("./routes/bookmarks.js");
+const followRequest = require("./routes/followRequest.js");
 
 //routes
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 app.use("/api/bookmarks", bookmarksRoute);
+app.use("/api/followRequest", followRequest);
 
 app.use(errorMiddlewares);
 
