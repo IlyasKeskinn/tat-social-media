@@ -14,6 +14,9 @@ import userAtom from "./atoms/userAtom";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
+import Settings from "./layouts/Settings";
+import YourAccount from "./pages/YourAccount";
+import AccountPrivacy from "./pages/AccountPrivacy";
 
 
 function App() {
@@ -26,8 +29,12 @@ function App() {
           <Route path="/post/:postId" element={<UserPost />} />
           <Route path="profile/:query" element={<Profile />} />
           <Route path="profile/edit/:username" element={<EditProfile />} />
-          <Route path="/settings" element={<BlockedUsers />} />
           <Route path="/message" element={<Conservations />} />
+          <Route path="/settings" element={<Settings />} >
+            <Route path="" element={<YourAccount />} />
+            <Route path="blocked_accounts" element={<BlockedUsers />} />
+            <Route path="account_privacy" element={<AccountPrivacy />} />
+          </Route>
         </Route>
       </Route>
       <Route element={<ProtectedRoutes condition={!user} routes="/" />}>

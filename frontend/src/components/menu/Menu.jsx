@@ -38,7 +38,6 @@ const Menu = () => {
         h="100vh"
       >
         <VStack
-          flexDirection="column"
           alignItems="start"
           justifyContent="center"
           spacing={2}
@@ -91,6 +90,7 @@ const Menu = () => {
         h="100vh"
         display={{ base: "none", md: "flex" }}
         orientation="vertical"
+        borderColor={colorMode === "dark" ? "gray.700" : "gray.300"}
       />
 
       <Flex

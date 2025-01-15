@@ -12,6 +12,7 @@ const OwnerProfileActions = () => {
     const copyProfile = useCopyProfile();
     const navigate = useNavigate();
     const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
+    const settingsURL = `/settings`;
 
     return (
         <Menu>
@@ -39,7 +40,10 @@ const OwnerProfileActions = () => {
                     >
                         <Text>Edit Profile</Text>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            navigate(settingsURL);
+                        }}>
                         <Text>Settings & Privacy</Text>
                     </MenuItem>
                 </MenuList>

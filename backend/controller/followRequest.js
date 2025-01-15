@@ -6,11 +6,6 @@ const { User } = require("../models/user");
 
 const createFollowRequest = async (req, res) => {
     const { senderId, receiverId } = req.body;
-    console.log(senderId);
-    console.log(receiverId);
-
-
-
 
     const existingFollowRequest = await FollowRequest.findOne({
         sender: senderId,
