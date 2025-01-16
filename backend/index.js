@@ -32,12 +32,14 @@ const userRoute = require("./routes/user.js");
 const postRoute = require("./routes/post.js");
 const bookmarksRoute = require("./routes/bookmarks.js");
 const followRequest = require("./routes/followRequest.js");
+const profilePrivacy = require("./routes/profilePrivacy.js");
 
 //routes
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 app.use("/api/bookmarks", bookmarksRoute);
 app.use("/api/followRequest", followRequest);
+app.use("/api/profilePrivacy", profilePrivacy);
 
 app.use(errorMiddlewares);
 

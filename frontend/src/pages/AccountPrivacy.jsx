@@ -1,8 +1,11 @@
 import { Box, Flex, Switch, Text } from "@chakra-ui/react"
 import SettingsTile from "../components/shared/SettingsTile"
+import { useState } from "react"
 
 
 const AccountPrivacy = () => {
+    const [checked, setChecked] = useState(true)
+
     return (
         <Flex
             px={{ base: 0, md: 6, lg: 24 }}
@@ -39,7 +42,7 @@ const AccountPrivacy = () => {
                             </Flex>
                         </Box>
                         <Box>
-                            <Switch size="lg" />
+                            <Switch size="lg" isChecked={checked} onChange={(e) => setChecked(e.checked)} />
                         </Box>
                     </Flex>
                 </Box>
