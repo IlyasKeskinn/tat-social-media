@@ -17,6 +17,7 @@ import Feed from "./pages/Feed";
 import Settings from "./layouts/Settings";
 import YourAccount from "./pages/YourAccount";
 import AccountPrivacy from "./pages/AccountPrivacy";
+import Notifications from "./pages/Notifications";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="profile/:query" element={<Profile />} />
           <Route path="profile/edit/:username" element={<EditProfile />} />
           <Route path="/message" element={<Conservations />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} >
             <Route path="" element={<YourAccount />} />
             <Route path="blocked_accounts" element={<BlockedUsers />} />

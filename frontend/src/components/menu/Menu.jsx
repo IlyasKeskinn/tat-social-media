@@ -63,7 +63,7 @@ const Menu = () => {
           </Flex>
           <MenuItem title="Feed" to="/" icon={IoHomeOutline} />
           <MenuItem
-            title="Profile"
+            title="PROFILE"
             to={`/profile/${user.userName}`}
             icon={FaRegUser}
           />
@@ -75,8 +75,9 @@ const Menu = () => {
             icon={BsSearch}
           />
           <MenuItem
-            title="Notifications"
+            title="NOTIFICATIONS"
             icon={IoMdNotificationsOutline}
+            to={"/notifications"}
             notificationCount={10}
           />
           <LogoutButton />
