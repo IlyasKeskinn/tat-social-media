@@ -7,6 +7,7 @@ import { TbMapSearch } from "react-icons/tb";
 import { BsSearch } from "react-icons/bs";
 import { useRecoilValue } from "recoil";
 import { GoSun } from "react-icons/go";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import PropTypes from "prop-types";
 
 import { ExploreSVG, HomeSVG, MessageSVG, SearchSVG } from "../shared/IconSvg";
@@ -15,6 +16,7 @@ import LogoutButton from "../auth/LogoutButton";
 import MobileMenuItem from "./MobileMenuItem";
 import userAtom from "../../atoms/userAtom";
 import MenuItem from "./MenuItem";
+
 
 
 const Menu = () => {
@@ -42,8 +44,8 @@ const Menu = () => {
           justifyContent="center"
           spacing={2}
           w="full"
-          py={4}
-          my={4}
+          py={2}
+          my={2}
         >
           <Flex w="full" alignItems="center" justifyContent="start">
             <Heading
@@ -65,13 +67,18 @@ const Menu = () => {
             to={`/profile/${user.userName}`}
             icon={FaRegUser}
           />
+          <MenuItem title="Message" to={"/message"} icon={AiOutlineMessage} notificationCount={2} />
           <MenuItem title="Explore" icon={TbMapSearch} />
           <MenuItem
             callbackFunction={handleSearch}
             title="Search"
             icon={BsSearch}
           />
-          <MenuItem title="Message" to={"/message"} icon={AiOutlineMessage} />
+          <MenuItem
+            title="Notifications"
+            icon={IoMdNotificationsOutline}
+            notificationCount={10}
+          />
           <LogoutButton />
           <Spacer />
           <Button background="transparent" my={2} onClick={toggleColorMode}>
@@ -124,7 +131,7 @@ const Menu = () => {
             isActive={getActiveStatus(`/profile/${user.userName}`)}
           />
         </MobileMenuItem>
-        <MobileMenuItem to="/message">
+        <MobileMenuItem to="/message" notificationCount={2}>
           <MessageSVG isActive={getActiveStatus("/message")} />
         </MobileMenuItem>
         <MobileMenuItem callbackFunction={handleSearch}>

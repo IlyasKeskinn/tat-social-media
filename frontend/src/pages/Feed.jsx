@@ -11,6 +11,7 @@ import useShowToast from "../hooks/showToast";
 import Post from "../components/post/Post";
 import postAtom from "../atoms/postAtom";
 import { API_POST_ROUTES } from "../constants/API_ROUTES";
+import TopBar from "../components/menu/TopBar";
 
 const fetchFeedPosts = async ({ pageParam = 1 }) => {
   try {
@@ -71,6 +72,7 @@ const Feed = () => {
   return (
     <>
       <Flex flex={2} alignItems={"center"} flexDirection={"column"}>
+        <TopBar />
         <CreatePost />
         {status === "loading" && <Loading />}
         {status === "error" && (
