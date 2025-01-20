@@ -1,5 +1,6 @@
 require("express-async-errors");
 const { User } = require("../models/user");
+const { FollowRequest } = require("../models/followRequest");
 const bcrypt = require("bcrypt");
 const { generateTokenAndCookie } = require("../helpers/generateTokenAndCookie");
 const isValidEmail = require("../helpers/emailController");
@@ -8,50 +9,65 @@ const cloudinary = require("cloudinary");
 
 const getProfile = async (req, res) => {
   const { query } = req.params;
-
   const currentUserId = req.user._id;
+
   let user;
   if (mongoose.Types.ObjectId.isValid(query)) {
-    user = await User.findOne({ _id: query })
-      .select("-password")
-      .select("-updateAt");
+    user = await User.findOne({ _id: query }).select("-password");
   } else {
-    user = await User.findOne({ userName: query })
-      .select("-password")
-      .select("updateAt");
+    user = await User.findOne({ userName: query }).select("-password");
   }
-
-  const currentUser = await User.findById(currentUserId);
 
   if (!user) {
     return res.status(404).json({ error: "User not found!" });
   }
 
-  const isBlockedByUser = await currentUser.blockedBy.includes(user._id);
+  const currentUser = await User.findById(currentUserId);
 
-  if (isBlockedByUser) {
-    return res
-      .status(404)
-      .json({ error: `You are blocked by this ${user.userName}.` });
+  if (user._id.toString() === currentUserId.toString()) {
+    return res.status(200).json({
+      ...user._doc,
+      blocked: false,
+      private: false,
+    });
   }
 
-  const isBlockingUser = currentUser.blockedUsers.includes(user._id);
-  if (isBlockingUser) {
+  if (currentUser.blockedBy.includes(user._id)) {
+    return res.status(404).json({ error: `You are blocked by ${user.userName}.` });
+  }
+
+  if (currentUser.blockedUsers.includes(user._id)) {
+    return res.status(200).json({
+      _id: user._id,
+      profilePic: user.userName,
+      userName: user.userName,
+      fullName: user.fullName,
+      bio: "",
+      followers: [],
+      following: [],
+      post: [],
+      blocked: true,
+    });
+  }
+
+  if (user.privateProfile && !Array.isArray(user.followers)) {
     return res.status(200).json({
       _id: user._id,
       profilePic: user.profilePic,
       userName: user.userName,
       fullName: user.fullName,
-      bio: "",
-      followers: [],
+      bio: user.bio,
+      followers: user.followers.length,
+      following: user.following.length,
       post: [],
-      following: [],
-      blocked: true,
+      private: true,
     });
   }
 
-  res.status(200).json({ ...user._doc, blocket: false });
+  res.status(200).json({ ...user._doc, blocked: false, private: false });
 };
+
+
 
 const suggestUsers = async (req, res) => {
   const currentUserId = req.user._id;
@@ -302,13 +318,34 @@ const followUnfollowUser = async (req, res) => {
   }
 
   if (isFollowing) {
+    // Unfollow the user
     await User.findByIdAndUpdate(id, { $pull: { followers: currentUserId } });
     await User.findByIdAndUpdate(currentUserId, { $pull: { following: id } });
     res.status(200).json({ message: "User unfollowed successfully!" });
   } else {
-    await User.findByIdAndUpdate(id, { $push: { followers: currentUserId } });
-    await User.findByIdAndUpdate(currentUser, { $push: { following: id } });
-    res.status(200).json({ message: "User followed successfuly!" });
+    if (userToModify.privateProfile) {
+      // Send a follow request
+      const existingFollowRequest = await FollowRequest.findOne({
+        sender: currentUserId,
+        receiver: id,
+        status: "pending"
+      });
+
+      if (existingFollowRequest) {
+        return res.status(400).json({ error: "You have already sent a follow request to this user." });
+      }
+
+      const followRequest = new FollowRequest({
+        sender: currentUserId,
+        receiver: id,
+      });
+      await followRequest.save();
+      return res.status(201).json({ message: "Follow request sent successfully!" });
+    } else {
+      await User.findByIdAndUpdate(id, { $push: { followers: currentUserId } });
+      await User.findByIdAndUpdate(currentUser, { $push: { following: id } });
+      res.status(200).json({ message: "User followed successfuly!" });
+    }
   }
 };
 

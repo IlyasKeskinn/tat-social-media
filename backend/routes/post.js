@@ -26,8 +26,8 @@ const {
 
 
 //post
-router.get("/getPost/:id", getPostById);
-router.get("/getuserPost/:query", getUserPost);
+router.get("/getPost/:id",isAuth , getPostById);
+router.get("/getuserPost/:query", isAuth, getUserPost);
 router.get("/feedPosts", isAuth, getFeedPosts);
 
 router.put("/likeUnlikePost/:id", isAuth, likeUnlikePost);

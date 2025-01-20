@@ -16,7 +16,7 @@ const UserCard = ({ user, onClose = {} }) => {
 
   const navigate = useNavigate();
 
-  const { handleFollowUnfollow, isLoading, isUserFollowing } =
+  const { handleFollowUnfollow, isLoading, isUserFollowing, isRequestSent} =
     useFollowUnfollow(user);
 
   return (
@@ -81,7 +81,6 @@ const UserCard = ({ user, onClose = {} }) => {
                   <Button
                     bg={"blue.400"}
                     color={"white"}
-                    w={24}
                     _hover={{
                       bg: "blue.500",
                     }}
@@ -89,8 +88,9 @@ const UserCard = ({ user, onClose = {} }) => {
                       handleFollowUnfollow();
                     }}
                     isLoading={isLoading}
+                    isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
                   >
-                    {isUserFollowing ? "Unfollow" : "Follow"}
+                    {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
                   </Button>
                 </Flex>
               )}

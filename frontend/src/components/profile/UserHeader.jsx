@@ -16,7 +16,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
   const currentUser = useRecoilValue(userAtom);
   const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
 
-  const { handleFollowUnfollow, isLoading, isUserFollowing } =
+  const { handleFollowUnfollow, isLoading, isUserFollowing, isRequestSent } =
     useFollowUnfollow(user);
 
   const isProfileOwner = currentUser?._id === user?._id;
@@ -127,8 +127,9 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                       handleFollowUnfollow();
                     }}
                     isLoading={isLoading}
+                    isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
                   >
-                    {isUserFollowing ? "Unfollow" : "Follow"}
+                    {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
                   </Button>
                   <Button
                     bg={"blue.400"}

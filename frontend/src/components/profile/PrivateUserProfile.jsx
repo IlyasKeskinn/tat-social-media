@@ -2,7 +2,7 @@ import { Text, VStack } from '@chakra-ui/react';
 import UserHeader from './UserHeader';
 import PropTypes from 'prop-types';
 
-const BlockedUserHeader = ({ user }) => {
+const BlockedUserProfile = ({ user }) => {
     return (
         <VStack gap={0} flex={1}>
             <UserHeader user={user} posts={0} tab={"post"} />
@@ -13,8 +13,8 @@ const BlockedUserHeader = ({ user }) => {
     );
 }
 
-BlockedUserHeader.propTypes = {
+BlockedUserProfile.propTypes = {
     user: PropTypes.object
 }
 
-export default BlockedUserHeader
+export default BlockedUserProfile

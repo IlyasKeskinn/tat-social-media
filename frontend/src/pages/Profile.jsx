@@ -1,11 +1,10 @@
-import { Grid, Text, VStack, Flex, Box } from "@chakra-ui/react";
+import { Grid, Text, VStack, Flex, Box, Icon } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useRecoilState } from "recoil";
 
-import BlockedUserHeader from "../components/profile/BlockedUserHeader";
 import UserNotFoundPage from "../components/notfound/UserNotFoundPage";
 import ProfilePagePost from "../components/post/ProfilePagePost";
 import useGetUserProfile from "../hooks/useGetUserProfile";
@@ -15,6 +14,8 @@ import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
 import postAtom from "../atoms/postAtom";
 import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
+import { MdBlock } from "react-icons/md";
+import { PiGhost } from "react-icons/pi";
 
 
 const Profile = () => {
@@ -23,7 +24,7 @@ const Profile = () => {
   const URL = API_POST_ROUTES.GET_POSTS_BY_USER(userName);
 
 
-  const [posts, setPosts] = useRecoilState(postAtom);
+  const [posts, setPosts] = useRecoilState(postAtom || []);
   const { responseData: user, isLoading, statusCode } = useGetUserProfile();
   const { ref, inView } = useInView();
 
@@ -45,14 +46,10 @@ const Profile = () => {
   const { responseData, isLoading: fetchingPost, error } = useFetch(URL);
 
   useEffect(() => {
-    if (error) {
-      showToast("Error", error.message, "error");
-      setPosts([]);
-    }
     if (statusCode === 200 && tab === "post") {
-      setPosts(responseData);
+      setPosts(responseData.posts);
     }
-  }, [responseData, error, statusCode, tab, setPosts, showToast]);
+  }, [responseData, error, statusCode, tab, setPosts, showToast, isLoading]);
 
   const fetchSavedPosts = async ({ pageParam = 1 }) => {
     try {
@@ -100,9 +97,6 @@ const Profile = () => {
     return <UserNotFoundPage />;
   }
 
-  if (user?.blocked) {
-    return <BlockedUserHeader user={user} />;
-  }
 
   const handleSaved = () => {
     setTab("saved");
@@ -111,15 +105,44 @@ const Profile = () => {
     setTab("post");
   };
 
-  const displayedPosts =
-    tab === "post" ? posts : savedPostsData?.pages.flat() || [];
 
+  const displayedPosts =
+    tab === "post" ? posts || [] : savedPostsData?.pages.flat() || [];
+
+
+  const getEmptyStateContent = () => {
+    if (tab === "post") {
+      if (responseData.status === "blocked") {
+        return {
+          icon: MdBlock,
+          text: "This user blocked.",
+        };
+      }
+      if (responseData.status === "private") {
+        return {
+          icon: PiGhost,
+          text: "This user's profile are private.",
+        };
+      }
+      return {
+        icon: null,
+        text: `${userName} has no posts.`,
+      };
+    } else {
+      return {
+        icon: null,
+        text: `${userName} has no saved posts.`,
+      };
+    }
+  };
+
+  const { icon: EmptyStateIcon, text: emptyStateText } = getEmptyStateContent();
   return isLoading || fetchingPost ? (
     <Loading />
   ) : (
     <VStack gap={0} flex={1}>
       <UserHeader
-        posts={posts.length}
+        posts={posts?.length}
         user={user}
         handlePost={handlePost}
         handleSaved={handleSaved}
@@ -130,11 +153,16 @@ const Profile = () => {
           <Loading />
         </Flex>
       ) : displayedPosts.length === 0 ? (
-        <Text fontSize={"lg"} mt={"5"}>
-          {tab === "post"
-            ? `${userName} has no posts.`
-            : `${userName} has no saved posts.`}
-        </Text>
+        <Flex
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          mt="5"
+          textAlign="center"
+        >
+          {EmptyStateIcon && <Icon as={EmptyStateIcon} boxSize={12} mb={3} />}
+          <Text fontSize={"lg"}>{emptyStateText}</Text>
+        </Flex>
       ) : (
         <Grid w={"full"} templateColumns={"repeat(3, 1fr)"} gap={1}>
           {displayedPosts.map((post, index) => (
@@ -147,5 +175,6 @@ const Profile = () => {
     </VStack>
   );
 };
+
 
 export default Profile;

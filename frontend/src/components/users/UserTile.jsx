@@ -16,7 +16,7 @@ const UserTile = ({ user }) => {
   };
 
 
-  const { handleFollowUnfollow, isLoading, isUserFollowing } =
+  const { handleFollowUnfollow, isLoading, isUserFollowing, isRequestSent } =
     useFollowUnfollow(user);
 
   return (
@@ -44,7 +44,6 @@ const UserTile = ({ user }) => {
       ) : (
         <Box>
           <Button
-            w={24}
             bg={"blue.400"}
             color={"white"}
             _hover={{
@@ -54,8 +53,9 @@ const UserTile = ({ user }) => {
               handleFollowUnfollow();
             }}
             isLoading={isLoading}
+            isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
           >
-            {isUserFollowing ? "Unfollow" : "Follow"}
+            {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
           </Button>
         </Box>
       )}

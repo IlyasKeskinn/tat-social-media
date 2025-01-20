@@ -8,18 +8,42 @@ const cloudinary = require("cloudinary");
 // post start
 const getPostById = async (req, res) => {
   const postId = req.params.id;
-
   const post = await Post.findById(postId);
+  const currentUserId = req.user._id;
 
   if (!post) {
     return res.status(404).json({ error: " Post not found!" });
   }
+
+  const postOwnerId = post.postedBy;
+  const user = await User.findById(postOwnerId);
+
+
+  const currentUser = await User.findById(currentUserId);
+
+  if (user._id.toString() === currentUserId.toString()) {
+    return res.status(200).json(post);
+  }
+
+  if (currentUser.blockedBy.includes(user._id)) {
+    return res.status(403).json({ error: `You are blocked by ${user.userName}.` });
+  }
+
+  if (currentUser.blockedUsers.includes(user._id)) {
+    return res.status(403).json({ error: `You have blocked ${user.userName}.` });
+  }
+
+  if (user.privateProfile && !user.followers.includes(currentUserId)) {
+    return res.status(403).json({ error: "This profile is private." });
+  }
+
 
   res.status(200).json(post);
 };
 
 const getUserPost = async (req, res) => {
   const { query } = req.params;
+  const currentUserId = req.user._id;
 
   let user;
   if (mongoose.Types.ObjectId.isValid(query)) {
@@ -36,8 +60,42 @@ const getUserPost = async (req, res) => {
     return res.status(404).json({ error: "User not found!" });
   }
 
+  const currentUser = await User.findById(currentUserId);
   const posts = await Post.find({ postedBy: user._id }).sort({ createdAt: -1 });
-  res.json(posts);
+
+  if (user._id.toString() === currentUserId.toString()) {
+    return res.status(200).json({ status: "self ", posts: posts });
+  }
+
+  if (currentUser.blockedBy.includes(user._id)) {
+    return res.status(200).json({
+      status: "blocked",
+      error: `You are blocked by ${user.userName}.`,
+      posts: [],
+    });
+  }
+
+  if (currentUser.blockedUsers.includes(user._id)) {
+    return res.status(200).json({
+      status: "blocked",
+      error: `You have blocked ${user.userName}.`,
+      posts: [],
+    });
+  }
+
+  if (user.privateProfile && !user.followers.includes(currentUserId)) {
+    return res.status(200).json({
+      status: "private",
+      error: "This profile is private.",
+      posts: [],
+    });
+  }
+
+  return res.status(200).json({
+    status: "public",
+    posts: posts,
+  });
+
 };
 
 const getFeedPosts = async (req, res) => {
@@ -232,7 +290,7 @@ const deleteComment = async (req, res) => {
     comment.commentBy.toString() !== userId.toString()
   ) {
     console.log("buraya giriyor s");
-    
+
     return res.status(401).json({ error: "Unauthorized to delete this comment!" });
   }
 
@@ -471,7 +529,7 @@ const replyLikeUnlike = async (req, res) => {
   await post.save();
 
   res.status(200).json(reply);
-} 
+}
 
 // reply end
 
