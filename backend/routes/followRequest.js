@@ -7,7 +7,6 @@ const { createFollowRequest
     rejectFollowRequest
 } = require("../controller/followRequest");
 
-router.post("/createFollowRequest", isAuth, createFollowRequest);
 router.put("/acceptFollowRequest/:followRequestId", isAuth, acceptFollowRequest);
 router.delete("/rejectFollowRequest/:followRequestId", isAuth, rejectFollowRequest);
 

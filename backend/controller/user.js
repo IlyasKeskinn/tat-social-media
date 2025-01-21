@@ -6,6 +6,7 @@ const { generateTokenAndCookie } = require("../helpers/generateTokenAndCookie");
 const isValidEmail = require("../helpers/emailController");
 const { mongoose } = require("mongoose");
 const cloudinary = require("cloudinary");
+const { Notification } = require("../models/notification");
 
 const getProfile = async (req, res) => {
   const { query } = req.params;
@@ -339,6 +340,15 @@ const followUnfollowUser = async (req, res) => {
         sender: currentUserId,
         receiver: id,
       });
+
+      const newNotification = new Notification({
+        sender: currentUserId,
+        receiver: id,
+        type: "followRequest"
+      });
+
+      await newNotification.save();
+
       await followRequest.save();
       return res.status(201).json({ message: "Follow request sent successfully!" });
     } else {

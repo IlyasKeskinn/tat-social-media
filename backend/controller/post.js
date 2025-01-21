@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { User } = require("../models/user");
 const { Post } = require("../models/post");
 const cloudinary = require("cloudinary");
+const { Notification } = require("../models/notification");
 
 
 // post start
@@ -199,6 +200,18 @@ const likeUnlikePost = async (req, res) => {
   } else {
     post.likes.push(userId);
     await post.save();
+
+    if (post.postedBy.toString() !== userId.toString()) {
+      const newNotification = new Notification({
+        sender: userId,
+        receiver: post.postedBy,
+        relatedPost: postId,
+        type: "like"
+      });
+
+      await newNotification.save();
+
+    }
     res.status(200).json({ messeage: "Post liked succesfully." });
   }
 };
@@ -233,6 +246,19 @@ const postComment = async (req, res) => {
   await post.save();
 
   const createdComment = post.comments[post.comments.length - 1];
+
+  if (post.postedBy.toString() !== userId.toString()) {
+    const newNotification = new Notification({
+      sender: userId,
+      receiver: post.postedBy,
+      relatedPost: postId,
+      comment: createdComment._id,
+      type: "comment"
+    });
+
+    await newNotification.save();
+
+  }
   res.status(201).json(createdComment);
 };
 
@@ -289,7 +315,6 @@ const deleteComment = async (req, res) => {
     post.postedBy.toString() !== userId.toString() &&
     comment.commentBy.toString() !== userId.toString()
   ) {
-    console.log("buraya giriyor s");
 
     return res.status(401).json({ error: "Unauthorized to delete this comment!" });
   }
