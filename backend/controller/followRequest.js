@@ -28,6 +28,12 @@ const acceptFollowRequest = async (req, res) => {
     await User.findByIdAndUpdate(receiver, { $push: { followers: sender } });
     await FollowRequest.findByIdAndUpdate(followRequestId, { status: "accepted" });
 
+    await Notification.deleteMany({
+        sender: sender,
+        receiver: receiver,
+        type: "followRequest"
+    });
+
     const newNotification = new Notification({
         sender: sender,
         receiver: receiver,

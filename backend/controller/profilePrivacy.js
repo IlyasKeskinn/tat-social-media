@@ -2,6 +2,7 @@ require("express-async-errors");
 const { User } = require("../models/user");
 const { FollowRequest } = require("../models/followRequest");
 const { mongoose } = require("mongoose");
+const { Notification } = require("../models/notification");
 
 
 
@@ -42,7 +43,21 @@ const setPrivateProfile = async (req, res) => {
                 await FollowRequestSenderUser.save();
             }
 
+            await Notification.deleteMany({
+                sender: pendingFollowRequest.sender,
+                receiver: signedInUserId,
+                type: "followRequest"
+            });
+
+            const newNotification = new Notification({
+                sender: signedInUserId,
+                receiver: pendingFollowRequest.sender,
+                type: "requestAccepted"
+            });
+
+            await newNotification.save();
         }
+
 
     }
     // Toggle the user's private profile status.

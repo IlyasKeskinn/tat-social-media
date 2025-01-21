@@ -8,7 +8,26 @@ const getNotifications = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     const skip = (page - 1) * limit;
-    const notifications = await Notification.find({ receiver: userId }).sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit));
+    const notifications = await Notification.find({ receiver: userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit))
+        .populate({
+            path: "receiver",
+            select: "fullName userName profilePic",
+        })
+        .populate({
+            path: "sender",
+            select: "fullName userName profilePic",
+        })
+        .populate({
+            path: "relatedPost",
+            select: "_id images text",
+        })
+        .populate({
+            path: "relatedEvent",
+            select: "_id name date",
+        });
 
 
     await Notification.updateMany({ receiver: userId, isRead: false }, { $set: { isRead: true } });
@@ -22,7 +41,7 @@ const getUnreadNotificationCount = async (req, res) => {
 
     const unreadCount = await Notification.countDocuments({ receiver: userId, isRead: false });
 
-    res.status(200).json({ unreadCount });
+    res.status(200).json(unreadCount);
 };
 
 module.exports = {

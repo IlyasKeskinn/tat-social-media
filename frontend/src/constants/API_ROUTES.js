@@ -45,6 +45,12 @@ export const API_REPLY_ROUTES = {
 };
 
 export const API_BOOKMARK_ROUTES = {
-  FETCH_SAVED_POSTS: (pageParam, limit = 10) =>`${API_URL}/bookmarks/getsavedPost?page=${pageParam}&limit=${limit}`,
+  FETCH_SAVED_POSTS: (pageParam, limit = 10) => `${API_URL}/bookmarks/getsavedPost?page=${pageParam}&limit=${limit}`,
   BOOKMARK_POST: (postId) => `${API_URL}/bookmarks/postBookmark/${postId}`,
+};
+
+
+export const API_NOTIFICATION_ROUTES = {
+  GET_NOTIFICATIONS: (pageParam, limit = 10) => `${API_URL}/notifications/getnotifications?page=${pageParam}&limit=${limit}`,
+  GET_UNREAD_NOTIFICATIONS:  `${API_URL}/notifications/getUnreadNotificationCount`,
 };

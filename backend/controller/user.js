@@ -383,7 +383,7 @@ const blockUnblockUser = async (req, res) => {
     currentUser.blockedUsers = currentUser.blockedUsers.filter(
       (userId) => userId.toString() !== id.toString()
     );
-
+    
     await currentUser.save();
     await modifyUser.save();
 

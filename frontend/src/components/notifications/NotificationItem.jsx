@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text, Image, Icon } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Text, Image, Icon, Button } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
@@ -9,6 +9,8 @@ const NotificationItem = ({ notification }) => {
         navigate(`/profile/${userName}`);
     };
 
+    console.log(notification);
+
     const navigateToPost = (postId) => {
         navigate(`/post/${postId}`);
     };
@@ -17,22 +19,36 @@ const NotificationItem = ({ notification }) => {
         switch (notification.type) {
             case "like":
                 return (
-                    <Text>
-                        <b>{notification.relatedUser.fullName}</b> liked your post.
-                    </Text>
+                    <Flex maxW={"300px"}>
+                        <Text>
+                            <b>{notification.sender.fullName}</b> liked your post.
+                        </Text>
+                    </Flex>
                 );
             case "comment":
                 return (
-                    <Text>
-                        <b>{notification.relatedUser.fullName}</b> commented on your post.
-                    </Text>
+                    <Flex maxW={"300px"}>
+                        <Text>
+                            <b>{notification.sender.fullName}</b> commented on your post.
+                        </Text>
+                    </Flex>
                 );
             case "requestAccepted":
                 return (
-                    <Text>
-                        <b>{notification.relatedUser.fullName}</b> accepted your follow request.
-                    </Text>
+                    <Flex maxW={"300px"}>
+                        <Text>
+                            <b>{notification.sender.fullName}</b> accepted your follow request.
+                        </Text>
+                    </Flex>
                 );
+            case "followRequest":
+                return (
+                    <Flex maxW={"300px"}>
+                        <Text>
+                            <b>{notification.sender.fullName}</b> wants to be your friend.
+                        </Text>
+                    </Flex>
+                )
             default:
                 return null;
         }
@@ -57,7 +73,7 @@ const NotificationItem = ({ notification }) => {
             <Flex alignItems="center" gap={2}>
                 {notification.relatedPost && (
                     <Image
-                        src={notification.relatedPost.image}
+                        src={notification.relatedPost.images[0]}
                         alt="Post Thumbnail"
                         boxSize="50px"
                         objectFit="cover"
@@ -68,6 +84,36 @@ const NotificationItem = ({ notification }) => {
                 )}
             </Flex>)
     };
+    const renderFollowRequest = () => {
+        if (notification.type !== "followRequest") return null;
+
+        return (
+            <Flex gap={2} alignItems={"center"}>
+                <Button
+                    bg={"blue.400"}
+                    color={"white"}
+                    w="full"
+                    _hover={{
+                        bg: "blue.500",
+                    }}
+                    size={"sm"}
+                >
+                    Accept
+                </Button>{" "}
+                <Button
+                    bg={"gray.600"}
+                    color={"white"}
+                    w="full"
+                    _hover={{
+                        bg: "gray.700",
+                    }}
+                    size={"sm"}
+                >
+                    Reject
+                </Button>{" "}
+            </Flex>
+        )
+    }
 
     return (
         <Box
@@ -82,8 +128,8 @@ const NotificationItem = ({ notification }) => {
                 <Avatar
                     cursor="pointer"
                     size="md"
-                    name={notification.relatedUser.fullName}
-                    src={notification.relatedUser.profilePic}
+                    name={notification.sender.fullName}
+                    src={notification.sender.profilePic}
                     onClick={() => navigateProfile(notification.relatedUser.userName)}
                     rounded="full"
                 />
@@ -97,6 +143,7 @@ const NotificationItem = ({ notification }) => {
                 </Flex>
             </Flex>
             {renderRelatedPost(notification.relatedPost)}
+            {renderFollowRequest()}
         </Box>
     );
 };

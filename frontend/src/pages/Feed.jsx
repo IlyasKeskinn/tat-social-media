@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEffect } from "react";
 
 import SuggestedUsers from "../components/users/SuggestedUsers";
@@ -10,8 +10,10 @@ import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
 import Post from "../components/post/Post";
 import postAtom from "../atoms/postAtom";
-import { API_POST_ROUTES } from "../constants/API_ROUTES";
+import { API_NOTIFICATION_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
 import TopBar from "../components/menu/TopBar";
+import notificationAtom from "../atoms/notificationAtom";
+import useFetch from "../hooks/useFetch";
 
 const fetchFeedPosts = async ({ pageParam = 1 }) => {
   try {
@@ -36,6 +38,7 @@ const fetchFeedPosts = async ({ pageParam = 1 }) => {
 const Feed = () => {
   const showToast = useShowToast();
   const [posts, setPosts] = useRecoilState(postAtom);
+  const setUnreadNotifications = useSetRecoilState(notificationAtom);
   const { ref, inView } = useInView();
 
   const {
@@ -56,6 +59,8 @@ const Feed = () => {
     },
   });
 
+  const { responseData, statusCode } = useFetch(API_NOTIFICATION_ROUTES.GET_UNREAD_NOTIFICATIONS);
+
   useEffect(() => {
     if (data) {
       // Flatten and set posts
@@ -68,6 +73,13 @@ const Feed = () => {
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
+
+  useEffect(() => {
+    if (statusCode === 200) {
+      setUnreadNotifications(responseData);
+      
+    }
+  }, [statusCode, setUnreadNotifications, responseData]);
 
   return (
     <>

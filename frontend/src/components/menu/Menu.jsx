@@ -16,6 +16,7 @@ import LogoutButton from "../auth/LogoutButton";
 import MobileMenuItem from "./MobileMenuItem";
 import userAtom from "../../atoms/userAtom";
 import MenuItem from "./MenuItem";
+import notificationAtom from "../../atoms/notificationAtom";
 
 
 
@@ -24,6 +25,7 @@ const Menu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
   const user = useRecoilValue(userAtom);
+  const unreadNotifications = useRecoilValue(notificationAtom);
 
   const getActiveStatus = (path) => location.pathname === path;
   const handleSearch = () => {
@@ -78,7 +80,7 @@ const Menu = () => {
             title="NOTIFICATIONS"
             icon={IoMdNotificationsOutline}
             to={"/notifications"}
-            notificationCount={10}
+            notificationCount={unreadNotifications}
           />
           <LogoutButton />
           <Spacer />
