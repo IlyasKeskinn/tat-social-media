@@ -28,6 +28,8 @@ export const API_USER_ROUTES = {
   SUGGEST_USERS: `${API_URL}/user/suggestUsers`,
   FETCH_LIKED_USERS: `${API_URL}/user/fetchlikeduser`,
   UPDATE_USER: (userId) => `${API_URL}/user/update/${userId}`,
+  SET_ACCOUNT_PRIVACY: `${API_URL}/profilePrivacy/setProfilePrivate`,
+  GET_PRIVACY_STATUS: `${API_URL}/profilePrivacy/getPrivacyStatus`,
 };
 
 export const API_COMMENT_ROUTES = {

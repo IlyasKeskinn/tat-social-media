@@ -69,6 +69,11 @@ const setPrivateProfile = async (req, res) => {
     res.status(200).json({ message: "Profile updated successfully." });
 };
 
+const getPrivacyStatus = async (req, res) => {
+    const signedInUserId = req.user._id;
+    const user = await User.findById(signedInUserId);
 
+    res.status(200).json({ isPrivate: user.privateProfile });
+};
 
-module.exports = { setPrivateProfile };
+module.exports = { setPrivateProfile, getPrivacyStatus };

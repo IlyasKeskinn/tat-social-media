@@ -1,10 +1,46 @@
-import { Box, Flex, Switch, Text } from "@chakra-ui/react"
-import SettingsTile from "../components/shared/SettingsTile"
-import { useState } from "react"
+import { Box, Flex, Switch, Text, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+
+import SettingsTile from "../components/shared/SettingsTile";
+import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import useFetch from "../hooks/useFetch";
 
 
 const AccountPrivacy = () => {
-    const [checked, setChecked] = useState(true)
+    const [checked, setChecked] = useState(false);
+    const toast = useToast();
+    
+    const { responseData: privacyStatus, isLoading: isLoadingStatus } = useFetch(API_USER_ROUTES.GET_PRIVACY_STATUS, "GET");
+    const { statusCode, isLoading: isUpdating, error, putData } = useFetch(API_USER_ROUTES.SET_ACCOUNT_PRIVACY, "PUT");
+
+    useEffect(() => {
+        if (privacyStatus?.isPrivate !== undefined) {
+            setChecked(privacyStatus.isPrivate);
+        }
+    }, [privacyStatus]);
+
+    const handlePrivacyChange = () => {
+        if (isUpdating) return;
+        putData();
+        setChecked(!checked);
+    }
+
+    useEffect(() => {
+        if (statusCode === 200) {
+            toast({
+                title: "Success",
+                description: "Account privacy updated successfully",
+                status: "success",
+            });
+        }
+        if (error) {
+            toast({
+                title: "Error",
+                description: "Account privacy update failed",
+                status: "error",
+            });
+        }
+    }, [statusCode, error, toast]);
 
     return (
         <Flex
@@ -42,7 +78,12 @@ const AccountPrivacy = () => {
                             </Flex>
                         </Box>
                         <Box>
-                            <Switch size="lg" isChecked={checked} onChange={(e) => setChecked(e.checked)} />
+                            <Switch
+                                size="lg"
+                                isChecked={checked}
+                                onChange={handlePrivacyChange}
+                                isDisabled={isUpdating || isLoadingStatus}
+                            />
                         </Box>
                     </Flex>
                 </Box>

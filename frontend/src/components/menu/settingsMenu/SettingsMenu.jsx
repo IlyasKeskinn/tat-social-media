@@ -1,5 +1,8 @@
-import { VStack, Flex, Heading, } from "@chakra-ui/react"
+import { VStack, Flex, Heading, } from "@chakra-ui/react";
+
 import SettingsMenuItem from "./SettingsMenuItem";
+
+
 const SettingsMenu = () => {
 
 
