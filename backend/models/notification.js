@@ -28,6 +28,10 @@ const notificationSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Event",
     },
+    followRequestId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "FollowRequest",
+    },
     isRead: {
         type: Boolean,
         default: false,

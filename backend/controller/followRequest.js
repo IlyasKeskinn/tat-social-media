@@ -35,9 +35,10 @@ const acceptFollowRequest = async (req, res) => {
     });
 
     const newNotification = new Notification({
-        sender: sender,
-        receiver: receiver,
-        type: "requestAccepted"
+        sender: receiver,
+        receiver: sender,
+        type: "requestAccepted",
+        followRequestId: followRequestId
     });
 
     await newNotification.save();
@@ -55,14 +56,20 @@ const rejectFollowRequest = async (req, res) => {
         return res.status(404).json({ error: "Follow request not found." });
     }
 
-    if (receiver.toString() !== userId.toString()) {
-        return res.status(401).json({ error: "Unauthorized to accept this follow request." });
+    if (followRequest.receiver.toString() !== userId.toString()) {
+        return res.status(401).json({ error: "Unauthorized to reject this follow request." });
     }
 
     if (followRequest.status !== "pending") {
         return res.status(400).json({ error: "Follow request has already been processed." });
     }
 
+    await Notification.deleteMany({
+        sender: followRequest.sender,
+        receiver: userId,
+        type: "followRequest",
+        followRequestId: followRequestId
+    });
 
     await FollowRequest.findByIdAndDelete(followRequestId);
 

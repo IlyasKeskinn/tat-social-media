@@ -1,11 +1,14 @@
 import { Stack, Text, Heading, Flex, Spinner, Box } from "@chakra-ui/react";
-import NotificationItem from "../components/notifications/NotificationItem";
-import useShowToast from "../hooks/showToast";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+
+import NotificationItem from "../components/notifications/NotificationItem";
 import { API_NOTIFICATION_ROUTES } from "../constants/API_ROUTES";
 import Loading from "../components/shared/Loading";
-import { useInView } from "react-intersection-observer";
+import useShowToast from "../hooks/showToast";
+
 
 const fetchNotifications = async ({ pageParam = 1 }) => {
     try {
@@ -29,6 +32,7 @@ const fetchNotifications = async ({ pageParam = 1 }) => {
 const Notifications = () => {
     const showToast = useShowToast();
     const { ref, inView } = useInView();
+    const queryClient = useQueryClient();
 
     const {
         data,
@@ -50,6 +54,16 @@ const Notifications = () => {
 
     const notifications = data?.pages.flat() || [];
 
+    const handleRequestProcessed = (notificationId) => {
+        const updatedPages = data.pages.map(page => 
+            page.filter(notification => notification._id !== notificationId)
+        ).filter(page => page.length > 0);
+        
+        queryClient.setQueryData(['notifications'], old => ({
+            ...old,
+            pages: updatedPages
+        }), { silent: true });
+    };
 
     useEffect(() => {
         if (inView) {
@@ -93,7 +107,11 @@ const Notifications = () => {
                     </Flex>
                 ) : (
                     notifications.map((notification) => (
-                        <NotificationItem key={notification.id} notification={notification} />
+                        <NotificationItem 
+                            key={notification.id} 
+                            notification={notification}
+                            onRequestProcessed={handleRequestProcessed}
+                        />
                     ))
                 )}
                 {isFetchingNextPage && <Spinner />}

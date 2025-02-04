@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 const useFetch = (url, method = "GET") => {
   const [responseData, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -26,6 +27,13 @@ const useFetch = (url, method = "GET") => {
         "Accept": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
+    });
+  };
+
+  const deleteData = () => {
+    setOptions({
+      method: "DELETE",
       credentials: "include",
     });
   };
@@ -58,10 +66,7 @@ const useFetch = (url, method = "GET") => {
     if (method === "GET") {
       fetchData();
     }
-    if (method === "POST" && options) {
-      fetchData(options);
-    }
-    if (method === "PUT" && options) {
+    if ((method === "POST" || method === "PUT" || method === "DELETE") && options) {
       fetchData(options);
     }
   }, [url, options, method]);
@@ -73,6 +78,7 @@ const useFetch = (url, method = "GET") => {
     error,
     postData,
     putData,
+    deleteData,
   };
 };
 

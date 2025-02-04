@@ -56,3 +56,8 @@ export const API_NOTIFICATION_ROUTES = {
   GET_NOTIFICATIONS: (pageParam, limit = 10) => `${API_URL}/notifications/getnotifications?page=${pageParam}&limit=${limit}`,
   GET_UNREAD_NOTIFICATIONS:  `${API_URL}/notifications/getUnreadNotificationCount`,
 };
+
+export const API_FOLLOW_REQUEST_ROUTES = {
+  ACCEPT_REQUEST: (requestId) => `${API_URL}/followRequest/acceptFollowRequest/${requestId}`,
+  REJECT_REQUEST: (requestId) => `${API_URL}/followRequest/rejectFollowRequest/${requestId}`,
+};

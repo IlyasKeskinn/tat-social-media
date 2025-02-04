@@ -1,15 +1,52 @@
 import { Avatar, Box, Flex, Text, Image, Icon, Button } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
-const NotificationItem = ({ notification }) => {
+
+import { API_FOLLOW_REQUEST_ROUTES } from "../../constants/API_ROUTES";
+import useShowToast from "../../hooks/showToast";
+import useFetch from "../../hooks/useFetch";
+
+
+const NotificationItem = ({ notification, onRequestProcessed }) => {
     const navigate = useNavigate();
+    const showToast = useShowToast();
+    const [action, setAction] = useState(null);
+    console.log(notification);
+    
+
+    const { putData: acceptRequest, isLoading: isAccepting } = useFetch(
+        notification.followRequestId 
+            ? API_FOLLOW_REQUEST_ROUTES.ACCEPT_REQUEST(notification.followRequestId)
+            : null,
+        "PUT"
+    );
+
+    const { deleteData: rejectRequest, isLoading: isRejecting, statusCode: rejectStatusCode } = useFetch(
+        notification.followRequestId 
+            ? API_FOLLOW_REQUEST_ROUTES.REJECT_REQUEST(notification.followRequestId)
+            : null,
+        "DELETE"
+    );
+
+    useEffect(() => {
+        if (rejectStatusCode === 200 && action === 'reject') {
+            setTimeout(() => {
+                onRequestProcessed(notification._id);
+                showToast(
+                    "Follow request rejected",
+                    "",
+                    "success"
+                );
+            }, 300);
+            setAction(null);
+        }
+    }, [rejectStatusCode]);
 
     const navigateProfile = (userName) => {
         navigate(`/profile/${userName}`);
     };
-
-    console.log(notification);
 
     const navigateToPost = (postId) => {
         navigate(`/post/${postId}`);
@@ -66,6 +103,7 @@ const NotificationItem = ({ notification }) => {
                 return null;
         }
     };
+
     const renderRelatedPost = (relatedPost) => {
         if (!relatedPost) return null;
 
@@ -84,8 +122,41 @@ const NotificationItem = ({ notification }) => {
                 )}
             </Flex>)
     };
+
+    const handleFollowRequest = (actionType) => {
+        setAction(actionType);
+        try {
+            if (actionType === 'accept') {
+                acceptRequest();
+            } else {
+                rejectRequest();
+            }
+
+            if (actionType === 'accept' && onRequestProcessed) {
+                setTimeout(() => {
+                    onRequestProcessed(notification._id);
+                    showToast(
+                        "Follow request accepted",
+                        "",
+                        "success"
+                    );
+                }, 300);
+            }
+
+        } catch (error) {
+            showToast(
+                "Error",
+                "Failed to process follow request",
+                "error"
+            );
+            setAction(null);
+        }
+    };
+
     const renderFollowRequest = () => {
         if (notification.type !== "followRequest") return null;
+
+        const isProcessing = isAccepting || isRejecting;
 
         return (
             <Flex gap={2} alignItems={"center"}>
@@ -97,9 +168,12 @@ const NotificationItem = ({ notification }) => {
                         bg: "blue.500",
                     }}
                     size={"sm"}
+                    onClick={() => handleFollowRequest('accept')}
+                    isLoading={action === 'accept' && isProcessing}
+                    isDisabled={isProcessing}
                 >
                     Accept
-                </Button>{" "}
+                </Button>
                 <Button
                     bg={"gray.600"}
                     color={"white"}
@@ -108,9 +182,12 @@ const NotificationItem = ({ notification }) => {
                         bg: "gray.700",
                     }}
                     size={"sm"}
+                    onClick={() => handleFollowRequest('reject')}
+                    isLoading={action === 'reject' && isProcessing}
+                    isDisabled={isProcessing}
                 >
                     Reject
-                </Button>{" "}
+                </Button>
             </Flex>
         )
     }
@@ -139,7 +216,6 @@ const NotificationItem = ({ notification }) => {
                         {new Date(notification.createdAt).toLocaleTimeString()}
                     </Text>
                     {renderNotificationIcon()}
-
                 </Flex>
             </Flex>
             {renderRelatedPost(notification.relatedPost)}
@@ -150,5 +226,7 @@ const NotificationItem = ({ notification }) => {
 
 NotificationItem.propTypes = {
     notification: PropTypes.object.isRequired,
+    onRequestProcessed: PropTypes.func,
 }
+
 export default NotificationItem;

@@ -344,7 +344,8 @@ const followUnfollowUser = async (req, res) => {
       const newNotification = new Notification({
         sender: currentUserId,
         receiver: id,
-        type: "followRequest"
+        type: "followRequest",
+        followRequestId: followRequest._id
       });
 
       await newNotification.save();
