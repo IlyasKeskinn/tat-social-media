@@ -6,18 +6,18 @@ import { useRecoilState } from "recoil";
 import NotFoundPage from "./components/notfound/NotFoundPage";
 import { ProtectedRoutes } from "./path/ProtectedRoutes";
 import UserPost from "./components/profile/UserPost";
-import Conservations from "./pages/Conservations";
+import AccountPrivacy from "./pages/AccountPrivacy";
+import Notifications from "./pages/Notifications";
+import Conservations from "./pages/Conversations";
 import BlockedUsers from "./pages/BlockedUsers";
+import YourAccount from "./pages/YourAccount";
 import MainLayout from "./layouts/MainLayout";
 import EditProfile from "./pages/EditProfile";
+import Settings from "./layouts/Settings";
 import userAtom from "./atoms/userAtom";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
-import Settings from "./layouts/Settings";
-import YourAccount from "./pages/YourAccount";
-import AccountPrivacy from "./pages/AccountPrivacy";
-import Notifications from "./pages/Notifications";
 
 
 function App() {

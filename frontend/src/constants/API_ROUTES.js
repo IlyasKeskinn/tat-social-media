@@ -61,3 +61,9 @@ export const API_FOLLOW_REQUEST_ROUTES = {
   ACCEPT_REQUEST: (requestId) => `${API_URL}/followRequest/acceptFollowRequest/${requestId}`,
   REJECT_REQUEST: (requestId) => `${API_URL}/followRequest/rejectFollowRequest/${requestId}`,
 };
+
+export const API_CONVERSATION_ROUTES = {
+    GET_CONVERSATIONS: `${API_URL}/conversation/conversations`,
+    GET_MESSAGES: (conversationId) => `${API_URL}/conversation/messages/${conversationId}`,
+    SEND_MESSAGE: `${API_URL}/conversation/message`,
+};
