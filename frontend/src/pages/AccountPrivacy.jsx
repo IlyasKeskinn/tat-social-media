@@ -1,4 +1,5 @@
 import { Box, Flex, Switch, Text, useToast } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 import SettingsTile from "../components/shared/SettingsTile";
@@ -7,6 +8,7 @@ import useFetch from "../hooks/useFetch";
 
 
 const AccountPrivacy = () => {
+    const { t } = useTranslation();
     const [checked, setChecked] = useState(false);
     const toast = useToast();
     
@@ -28,15 +30,15 @@ const AccountPrivacy = () => {
     useEffect(() => {
         if (statusCode === 200) {
             toast({
-                title: "Success",
-                description: "Account privacy updated successfully",
+                title: t("common.success"),
+                description: t("accountPrivacy.accountPrivacyUpdatedSuccessfully"),
                 status: "success",
             });
         }
         if (error) {
             toast({
-                title: "Error",
-                description: "Account privacy update failed",
+                title: t("common.error"),
+                description: t("accountPrivacy.accountPrivacyUpdateFailed"),
                 status: "error",
             });
         }
@@ -54,7 +56,7 @@ const AccountPrivacy = () => {
             <SettingsTile onClick={() => { }} settingTile={"Account Privacy"} />
             <Box my={2}>
                 <Text fontSize={"md"} color={"gray.500"} >
-                    Manage what information you see and share on T.A.T
+                    {t("accountPrivacy.accountPrivacyDesc")}
                 </Text>
             </Box>
 
@@ -70,10 +72,10 @@ const AccountPrivacy = () => {
                     <Flex gap={2} alignItems={"center"}>
                         <Box>
                             <Flex direction={"column"} gap={1}>
-                                <Text>Private Account</Text>
+                                <Text>{t("accountPrivacy.privateAccount")}</Text>
                                 <Text
                                     color={"gray.500"}
-                                >When your account is public, your profile and posts can be seen by anyone on or off T.A.T. even if they don&apos;t have an T.A.T account.</Text>
+                                >{t("accountPrivacy.accountPrivateDesc")}</Text>
 
                             </Flex>
                         </Box>

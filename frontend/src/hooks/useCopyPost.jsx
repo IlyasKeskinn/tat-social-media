@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useCallback } from "react";
+
 import useShowToast from "./showToast";
 
+
 const useCopyPost = () => {
+  const { t } = useTranslation();
   const BASE_URL = import.meta.env.VITE_FRONTEND_URL;
   const showToast = useShowToast();
   const copyPost = useCallback(
@@ -9,8 +13,8 @@ const useCopyPost = () => {
       const postURL = `${BASE_URL}/#/post/${postID}`;
       navigator.clipboard.writeText(postURL).then(() => {
         showToast(
-          "Copied to clipboard",
-          "Post URL has been copied successfully.",
+          t("common.copiedToClipboard"),
+          t("common.URLHasBeenCopiedSuccessfully"),
           "success"
         );
       });

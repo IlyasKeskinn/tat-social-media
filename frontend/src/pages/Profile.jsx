@@ -1,10 +1,14 @@
 import { Grid, Text, VStack, Flex, Box, Icon } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { PiGhost } from "react-icons/pi";
+import { MdBlock } from "react-icons/md";
 import { useRecoilState } from "recoil";
 
+import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
 import UserNotFoundPage from "../components/notfound/UserNotFoundPage";
 import ProfilePagePost from "../components/post/ProfilePagePost";
 import useGetUserProfile from "../hooks/useGetUserProfile";
@@ -13,12 +17,10 @@ import Loading from "../components/shared/Loading";
 import useShowToast from "../hooks/showToast";
 import useFetch from "../hooks/useFetch";
 import postAtom from "../atoms/postAtom";
-import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
-import { MdBlock } from "react-icons/md";
-import { PiGhost } from "react-icons/pi";
 
 
 const Profile = () => {
+  const { t } = useTranslation();
   const userName = useParams().query;
 
   const URL = API_POST_ROUTES.GET_POSTS_BY_USER(userName);
@@ -115,23 +117,23 @@ const Profile = () => {
       if (responseData.status === "blocked") {
         return {
           icon: MdBlock,
-          text: "This user blocked.",
+          text: t("profile.blockedProfile"),
         };
       }
       if (responseData.status === "private") {
         return {
           icon: PiGhost,
-          text: "This user's profile are private.",
+          text: t("profile.privateProfile"),
         };
       }
       return {
         icon: null,
-        text: `${userName} has no posts.`,
+        text: t("profile.noPosts"),
       };
     } else {
       return {
         icon: null,
-        text: `${userName} has no saved posts.`,
+        text: t("profile.noSavedPosts"),
       };
     }
   };

@@ -1,19 +1,20 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
-import { API_USER_ROUTES } from "../constants/API_ROUTES";
-import useShowToast from "../hooks/showToast";
-import Loading from "../components/shared/Loading";
-import useFetch from "../hooks/useFetch";
-import BlockedUserTile from "../components/profile/BlockedUserTile"
+import BlockedUserTile from "../components/profile/BlockedUserTile";
 import SettingsTile from "../components/shared/SettingsTile";
-
+import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import Loading from "../components/shared/Loading";
+import useShowToast from "../hooks/showToast";
+import useFetch from "../hooks/useFetch";
 
 
 const BlockedUsers = () => {
     const [blockedUsers, setBlockedUsers] = useState([]);
     const { responseData, isLoading, error, statusCode } = useFetch(API_USER_ROUTES.GET_BLOCKED_USERS);
     const showToast = useShowToast();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (error) {
@@ -38,7 +39,7 @@ const BlockedUsers = () => {
 
         return (
             <Box>
-                <Text>No blocked users</Text>
+                <Text>{t("blockedUsers.noBlockedUsers")}</Text>
             </Box>
         );
     };
@@ -51,10 +52,10 @@ const BlockedUsers = () => {
             w={"100%"}
             maxH={{ base: "80dvh", md: "100dvh" }}
         >
-            <SettingsTile onClick={() => { }} settingTile={"Blocked Users"} />
+            <SettingsTile onClick={() => { }} settingTile={t("blockedUsers.blockedUsersTitle")} />
             <Box my={2}>
                 <Text fontSize={"md"} color={"gray.500"} >
-                    You can block people at any time by going to their profiles.
+                    {t("blockedUsers.blockedUsersDesc")}
                 </Text>
             </Box>
             <Stack

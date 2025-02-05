@@ -2,6 +2,7 @@ import { Stack, Text, Heading, Flex, Spinner, Box } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 
 import NotificationItem from "../components/notifications/NotificationItem";
@@ -30,6 +31,7 @@ const fetchNotifications = async ({ pageParam = 1 }) => {
 };
 
 const Notifications = () => {
+    const { t } = useTranslation();
     const showToast = useShowToast();
     const { ref, inView } = useInView();
     const queryClient = useQueryClient();
@@ -72,7 +74,7 @@ const Notifications = () => {
     }, [inView, fetchNextPage]);
 
     if (status === "loading") return <Loading />
-    if (status === "error") return <Text>An error occurred: {error.message}</Text>;
+    if (status === "error") return <Text>{t("common.errorOccurred")}: {error.message}</Text>;
 
     return (
         <Stack spacing={4} w={"full"}>
@@ -82,7 +84,7 @@ const Notifications = () => {
                 fontWeight={"bold"}
                 mb={12}
             >
-                Notifications
+                {t("notifications.notifications")}
             </Heading>
             <Flex
                 alignItems={"center"}
@@ -102,7 +104,7 @@ const Notifications = () => {
                             🥺
                         </Text>
                         <Text fontSize="3xl" fontWeight="medium" color="gray.500" textAlign="center">
-                            You have no notifications yet!
+                        {t("notifications.noNotifications")}
                         </Text>
                     </Flex>
                 ) : (

@@ -2,19 +2,21 @@ import { MenuItem, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader
 import { useRecoilState, useRecoilValue } from "recoil";
 import { CiMedicalClipboard } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { GoPencil } from "react-icons/go";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 
+import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 import useCopyPost from "../../hooks/useCopyPost";
 import useDelete from "../../hooks/useDelete";
 import userAtom from "../../atoms/userAtom";
 import postAtom from "../../atoms/postAtom";
-import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const PostOwnerActions = ({ postId }) => {
+  const { t } = useTranslation();
   const currentUser = useRecoilValue(userAtom);
   const copyPost = useCopyPost();
   const URL = API_POST_ROUTES.DELETE_POST(postId);
@@ -42,11 +44,11 @@ const PostOwnerActions = ({ postId }) => {
     <>
       <MenuItem onClick={onOpen} color={"red.500"} fontSize={"lg"}>
         <MdDeleteOutline style={{ marginRight: "8px" }} />
-        Delete
+        {t("postActions.deletePost")}
       </MenuItem>
       <MenuItem fontSize={"lg"}>
         <GoPencil style={{ marginRight: "8px" }} />
-        Edit
+        {t("postActions.editPost")}
       </MenuItem>
       <MenuItem
         fontSize={"lg"}
@@ -55,16 +57,16 @@ const PostOwnerActions = ({ postId }) => {
         }}
       >
         <CiMedicalClipboard style={{ marginRight: "8px" }} />
-        Send the post.
+        {t("postActions.sendPost")}
       </MenuItem>
       {/* Delete Post Modal */}
       <Modal size={"md"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign={"center"}>Delete Post?</ModalHeader>
+          <ModalHeader textAlign={"center"}>{t("postActions.deletePost")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody textAlign={"center"}>
-            Are you sure you want to delete this post?
+            {t("postActions.deletePostModal")}
           </ModalBody>
           <ModalFooter justifyContent={"center"}>
             <Flex direction={"column"} gap={5}>
@@ -76,7 +78,7 @@ const PostOwnerActions = ({ postId }) => {
                 isLoading={isLoading}
                 onClick={handleDelete}
               >
-                Delete
+                {t("postActions.deletePostButton")}
               </Button>{" "}
               <Button
                 variant={"ghost"}
@@ -86,7 +88,7 @@ const PostOwnerActions = ({ postId }) => {
                 isLoading={isLoading}
                 onClick={onClose}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>{" "}
             </Flex>
           </ModalFooter>

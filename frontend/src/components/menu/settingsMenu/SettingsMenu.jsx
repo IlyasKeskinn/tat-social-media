@@ -1,9 +1,11 @@
 import { VStack, Flex, Heading, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
 import SettingsMenuItem from "./SettingsMenuItem";
 
 
 const SettingsMenu = () => {
+    const { t } = useTranslation();
 
 
     return (
@@ -29,13 +31,13 @@ const SettingsMenu = () => {
                             fontWeight={"bold"}
                             mb={12}
                         >
-                            Settings
+                            {t("settingsMenu.settings")}
                         </Heading>
                     </Flex>
-                    <SettingsMenuItem label={"Your Account"} to="/settings" />
-                    <SettingsMenuItem label={"Blocked accounts"} to="/settings/blocked_accounts" />
-                    <SettingsMenuItem label={"Account Privacy"} to="/settings/account_privacy" />
-                    <SettingsMenuItem label={"Help"} to="/settings/help" />
+                    <SettingsMenuItem label={t("settingsMenu.yourAccount")} to="/settings" />
+                    <SettingsMenuItem label={t("settingsMenu.blockedAccounts")} to="/settings/blocked_accounts" />
+                    <SettingsMenuItem label={t("settingsMenu.accountPrivacy")} to="/settings/account_privacy" />
+                    <SettingsMenuItem label={t("settingsMenu.help")} to="/settings/help" />
                 </VStack>
             </Flex>
         </>

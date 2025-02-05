@@ -1,4 +1,5 @@
 import { Box, Flex, Text, Button, useBreakpointValue, Divider, useColorMode } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -225,6 +226,7 @@ const Conversations = () => {
     const { colorMode } = useColorMode();
     const navigate = useNavigate();
     const [conversations, setConversations] = useState(DUMMY_CONVERSATIONS);
+    const { t } = useTranslation();
 
     const handleConversationSelect = (conversation) => {
         setSelectedConversation(conversation);
@@ -245,13 +247,13 @@ const Conversations = () => {
                 p={4}
             >
                 <Text fontSize="xl" mb={4}>
-                    No messages
+                    {t("conversations.noMessages")}
                 </Text>
                 <Button
                     colorScheme="blue"
                     onClick={() => navigate("/explore")}
                 >
-                    Start new conversation
+                    {t("conversations.startNewConversation")}
                 </Button>
             </Flex>
         );
@@ -292,7 +294,7 @@ const Conversations = () => {
                                 justify="center"
                             >
                                 <Text>
-                                    Select a conversation
+                                    {t("conversations.selectConversation")}
                                 </Text>
                             </Flex>
                         )

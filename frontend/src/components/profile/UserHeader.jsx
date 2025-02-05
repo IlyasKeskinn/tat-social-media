@@ -1,4 +1,5 @@
 import { VStack, Flex, Box, Avatar, Text, Button, Grid, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
 import PropTypes from "prop-types";
@@ -12,6 +13,7 @@ import userAtom from "../../atoms/userAtom";
 
 
 const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const currentUser = useRecoilValue(userAtom);
   const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
@@ -100,7 +102,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                       navigate(PROFILE_EDIT_URL);
                     }}
                   >
-                    Edit Profile
+                    {t("common.editProfile")}
                   </Button>
                 </Flex>
               ) : user.blocked ? (
@@ -113,7 +115,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                   onClick={handleBlockButtonClick}
                   isLoading={blockLoading}
                 >
-                  Unblock
+                  {t("common.unblock")}
                 </Button>
               ) : (
                 <Grid templateColumns={"repeat(2, 1fr)"} gap={4}>
@@ -129,7 +131,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                     isLoading={isLoading}
                     isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
                   >
-                    {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
+                    {isRequestSent ? t("common.requestSent") : isUserFollowing ? t("common.unfollow") : t("common.follow")}
                   </Button>
                   <Button
                     bg={"blue.400"}
@@ -138,7 +140,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
                       bg: "blue.500",
                     }}
                   >
-                    Message
+                    {t("common.message")}
                     <ShareSvg />
                   </Button>
                 </Grid>
@@ -159,7 +161,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
           cursor={"pointer"}
           onClick={handlePost}
         >
-          <Text fontWeight={"bold"}>Posts</Text>
+          <Text fontWeight={"bold"}>{t("common.posts")}</Text>
         </Flex>
         {isProfileOwner && (
           <Flex
@@ -174,7 +176,7 @@ const UserHeader = ({ user, posts, handlePost, handleSaved, tab }) => {
           >
             <Text fontWeight={"bold"}>
               {" "}
-              Saved ({currentUser.bookmarksCollection ? currentUser.bookmarksCollection.length : 0})
+              {t("common.saved")} ({currentUser.bookmarksCollection ? currentUser.bookmarksCollection.length : 0})
             </Text>
           </Flex>
         )}

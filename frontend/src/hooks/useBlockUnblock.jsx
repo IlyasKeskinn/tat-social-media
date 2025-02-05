@@ -1,10 +1,14 @@
-import ProptTypes from "prop-types"
-import useFetch from "./useFetch";
-import useShowToast from "./showToast";
+import { useTranslation } from "react-i18next";
+import ProptTypes from "prop-types";
 import { useEffect } from "react";
+
 import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import useShowToast from "./showToast";
+import useFetch from "./useFetch";
+
 
 const useBlockUnblock = (user) => {
+    const { t } = useTranslation();
     const showToast = useShowToast()
 
     const URL = API_USER_ROUTES.BLOCK_UNBLOCK(user._id);
@@ -19,7 +23,7 @@ const useBlockUnblock = (user) => {
 
     useEffect(() => {
         if (error) {
-            showToast("Error", error.message, "error");
+            showToast(t("common.error"), error.message, "error");
         }
         if (statusCode === 200) {
             window.location.reload();

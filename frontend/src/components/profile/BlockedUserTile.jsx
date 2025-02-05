@@ -1,10 +1,12 @@
 import { Avatar, Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 import useBlockUnblock from "../../hooks/useBlockUnblock";
 
 
 const BlockedUserTile = ({ user }) => {
+    const { t } = useTranslation();
     const { handleBlockUnblock, isLoading: blockLoading } = useBlockUnblock(user);
 
     const handleBlockButtonClick = () => {
@@ -26,7 +28,7 @@ const BlockedUserTile = ({ user }) => {
                     />
                 </Box>
                 <Text fontSize={"md"} textTransform={"capitalize"}>
-                    {user ? user.fullName : "T.A.T user"}
+                    {user ? user.fullName : t("common.tatUser")}
                 </Text>
             </Flex>
             <Box>
@@ -39,7 +41,7 @@ const BlockedUserTile = ({ user }) => {
                     onClick={handleBlockButtonClick}
                     isLoading={blockLoading}
                 >
-                    Unblock
+                    {t("common.unblock")}
                 </Button>
             </Box>
         </Flex>

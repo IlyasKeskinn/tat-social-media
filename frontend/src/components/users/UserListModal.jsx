@@ -1,27 +1,18 @@
-import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  Box,
-} from "@chakra-ui/react";
+import { Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Popover, PopoverTrigger, PopoverContent, PopoverBody, Box, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import useFetch from "../../hooks/useFetch";
-import useShowToast from "../../hooks/showToast";
-import Loading from "../shared/Loading";
-import ProfilePreviewPopover from "./ProfilePreviewPopover";
-import UserTile from "./UserTile";
 import PropTypes from "prop-types";
+
 import { API_USER_ROUTES } from "../../constants/API_ROUTES";
+import ProfilePreviewPopover from "./ProfilePreviewPopover";
+import useShowToast from "../../hooks/showToast";
+import useFetch from "../../hooks/useFetch";
+import Loading from "../shared/Loading";
+import UserTile from "./UserTile";
+
 
 const UserListModal = ({ isOpen, onClose, likesArr }) => {
+  const { t } = useTranslation();
   const LIKE_USERS_URL = API_USER_ROUTES.FETCH_LIKED_USERS;
   const [likedUsers, setLikedUsers] = useState([]);
   const showToast = useShowToast();
@@ -56,7 +47,7 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader m={4} textAlign={"center"}>
-          Likes
+          {t("common.likes")}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody
@@ -73,7 +64,7 @@ const UserListModal = ({ isOpen, onClose, likesArr }) => {
               left={"50%"}
               transform={"translate(-50% , -50%)"}
             >
-              <Text fontSize={"xl"}>No likes </Text>
+              <Text fontSize={"xl"}>{t("common.noLikes")}</Text>
               <Text fontSize={"4xl"}>🥺</Text>
             </Box>
           )}

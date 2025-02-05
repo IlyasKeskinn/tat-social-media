@@ -1,5 +1,6 @@
 import { Avatar, Box, Flex, Text, Image, Icon, Button } from "@chakra-ui/react";
 import { FaRegCommentAlt, FaHeart } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
@@ -13,7 +14,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
     const navigate = useNavigate();
     const showToast = useShowToast();
     const [action, setAction] = useState(null);
-    console.log(notification);
+    const { t } = useTranslation();
     
 
     const { putData: acceptRequest, isLoading: isAccepting } = useFetch(
@@ -35,7 +36,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
             setTimeout(() => {
                 onRequestProcessed(notification._id);
                 showToast(
-                    "Follow request rejected",
+                    t("notifications.followRequestRejected"),
                     "",
                     "success"
                 );
@@ -58,7 +59,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                 return (
                     <Flex maxW={"300px"}>
                         <Text>
-                            <b>{notification.sender.fullName}</b> liked your post.
+                            <b>{notification.sender.fullName}</b> {t("notifications.likedPost")}
                         </Text>
                     </Flex>
                 );
@@ -66,7 +67,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                 return (
                     <Flex maxW={"300px"}>
                         <Text>
-                            <b>{notification.sender.fullName}</b> commented on your post.
+                            <b>{notification.sender.fullName}</b> {t("notifications.commentedPost")}
                         </Text>
                     </Flex>
                 );
@@ -74,7 +75,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                 return (
                     <Flex maxW={"300px"}>
                         <Text>
-                            <b>{notification.sender.fullName}</b> accepted your follow request.
+                            <b>{notification.sender.fullName}</b> {t("notifications.requestAccepted")}
                         </Text>
                     </Flex>
                 );
@@ -82,7 +83,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                 return (
                     <Flex maxW={"300px"}>
                         <Text>
-                            <b>{notification.sender.fullName}</b> wants to be your friend.
+                            <b>{notification.sender.fullName}</b> {t("notifications.followRequest")}
                         </Text>
                     </Flex>
                 )
@@ -136,7 +137,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                 setTimeout(() => {
                     onRequestProcessed(notification._id);
                     showToast(
-                        "Follow request accepted",
+                        t("notifications.followRequestAccepted"),
                         "",
                         "success"
                     );
@@ -145,8 +146,8 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
 
         } catch (error) {
             showToast(
-                "Error",
-                "Failed to process follow request",
+                t("notifications.followRequestFailed"),
+                "",
                 "error"
             );
             setAction(null);
@@ -172,7 +173,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                     isLoading={action === 'accept' && isProcessing}
                     isDisabled={isProcessing}
                 >
-                    Accept
+                    {t("common.accept")}
                 </Button>
                 <Button
                     bg={"gray.600"}
@@ -186,7 +187,7 @@ const NotificationItem = ({ notification, onRequestProcessed }) => {
                     isLoading={action === 'reject' && isProcessing}
                     isDisabled={isProcessing}
                 >
-                    Reject
+                    {t("common.reject")}
                 </Button>
             </Flex>
         )

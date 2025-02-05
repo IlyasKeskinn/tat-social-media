@@ -1,8 +1,10 @@
 import { Flex, Box, Text, useDisclosure } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import PropTypes from "prop-types";
 
+import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../../constants/API_ROUTES";
 import UserListModal from "../users/UserListModal";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
@@ -10,10 +12,10 @@ import useFetch from "../../hooks/useFetch";
 import postAtom from "../../atoms/postAtom";
 import Comments from "../comment/Comments";
 import { BookmarkSVG } from "./IconSvg";
-import { API_BOOKMARK_ROUTES, API_POST_ROUTES } from "../../constants/API_ROUTES";
 
 
 const Actions = ({ currentPost }) => {
+  const { t } = useTranslation();
   const LIKE_URL = API_POST_ROUTES.LIKE_UNLIKE_POST(currentPost._id);
   const BOOKMARK_URL = API_BOOKMARK_ROUTES.BOOKMARK_POST(currentPost._id);
 
@@ -225,7 +227,7 @@ const Actions = ({ currentPost }) => {
             fontSize={"sm"}
             cursor={"pointer"}
           >
-            {currentPost.likes.length} Likes
+            {currentPost.likes.length} {t("common.likes")}
           </Text>
           <Box w={1} h={1} bg={"gray"} rounded={"full"}></Box>
           <Text
@@ -234,7 +236,7 @@ const Actions = ({ currentPost }) => {
             fontSize={"sm"}
             cursor={"pointer"}
           >
-            {currentPost.comments.length} Comments
+            {currentPost.comments.length} {t("common.comments")}
           </Text>
         </Flex>
       </Flex>

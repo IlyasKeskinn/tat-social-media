@@ -1,24 +1,14 @@
-import {
-  Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Input,
-  Button,
-  Link,
-  InputGroup,
-  InputRightElement,
-} from "@chakra-ui/react";
-
+import { Box, Flex, Stack, Heading, Text, Input, Button, Link, InputGroup, InputRightElement, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
-
 import { useState } from "react";
+
 
 const ResetPassword = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const { t } = useTranslation();
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -34,7 +24,7 @@ const ResetPassword = () => {
           lineHeight={1.1}
           fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
         >
-          Enter new password
+          {t("auth.enterNewPassword")}
         </Heading>
 
         <Box as={"form"} mt={10}>
@@ -84,13 +74,13 @@ const ResetPassword = () => {
             }}
             type="submit"
           >
-            Reset Password
+            {t("auth.resetPassword")}
           </Button>
         </Box>
         <Flex justifyContent={"space-between"}>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              <Link color={"blue.400"}>Login Page</Link>
+              <Link color={"blue.400"}>{t("auth.login")}</Link>
             </Text>
           </Flex>
         </Flex>

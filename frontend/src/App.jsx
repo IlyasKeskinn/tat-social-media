@@ -1,7 +1,10 @@
 import "./App.css";
+import "./i18n"; // i18n konfigürasyonunu import et
 
 import { Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 
 import NotFoundPage from "./components/notfound/NotFoundPage";
 import { ProtectedRoutes } from "./path/ProtectedRoutes";
@@ -20,8 +23,21 @@ import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 
 
+// i18n konfigürasyonunu import et
+
+
 function App() {
   const user = useRecoilState(userAtom)[0];
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    // Sayfa yüklendiğinde kaydedilmiş dil tercihini kontrol et
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (savedLanguage) {
+      i18n.changeLanguage(savedLanguage);
+    }
+  }, [i18n]);
+
   return (
     <Routes>
       <Route element={<ProtectedRoutes condition={user} routes={"/auth"} />}>

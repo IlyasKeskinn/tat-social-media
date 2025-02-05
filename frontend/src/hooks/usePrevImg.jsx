@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 import useShowToast from "./showToast";
 
+
 const usePrevImg = () => {
+  const { t } = useTranslation();
   const showToast = useShowToast();
 
   const [imgUrl, setImgUrl] = useState("");
@@ -36,7 +39,7 @@ const usePrevImg = () => {
 
       reader.readAsDataURL(file);
     } else {
-      showToast("Invalid Format", "Please chose an image!", "error");
+      showToast(t("common.invalidFormat"), t("common.pleaseChoseAnImage"), "error");
     }
   };
   return { imgUrl, handleImageChange,setImgUrl };

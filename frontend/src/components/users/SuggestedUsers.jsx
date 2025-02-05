@@ -1,13 +1,14 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 import useShowToast from "../../hooks/showToast";
 import useFetch from "../../hooks/useFetch";
 import UserTile from "./UserTile";
-import { API_USER_ROUTES } from "../../constants/API_ROUTES";
-
+import { useTranslation } from "react-i18next";
 
 const SuggestedUsers = () => {
+    const { t } = useTranslation();
     const showToast = useShowToast();
 
     const suggestUsersURL = API_USER_ROUTES.SUGGEST_USERS;
@@ -41,7 +42,7 @@ const SuggestedUsers = () => {
                     mb={4}
                     textAlign="center"
                 >
-                    Suggested
+                    {t("common.suggestedUsers")}
                 </Text>
                 <Flex direction={"column"} gap={2}>
                     {suggestedUsers.map((suggestedUser) => (<UserTile key={suggestedUser._id} user={suggestedUser} />))}

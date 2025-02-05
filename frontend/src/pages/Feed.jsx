@@ -1,19 +1,21 @@
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 
+import { API_NOTIFICATION_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
 import SuggestedUsers from "../components/users/SuggestedUsers";
+import notificationAtom from "../atoms/notificationAtom";
 import CreatePost from "../components/post/CreatePost";
 import Loading from "../components/shared/Loading";
+import TopBar from "../components/menu/TopBar";
 import useShowToast from "../hooks/showToast";
 import Post from "../components/post/Post";
-import postAtom from "../atoms/postAtom";
-import { API_NOTIFICATION_ROUTES, API_POST_ROUTES } from "../constants/API_ROUTES";
-import TopBar from "../components/menu/TopBar";
-import notificationAtom from "../atoms/notificationAtom";
 import useFetch from "../hooks/useFetch";
+import postAtom from "../atoms/postAtom";
+
 
 const fetchFeedPosts = async ({ pageParam = 1 }) => {
   try {
@@ -36,6 +38,7 @@ const fetchFeedPosts = async ({ pageParam = 1 }) => {
 };
 
 const Feed = () => {
+  const { t } = useTranslation();
   const showToast = useShowToast();
   const [posts, setPosts] = useRecoilState(postAtom);
   const setUnreadNotifications = useSetRecoilState(notificationAtom);
@@ -88,13 +91,13 @@ const Feed = () => {
         <CreatePost />
         {status === "loading" && <Loading />}
         {status === "error" && (
-          <Text size={"lg"}>An error occurred: {error.message}</Text>
+          <Text size={"lg"}>{t("common.errorOccurred")}: {error.message}</Text>
         )}
         {status === "success" && (
           <>
             {posts.length === 0 && (
               <Text size={"lg"}>
-                There are no posts. See more posts by following new people.
+                {t("feed.noPosts")}
               </Text>
             )}
             {posts.map((post) => (

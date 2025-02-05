@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { Box, Text } from "@chakra-ui/react";
-import { useState } from "react";
 import PropTypes from "prop-types";
+import { useState } from "react";
+
 
 const ExpandableText = ({ children, limit = "160" }) => {
+  const { t } = useTranslation();
   const [isExpanded, setExpanded] = useState(false);
 
   // Add a check to ensure children is a string
@@ -33,7 +36,7 @@ const ExpandableText = ({ children, limit = "160" }) => {
         onClick={toggleExpand}
       >
         {children && children.length > limit && (
-          <span> {isExpanded ? "see less" : "see more"}</span>
+          <span> {isExpanded ? t("common.seeLess") : t("common.seeMore")}</span>
         )}
       </Text>
     </Box>

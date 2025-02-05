@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { API_NOTIFICATION_ROUTES } from "../constants/API_ROUTES";
+
 
 const fetchNotifications = async () => {
     const response = await fetch(

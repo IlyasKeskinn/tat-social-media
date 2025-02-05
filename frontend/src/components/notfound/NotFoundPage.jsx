@@ -1,8 +1,12 @@
 import { Button, Image, VStack, Box, Flex, Text } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
+
+
 const NotFoundPage = ({ text }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <VStack alignItems={"center"} justifyContent={"center"} flex={1}>
       <Box w={"full"} h={"65vh"} maxW={"600px"}>
@@ -26,7 +30,7 @@ const NotFoundPage = ({ text }) => {
             navigate("/");
           }}
         >
-          Bact to feed
+          {t("notFound.backToFeed")}
         </Button>{" "}
       </Flex>
     </VStack>

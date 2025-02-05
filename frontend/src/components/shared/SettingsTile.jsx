@@ -1,8 +1,9 @@
-import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react"
+import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { LuChevronLeft } from "react-icons/lu";
 import { useSetRecoilState } from "recoil";
-import selectedSettingAtom from "../../atoms/selectedSetting";
 import PropTypes from "prop-types";
+
+import selectedSettingAtom from "../../atoms/selectedSetting";
 
 
 const SettingsTile = ({ settingTile }) => {

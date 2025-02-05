@@ -1,5 +1,6 @@
 import { Box, Flex, Stack, Heading, Text, Input, Button, Link, InputGroup, InputRightElement, } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
@@ -7,28 +8,28 @@ import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import * as z from "zod";
 
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 import authScreenAtom from "../../atoms/authAtom";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
-import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
-
-const schema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .max(24, "Password must be at most 24 characters"),
-});
 
 const Login = () => {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false);
+  const schema = z.object({
+    email: z.string().email(t("userFormValidation.invalidEmail")),
+    password: z
+      .string()
+      .min(6, t("userFormValidation.passwordMin"))
+      .max(24, t("userFormValidation.passwordMax")),
+  });
   const handleClick = () => setShow(!show);
   const showToast = useShowToast();
 
   const LOGIN_URL = API_AUTH_ROUTES.LOGIN;
-  
+
   const { statusCode, responseData, isLoading, error, postData } = useFetch(
     LOGIN_URL,
     "POST"
@@ -66,7 +67,7 @@ const Login = () => {
   }, [error, responseData]);
 
   return (
-    <Flex minH={"100vh"} align={"center"} justify={"center"}>
+    <Flex minH={"100vh"} align={"center"} justify={"center"} >
       <Stack
         bg={"gray.50"}
         rounded={"xl"}
@@ -74,6 +75,7 @@ const Login = () => {
         spacing={{ base: 8 }}
         maxW={{ lg: "lg" }}
         mx={3}
+        w={"100%"}
       >
         <Stack spacing={4}>
           <Heading
@@ -81,7 +83,7 @@ const Login = () => {
             lineHeight={1.1}
             fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
           >
-            Welcome back to T.A.T
+            {t("auth.loginTitle")}
             <Text
               as={"span"}
               bgGradient="linear(to-r, blue.400,cyan.400)"
@@ -91,14 +93,13 @@ const Login = () => {
             </Text>
           </Heading>
           <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-            Dive into new discoveries by logging into your account and continue
-            exploring!
+            {t("auth.loginDesc")}
           </Text>
         </Stack>
         <Box as={"form"} mt={10} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
             <Input
-              placeholder="tatmember@example.com"
+              placeholder={t("user.emailPlaceholder")}
               bg={"gray.100"}
               border={0}
               color={"gray.500"}
@@ -113,7 +114,7 @@ const Login = () => {
             )}
             <InputGroup>
               <Input
-                placeholder="password"
+                placeholder={t("user.passwordPlaceholder")}
                 bg={"gray.100"}
                 type={show ? "text" : "password"}
                 border={0}
@@ -153,7 +154,7 @@ const Login = () => {
             type="submit"
             isLoading={isLoading}
           >
-            Log in
+            {t("auth.login")}
           </Button>
         </Box>
         <Flex justifyContent={"space-between"}>
@@ -165,22 +166,22 @@ const Login = () => {
                   setAuthScreen("forgotpassword");
                 }}
               >
-                Forgot Password?
+                {t("auth.forgotPassword")}
               </Link>
             </Text>
           </Flex>
-          <Flex>
+          <Flex gap={1}>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              Not a T.A.T member yet?{" "}
-              <Link
-                color={"blue.400"}
-                onClick={() => {
-                  setAuthScreen("signup");
-                }}
-              >
-                Join the T.A.T
-              </Link>
+              {t("auth.notMember")}
             </Text>
+            <Link
+              color={"blue.400"}
+              onClick={() => {
+                setAuthScreen("signup");
+              }}
+            >
+              {t("auth.joinTAT")}
+            </Link>
           </Flex>
         </Flex>
       </Stack>

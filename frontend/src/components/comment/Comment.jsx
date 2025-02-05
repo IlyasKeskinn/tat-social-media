@@ -1,26 +1,28 @@
 import { Flex, Text, Popover, PopoverContent, PopoverBody, PopoverTrigger, Avatar, Box, Button, Menu, MenuButton, MenuList, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
 import useFormatShortDistanceToNow from "../../hooks/useFormatShortDistanceToNow.jsx";
+import { API_COMMENT_ROUTES, API_REPLY_ROUTES } from "../../constants/API_ROUTES.js";
 import ProfilePreviewPopover from "../users/ProfilePreviewPopover.jsx";
+import ExpandableText from "../shared/ExpandableText.jsx";
 import CommentInputForm from "./CommentInputForm.jsx";
 import useShowToast from "../../hooks/showToast.jsx";
 import commentAtom from "../../atoms/commentAtom.js";
-import ExpandableText from "../shared/ExpandableText.jsx";
+import { LikeButton } from "../shared/Actions.jsx";
 import useUpdate from "../../hooks/useUpdate.jsx";
 import CommentActions from "./CommentActions.jsx";
 import useFetch from "../../hooks/useFetch.jsx";
 import userAtom from "../../atoms/userAtom.js";
-import { LikeButton } from "../shared/Actions.jsx";
 import Reply from "../reply/Reply.jsx";
-import { API_COMMENT_ROUTES, API_REPLY_ROUTES } from "../../constants/API_ROUTES.js";
 
 
 const Comment = ({ comment, post }) => {
+  const { t } = useTranslation();
   const FETCH_REPLIES = API_REPLY_ROUTES.FETCH_REPLIES(comment._id);
   const COMMENT_LIKE_URL = API_COMMENT_ROUTES.LIKE_UNLIKE_COMMENT(post._id, comment._id);
   const COMMENT_DELETE_URL = API_COMMENT_ROUTES.DELETE_COMMENT(post._id, comment._id);
@@ -52,14 +54,14 @@ const Comment = ({ comment, post }) => {
   const { handleUpdate: deleteComment, isLoading, updated: deletedComment } = useUpdate(
     comment._id,
     COMMENT_DELETE_URL,
-    "Comment is successfully deleted!"
+    t("comment.deleted")
   );
 
   const handleLiked = () => {
     if (!user) {
       return showToast(
         "Error",
-        "You must be logged in to like a post",
+        t("common.mustBeLoggedIn"),
         "error"
       );
     }
@@ -241,7 +243,7 @@ const Comment = ({ comment, post }) => {
                     color={"gray.500"}
                     minW={"50px"}
                   >
-                    {comment.replies.length} reply
+                    {comment.replies.length} {t("comment.replies")}
                   </Text>
                 )}
               </Flex>

@@ -1,20 +1,14 @@
-import {
-    Menu,
-    MenuButton,
-    Portal,
-    MenuList,
-    MenuItem,
-    Text,
-} from "@chakra-ui/react"
-
+import { Menu, MenuButton, Portal, MenuList, MenuItem, Text, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import PropTypes from "prop-types"
-import useCopyProfile from "../../hooks/useCopyProfile";
+import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
+
 import useBlockUnblock from "../../hooks/useBlockUnblock";
+import useCopyProfile from "../../hooks/useCopyProfile";
 
 
 const ProfileActions = ({ user }) => {
-
+    const { t } = useTranslation();
     const copyProfile = useCopyProfile();
     const { handleBlockUnblock, isLoading } = useBlockUnblock(user)
 
@@ -39,11 +33,11 @@ const ProfileActions = ({ user }) => {
                         }}
                     >
                         <Text color={"red.500"}>
-                            {user.blocked ? "Unblock" : "Block"}
+                            {user.blocked ? t("common.unblock") : t("common.block")}
                         </Text>
                     </MenuItem>
                     <MenuItem>
-                        <Text color={"red.500"}>Report!</Text>
+                        <Text color={"red.500"}>{t("common.report")}</Text>
                     </MenuItem>
                     <MenuItem
                         onClick={() => {
@@ -51,7 +45,7 @@ const ProfileActions = ({ user }) => {
                         }}
                     >
                         <Text>
-                            Copy Profile URL
+                            {t("common.copyProfileURL")}
                         </Text>
                     </MenuItem>
                 </MenuList>

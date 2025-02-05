@@ -1,26 +1,28 @@
 import { Flex, VStack, Heading, Divider, useColorMode, Button, Spacer, Avatar, useDisclosure, } from "@chakra-ui/react";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaRegUser, FaRegMoon } from "react-icons/fa";
 import { AiOutlineMessage } from "react-icons/ai";
 import { IoHomeOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { TbMapSearch } from "react-icons/tb";
 import { BsSearch } from "react-icons/bs";
 import { useRecoilValue } from "recoil";
 import { GoSun } from "react-icons/go";
-import { IoMdNotificationsOutline } from "react-icons/io";
 import PropTypes from "prop-types";
 
 import { ExploreSVG, HomeSVG, MessageSVG, SearchSVG } from "../shared/IconSvg";
+import notificationAtom from "../../atoms/notificationAtom";
 import SearchDrawer from "../shared/SearchDrawer";
 import LogoutButton from "../auth/LogoutButton";
 import MobileMenuItem from "./MobileMenuItem";
 import userAtom from "../../atoms/userAtom";
 import MenuItem from "./MenuItem";
-import notificationAtom from "../../atoms/notificationAtom";
-
 
 
 const Menu = () => {
+  const { t } = useTranslation();
+  
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
@@ -63,21 +65,21 @@ const Menu = () => {
               T.A.T
             </Heading>
           </Flex>
-          <MenuItem title="Feed" to="/" icon={IoHomeOutline} />
+          <MenuItem title={t("menu.feed")} to="/" icon={IoHomeOutline} />
           <MenuItem
-            title="PROFILE"
+            title={t("menu.profile")}
             to={`/profile/${user.userName}`}
             icon={FaRegUser}
           />
-          <MenuItem title="Message" to={"/message"} icon={AiOutlineMessage} notificationCount={2} />
-          <MenuItem title="Explore" icon={TbMapSearch} />
+          <MenuItem title={t("menu.message")} to={"/message"} icon={AiOutlineMessage} notificationCount={2} />
+          <MenuItem title={t("menu.explore")} icon={TbMapSearch} />
           <MenuItem
             callbackFunction={handleSearch}
-            title="Search"
+            title={t("menu.search")}
             icon={BsSearch}
           />
           <MenuItem
-            title="NOTIFICATIONS"
+            title={t("menu.notifications")}
             icon={IoMdNotificationsOutline}
             to={"/notifications"}
             notificationCount={unreadNotifications}

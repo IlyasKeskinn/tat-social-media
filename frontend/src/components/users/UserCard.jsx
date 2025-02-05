@@ -1,11 +1,15 @@
 import { Avatar, Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
-import { useRecoilValue } from "recoil";
-import userAtom from "../../atoms/userAtom";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
+import { useRecoilValue } from "recoil";
 import PropTypes from "prop-types";
+
 import useFollowUnfollow from "../../hooks/useFollowUnfollow";
+import userAtom from "../../atoms/userAtom";
+
 
 const UserCard = ({ user, onClose = {} }) => {
+  const { t } = useTranslation();
   const currentUser = useRecoilValue(userAtom);
 
 
@@ -52,13 +56,13 @@ const UserCard = ({ user, onClose = {} }) => {
                   <Text fontWeight={"bold"} as={"span"}>
                     {user?.followers?.length}
                   </Text>{" "}
-                  followers
+                  {t("common.followers")}
                 </Text>
                 <Text textAlign={"center"} fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
                     {user?.following?.length}
                   </Text>{" "}
-                  following
+                  {t("common.following")}
                 </Text>
               </Flex>
               {isProfileOwner ? (
@@ -76,7 +80,7 @@ const UserCard = ({ user, onClose = {} }) => {
                       onClose();
                     }}
                   >
-                    See Profile
+                    {t("common.seeProfile")}
                   </Button>
                   <Button
                     bg={"blue.400"}
@@ -90,7 +94,7 @@ const UserCard = ({ user, onClose = {} }) => {
                     isLoading={isLoading}
                     isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
                   >
-                    {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
+                    {isRequestSent ? t("common.requestSent") : isUserFollowing ? t("common.unfollow") : t("common.follow")}
                   </Button>
                 </Flex>
               )}

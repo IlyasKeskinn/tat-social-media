@@ -1,10 +1,15 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import useFetch from "./useFetch";
-import useShowToast from "./showToast";
 import { useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
+
 import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import userAtom from "../atoms/userAtom";
+import useShowToast from "./showToast";
+import useFetch from "./useFetch";
+
+
 const useFollowUnfollow = (user) => {
+  const { t } = useTranslation();
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
 
@@ -24,10 +29,10 @@ const useFollowUnfollow = (user) => {
   };
   useEffect(() => {
     if (error) {
-      showToast("Error", error.message, "error"); // Show error notification
+      showToast(t("common.error"), error.message, "error"); // Show error notification
     }
     if (statusCode === 201) {
-      showToast("Success", "Follow request sent!", "success"); // Show follow request success notification
+      showToast(t("common.success"), t("notifications.followRequestSent"), "success"); // Show follow request success notification
       setIsRequestSent(true);
     }
     if (statusCode === 200) {

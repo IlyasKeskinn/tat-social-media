@@ -1,17 +1,19 @@
 import { Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Box, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import PropTypes from "prop-types";
 
+import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 import CommentInputForm from "./CommentInputForm.jsx";
 import useShowToast from "../../hooks/showToast.jsx";
 import commentAtom from "../../atoms/commentAtom.js";
 import Loading from "../shared/Loading.jsx";
 import Comment from "./Comment.jsx";
-import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 
 
 const Comments = ({ isOpen, onClose, currentPost }) => {
+  const { t } = useTranslation();
   const showToast = useShowToast();
 
   const FETCH_COMMENTS = API_COMMENT_ROUTES.FETCH_COMMENTS(currentPost._id);
@@ -65,7 +67,7 @@ const Comments = ({ isOpen, onClose, currentPost }) => {
               left={"50%"}
               transform="translate(-50%, -50%)"
             >
-              <Text fontSize={"xl"}>No Comments </Text>
+              <Text fontSize={"xl"}>{t("comment.noComments")}</Text>
               <Text fontSize={"3xl"}>🧐</Text>
             </Box>
           )}

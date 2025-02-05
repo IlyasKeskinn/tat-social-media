@@ -1,11 +1,13 @@
 import { Box, Flex, IconButton, Input, useColorMode } from "@chakra-ui/react";
 import { FaPaperPlane, FaMicrophone } from "react-icons/fa";
 import { BsEmojiSmile, BsImage } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 
 const MessageBar = ({ onSendMessage, isLoading }) => {
+    const { t } = useTranslation();
     const { colorMode } = useColorMode();
     const [inputValue, setInputValue] = useState("");
     const inputRef = useRef();
@@ -44,7 +46,7 @@ const MessageBar = ({ onSendMessage, isLoading }) => {
                         ref={inputRef}
                         value={inputValue}
                         onChange={handleInputChange}
-                        placeholder="Write your message..."
+                        placeholder={t("conversation.writeYourMessage")}
                         disabled={isLoading}
                         size="lg"
                         py={6}

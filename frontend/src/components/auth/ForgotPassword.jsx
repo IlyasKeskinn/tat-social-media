@@ -1,10 +1,12 @@
 import { Box, Flex, Stack, Heading, Text, Input, Button, Link, } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useSetRecoilState } from "recoil";
 
 import authScreenAtom from "../../atoms/authAtom";
 
 
 const ForgotPassword = () => {
+  const { t } = useTranslation();
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -21,7 +23,7 @@ const ForgotPassword = () => {
             lineHeight={1.1}
             fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
           >
-            Forgot your password
+            {t("auth.forgotPasswordTitle")}
             <Text
               as={"span"}
               bgGradient="linear(to-r, blue.400,cyan.400)"
@@ -31,13 +33,13 @@ const ForgotPassword = () => {
             </Text>
           </Heading>
           <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-            You will get an email with a reset link
+            {t("auth.forgotPasswordDesc")}
           </Text>
         </Stack>
         <Box as={"form"} mt={10}>
           <Stack spacing={4}>
             <Input
-              placeholder="tatmember@example.com"
+              placeholder={t("user.emailPlaceholder")}
               bg={"gray.100"}
               border={0}
               color={"gray.500"}
@@ -58,14 +60,14 @@ const ForgotPassword = () => {
             }}
             type="submit"
           >
-            Request Reset
+            {t("auth.forgotPasswordRequestReset")}
           </Button>
         </Box>
         <Flex justifyContent={"space-between"}>
           <Flex>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
               <Link color={"blue.400"} onClick={() => setAuthScreen("login")}>
-                Login Page
+                {t("auth.login")}
               </Link>
             </Text>
           </Flex>

@@ -2,6 +2,7 @@ import { Flex, Text, Avatar, IconButton, Input, VStack, useColorMode, Modal, Mod
 import { useRef, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IoIosArrowBack } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useRecoilValue } from "recoil";
@@ -71,6 +72,7 @@ const DUMMY_MESSAGES = {
 };
 
 const ChatRoom = ({ conversation, onBack }) => {
+    const { t } = useTranslation();
     const { colorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const navigate = useNavigate();
@@ -100,12 +102,12 @@ const ChatRoom = ({ conversation, onBack }) => {
 
     const handleSendMessage = async (content) => {
         try {
-             postData({
+            postData({
                 conversationId: conversation._id,
                 content
             });
         } catch (error) {
-            showToast("Error", "Failed to send message", "error");
+            showToast(t("common.error"), t("conversation.failedToSendMessage"), "error");
         }
     };
 
@@ -181,7 +183,7 @@ const ChatRoom = ({ conversation, onBack }) => {
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Search in chat</ModalHeader>
+                    <ModalHeader>{t("conversation.searchInChat")}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <InputGroup mb={4}>
@@ -189,7 +191,7 @@ const ChatRoom = ({ conversation, onBack }) => {
                                 <BsSearch />
                             </InputLeftElement>
                             <Input
-                                placeholder="Search in messages..."
+                                placeholder={t("conversation.searchInMessages")}
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
                                 autoFocus
@@ -206,7 +208,7 @@ const ChatRoom = ({ conversation, onBack }) => {
                             ))}
                             {searchQuery && !searchResults.length && (
                                 <Text color="gray.500" textAlign="center">
-                                    No results found
+                                    {t("conversation.noResultsFound")}
                                 </Text>
                             )}
                         </VStack>

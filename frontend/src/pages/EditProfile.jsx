@@ -1,38 +1,23 @@
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Stack,
-  useColorModeValue,
-  Avatar,
-  Center,
-  Box,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
-import { FaChevronLeft } from "react-icons/fa";
-
-import { useEffect, useRef } from "react";
-
-import { useForm } from "react-hook-form";
+import { Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useColorModeValue, Avatar, Center, Box, Text, Textarea, } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-
-import usePrevImg from "../hooks/usePrevImg";
-import useFetch from "../hooks/useFetch";
-import useShowToast from "../hooks/showToast";
-
-import userAtom from "../atoms/userAtom";
-import { useRecoilState } from "recoil";
+import { useTranslation } from "react-i18next";
+import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
+
 import { editProfileSchema } from "../formSchemas/editProfileSchema";
 import { API_USER_ROUTES } from "../constants/API_ROUTES";
+import useShowToast from "../hooks/showToast";
+import usePrevImg from "../hooks/usePrevImg";
+import userAtom from "../atoms/userAtom";
+import useFetch from "../hooks/useFetch";
+
 
 const EditProfile = () => {
   const [user, setUser] = useRecoilState(userAtom);
+  const { t } = useTranslation();
 
   const UPDATE_URL = API_USER_ROUTES.UPDATE_USER(user._id);
 
@@ -99,7 +84,7 @@ const EditProfile = () => {
             <FaChevronLeft />
           </Box>
           <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-            Profile Edit
+            {t("common.editProfile")}
           </Heading>
           <FormControl>
             <Stack
@@ -143,7 +128,7 @@ const EditProfile = () => {
                   }}
                   isDisabled={isLoading}
                 >
-                  Change photo
+                  {t("common.changePhoto")}
                 </Button>{" "}
               </Center>
             </Stack>
@@ -151,7 +136,7 @@ const EditProfile = () => {
           <Flex gap={5}>
             <FormControl>
               <FormLabel fontSize={"lg"} fontWeight={"bold"}>
-                Full name
+                {t("user.fullName")}
               </FormLabel>
               <Input
                 placeholder="John Doe"
@@ -170,7 +155,7 @@ const EditProfile = () => {
             </FormControl>
             <FormControl>
               <FormLabel fontSize={"lg"} fontWeight={"bold"}>
-                Username
+                {t("user.userName")}
               </FormLabel>
               <Input
                 placeholder="JohnDoe"
@@ -189,7 +174,7 @@ const EditProfile = () => {
           </Flex>
           <FormControl>
             <FormLabel fontSize={"lg"} fontWeight={"bold"}>
-              Bio
+              {t("user.bio")}
             </FormLabel>
             <Textarea
               placeholder="Bio..."
@@ -219,7 +204,7 @@ const EditProfile = () => {
               type="submit"
               isLoading={isLoading}
             >
-              Submit
+              {t("common.apply")}
             </Button>
           </Stack>
         </Stack>

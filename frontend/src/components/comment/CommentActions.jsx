@@ -1,6 +1,7 @@
-import { MenuItem } from "@chakra-ui/react";
 import { MdOutlineReport, MdDelete, MdEdit } from "react-icons/md";
+import { MenuItem } from "@chakra-ui/react";
 import PropTypes from "prop-types";
+
 
 const CommentActions = ({ userId, commentById, postById, onDelete, onEdit, onReport }) => {
     const isCommentOwner = userId === commentById;

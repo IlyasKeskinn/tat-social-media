@@ -1,17 +1,19 @@
 import { VStack, Flex, Box, Avatar, Text, Button } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
-import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-import userAtom from "../../atoms/userAtom";
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 import useShowToast from "../../hooks/showToast";
+import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
 import Loading from "../shared/Loading";
 
-import PropTypes from "prop-types";
-import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 const ProfilePreviewPopover = ({ userId }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const showToast = useShowToast();
 
@@ -96,13 +98,13 @@ const ProfilePreviewPopover = ({ userId }) => {
                   <Text fontWeight={"bold"} as={"span"}>
                     {user?.followers?.length}
                   </Text>{" "}
-                  followers
+                  {t("common.followers")}
                 </Text>
                 <Text textAlign={"center"} fontSize={"lg"}>
                   <Text fontWeight={"bold"} as={"span"}>
                     {user?.following?.length}
                   </Text>{" "}
-                  following
+                  {t("common.following")}
                 </Text>
               </Flex>
               {isProfileOwner ? (
@@ -117,7 +119,7 @@ const ProfilePreviewPopover = ({ userId }) => {
                       navigate(PROFILE_URL);
                     }}
                   >
-                    See Profile
+                    {t("common.seeProfile")}
                   </Button>
                 </Flex>
               ) : (
@@ -132,7 +134,7 @@ const ProfilePreviewPopover = ({ userId }) => {
                   }}
                   isLoading={isLoading}
                 >
-                  {isUserFollowing ? "Unfollow" : "Follow"}
+                  {isUserFollowing ? t("common.unfollow") : t("common.follow")}
                 </Button>
               )}
               <Text noOfLines={2} fontSize={"sm"}>

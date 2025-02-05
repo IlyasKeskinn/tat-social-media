@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import useShowToast from "./showToast";
+import { useRecoilValue } from "recoil";
+import { useState } from "react";
+
 import userAtom from "../atoms/userAtom";
+import useShowToast from "./showToast";
+
 
 const useDelete = (req_body, URL, msg) => {
-
+  const { t } = useTranslation();
   const currentUser = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const navigate = useNavigate();
@@ -29,10 +32,10 @@ const useDelete = (req_body, URL, msg) => {
         showToast("Success", msg, "success");
         navigate(`/profile/${currentUser.userName}`)
       } else {
-        showToast("Error", data.error || "Failed to delete post", "error");
+        showToast(t("common.error"), data.error || t("common.failedToDelete"), "error");
       }
     } catch (error) {
-      showToast("Error", error.message, "error");
+      showToast(t("common.error"), error.message, "error");
       setDeleted(false);
     } finally {
       setLoading(false);

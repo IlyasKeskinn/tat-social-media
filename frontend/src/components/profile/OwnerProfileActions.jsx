@@ -1,5 +1,6 @@
 import { Menu, MenuButton, Portal, MenuList, MenuItem, Text, } from "@chakra-ui/react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useRecoilValue } from "recoil";
 
@@ -13,6 +14,7 @@ const OwnerProfileActions = () => {
     const navigate = useNavigate();
     const PROFILE_EDIT_URL = `/profile/edit/${user.userName}`;
     const settingsURL = `/settings`;
+    const { t } = useTranslation();
 
     return (
         <Menu>
@@ -30,7 +32,7 @@ const OwnerProfileActions = () => {
                         }}
                     >
                         <Text>
-                            Copy Profile URL
+                            {t("common.copyProfileURL")}
                         </Text>
                     </MenuItem>
                     <MenuItem
@@ -38,13 +40,13 @@ const OwnerProfileActions = () => {
                             navigate(PROFILE_EDIT_URL);
                         }}
                     >
-                        <Text>Edit Profile</Text>
+                        <Text>{t("common.editProfile")}</Text>
                     </MenuItem>
                     <MenuItem
                         onClick={() => {
                             navigate(settingsURL);
                         }}>
-                        <Text>Settings & Privacy</Text>
+                        <Text>{t("common.settingsPrivacy")}</Text>
                     </MenuItem>
                 </MenuList>
             </Portal>

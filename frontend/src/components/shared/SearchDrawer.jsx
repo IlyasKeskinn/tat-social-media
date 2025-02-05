@@ -1,13 +1,14 @@
 import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, Button, Box, } from "@chakra-ui/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
+import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 import useShowToast from "../../hooks/showToast";
 import UserCard from "../users/UserCard";
 import Loading from "./Loading";
-import { API_USER_ROUTES } from "../../constants/API_ROUTES";
 
 
 const getSearchUsers = async ({ queryKey, pageParam = 1 }) => {
@@ -32,6 +33,7 @@ const getSearchUsers = async ({ queryKey, pageParam = 1 }) => {
 };
 
 const SearchDrawer = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState([]);
   const { ref, inView } = useInView();
@@ -110,7 +112,7 @@ const SearchDrawer = ({ isOpen, onClose }) => {
         </DrawerBody>
 
         <DrawerFooter>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

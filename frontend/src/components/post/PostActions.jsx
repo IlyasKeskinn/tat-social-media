@@ -1,22 +1,24 @@
-import { MenuItem } from "@chakra-ui/react";
-
-import { BsBookmarkStar } from "react-icons/bs";
-import { CiMedicalClipboard } from "react-icons/ci";
-import { MdBlock } from "react-icons/md";
-import { MdOutlineReport } from "react-icons/md";
 import { MdOutlineReportOff } from "react-icons/md";
-
-import useCopyPost from "../../hooks/useCopyPost";
+import { CiMedicalClipboard } from "react-icons/ci";
+import { MdOutlineReport } from "react-icons/md";
+import { BsBookmarkStar } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
+import { MenuItem } from "@chakra-ui/react";
+import { MdBlock } from "react-icons/md";
 import PropTypes from "prop-types";
 
+import useCopyPost from "../../hooks/useCopyPost";
+
+
 const PostActions = ({ postId, postedBy }) => {
+  const { t } = useTranslation();
   const copyPost = useCopyPost();
 
   return (
     <>
       <MenuItem fontSize={"lg"}>
         <BsBookmarkStar style={{ marginRight: "8px" }} />
-        Save Bookmarks
+        {t("postActions.saveBookmarks")}
       </MenuItem>
       <MenuItem
         onClick={() => {
@@ -25,20 +27,20 @@ const PostActions = ({ postId, postedBy }) => {
         fontSize={"lg"}
       >
         <CiMedicalClipboard style={{ marginRight: "8px" }} />
-        Copy post url.
+        {t("postActions.copyPostUrl")}
       </MenuItem>
 
       <MenuItem fontSize={"lg"}>
         <MdBlock style={{ marginRight: "8px" }} />
-        Block {postedBy.userName}
+        {t("postActions.blockUser", { userName: postedBy.userName })}
       </MenuItem>
       <MenuItem fontSize={"lg"}>
         <MdOutlineReport style={{ marginRight: "8px" }} />
-        Report {postedBy.userName}
+        {t("postActions.reportUser", { userName: postedBy.userName })}
       </MenuItem>
       <MenuItem fontSize={"lg"}>
         <MdOutlineReportOff style={{ marginRight: "8px" }} />
-        Report this post!
+        {t("postActions.reportPost")}
       </MenuItem>
     </>
   );

@@ -1,6 +1,7 @@
 import { Flex, Input, InputGroup, InputRightElement, Button, Box, Icon, FormControl, useColorMode, } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MdEmojiEmotions } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IoSend } from "react-icons/io5";
@@ -8,16 +9,12 @@ import { useRecoilValue } from "recoil";
 import PropTypes from "prop-types";
 import * as z from "zod";
 
+import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 import EmojiPickerBox from "../shared/EmojiPickerBox.jsx";
 import useShowToast from "../../hooks/showToast.jsx";
 import useFetch from "../../hooks/useFetch.jsx";
 import userAtom from "../../atoms/userAtom.js";
-import { API_COMMENT_ROUTES } from "../../constants/API_ROUTES.js";
 
-
-const schema = z.object({
-    text: z.string().min(1, "cannot be sent empty"),
-});
 
 const CommentInputForm = ({
     currentPost,
@@ -27,9 +24,14 @@ const CommentInputForm = ({
     comment,
     setComments,
 }) => {
+    const { t } = useTranslation();
     const { colorMode } = useColorMode();
     const showToast = useShowToast();
     const currentUser = useRecoilValue(userAtom);
+
+    const schema = z.object({
+        text: z.string().min(1, t("common.cannotBeSentEmpty")),
+    });
 
     const COMMENT_URL = isEditing
         ? API_COMMENT_ROUTES.UPDATE_COMMENT(currentPost._id, comment._id)
@@ -66,7 +68,7 @@ const CommentInputForm = ({
         if (statusCode === 201 || statusCode === 200) {
             showToast(
                 "Success",
-                isEditing ? "Comment updated successfully!" : "Comment added successfully!",
+                isEditing ? t("comment.updated") : t("comment.added"),
                 "success"
             );
 

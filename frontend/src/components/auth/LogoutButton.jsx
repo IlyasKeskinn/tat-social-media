@@ -1,14 +1,16 @@
 import { Flex, PopoverTrigger, Popover, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody, PopoverFooter, Portal, Button, Box, Text, ButtonGroup, useDisclosure, } from "@chakra-ui/react";
 import { AiOutlineLogout } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
-import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
 
 const LogoutButton = () => {
+  const { t } = useTranslation();
   const LOGOUT_URL = API_AUTH_ROUTES.LOGOUT;
 
   const userState = useSetRecoilState(userAtom);
@@ -71,7 +73,7 @@ const LogoutButton = () => {
           <Flex gap={4} alignItems={"center"} justifyContent={"start"} px={2}>
             <AiOutlineLogout fontSize={"24px"} />
             <Text fontSize={"md"} textTransform={"uppercase"}>
-              Log out
+              {t("auth.logout")}
             </Text>
           </Flex>
         </Box>
@@ -79,15 +81,15 @@ const LogoutButton = () => {
       <Portal>
         <PopoverContent>
           <PopoverArrow />
-          <PopoverHeader>Confirmation</PopoverHeader>
+          <PopoverHeader>{t("auth.logout")}</PopoverHeader>
           <PopoverCloseButton />
           <PopoverBody>
-            <Text>Are you sure you want to continue with your action?</Text>
+            <Text>{t("auth.logoutConfirmationDesc")}</Text>
           </PopoverBody>
           <PopoverFooter>
             <ButtonGroup size="sm">
               <Button variant="outline" isDisabled={isLoaading} onClick={onClose}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 colorScheme="red"
@@ -96,7 +98,7 @@ const LogoutButton = () => {
                   handleClick();
                 }}
               >
-                Apply
+                {t("common.apply")}
               </Button>
             </ButtonGroup>
           </PopoverFooter>

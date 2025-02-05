@@ -1,5 +1,6 @@
 import { Box, Flex, Stack, Heading, Text, Container, Input, Button, SimpleGrid, useBreakpointValue, Link, InputRightElement, InputGroup, } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { useForm } from "react-hook-form";
@@ -7,37 +8,18 @@ import { LuEyeOff } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import * as z from "zod";
 
+import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 import authScreenAtom from "../../atoms/authAtom";
 import useShowToast from "../../hooks/showToast";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
-import { API_AUTH_ROUTES } from "../../constants/API_ROUTES";
 
-
-const schema = z.object({
-  firstName: z
-    .string()
-    .min(3, "First name must be at least 3 characters")
-    .max(24, "First name must be at most 24 characters"),
-  lastName: z
-    .string()
-    .min(3, "Last name must be at least 3 characters")
-    .max(24, "Last name must be at most 24 characters"),
-  email: z.string().email("Invalid email address"),
-  userName: z
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .max(24, "Username must be at most 24 characters"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .max(24, "Password must be at most 24 characters"),
-});
 
 const SignUP = () => {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-
+  
   const setUserState = useSetRecoilState(userAtom);
 
   const showToast = useShowToast();
@@ -47,6 +29,28 @@ const SignUP = () => {
     REGISTER_URL,
     "POST"
   );
+
+  const schema = z.object({
+    firstName: z
+      .string()
+      .min(3, t('userFormValidation.firstNameMin'))
+      .max(24, t('userFormValidation.firstNameMax')),
+    lastName: z
+      .string()
+      .min(3, t('userFormValidation.lastNameMin'))
+      .max(24, t('userFormValidation.lastNameMax')),
+    email: z
+      .string()
+      .email(t('auth.invalidEmail')),
+    userName: z
+      .string()
+      .min(3, t('userFormValidation.userNameMin'))
+      .max(24, t('userFormValidation.userNameMax')),
+    password: z
+      .string()
+      .min(6, t('userFormValidation.passwordMin'))
+      .max(24, t('userFormValidation.passwordMax')),
+  });
 
   const {
     register,
@@ -89,15 +93,15 @@ const SignUP = () => {
             lineHeight={1.1}
             fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "6xl" }}
           >
-            Connect, Share{" "}
+            {t("signUpScreen.cachingWord")} {t("signUpScreen.cachingWord2")}{" "}
             <Text
               as={"span"}
               bgGradient="linear(to-r, blue.400,cyan.400)"
               bgClip="text"
             >
-              &
+              {t("signUpScreen.cachingWord4")}
             </Text>{" "}
-            Discover
+            {t("signUpScreen.cachingWord3")}
           </Heading>
 
           <Stack direction={"row"} spacing={4} align={"center"}>
@@ -125,10 +129,10 @@ const SignUP = () => {
                 left: 0,
               }}
             >
-              T.A.T
+              {t("signUpScreen.tat")}
             </Flex>
             <Text fontFamily={"heading"} fontSize={{ base: "4xl", md: "6xl" }}>
-              +
+              {t("signUpScreen.connectEmoji")}
             </Text>
             <Flex
               align={"center"}
@@ -154,7 +158,7 @@ const SignUP = () => {
                 left: 0,
               }}
             >
-              YOU
+              {t("signUpScreen.you")}
             </Flex>
           </Stack>
         </Stack>
@@ -171,7 +175,7 @@ const SignUP = () => {
               lineHeight={1.1}
               fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }}
             >
-              Join T.A.T
+              {t("signUpScreen.joinTAT")}
               <Text
                 as={"span"}
                 bgGradient="linear(to-r, blue.400,cyan.400)"
@@ -181,14 +185,14 @@ const SignUP = () => {
               </Text>
             </Heading>
             <Text color={"gray.500"} fontSize={{ base: "sm", sm: "md" }}>
-              Ready to shine? Join T.A.T and shine by sharing your world!
+              {t("signUpScreen.joinTATDesc")}
             </Text>
           </Stack>
           <Box as={"form"} mt={10} onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <Flex gap={2}>
                 <Input
-                  placeholder="Firstname"
+                  placeholder={t('user.firstName')}
                   bg={"gray.100"}
                   border={0}
                   color={"gray.500"}
@@ -199,7 +203,7 @@ const SignUP = () => {
                   isInvalid={errors.firstName}
                 />{" "}
                 <Input
-                  placeholder="Lastname"
+                  placeholder={t('user.lastName')}
                   bg={"gray.100"}
                   border={0}
                   color={"gray.500"}
@@ -219,7 +223,7 @@ const SignUP = () => {
                 )}
               </Flex>
               <Input
-                placeholder="tatmember@example.com"
+                placeholder={t('user.emailPlaceholder')}
                 bg={"gray.100"}
                 border={0}
                 color={"gray.500"}
@@ -233,7 +237,7 @@ const SignUP = () => {
                 <Text color="red.500">{errors.email.message}</Text>
               )}
               <Input
-                placeholder="Username"
+                placeholder={t('user.userName')}
                 bg={"gray.100"}
                 border={0}
                 color={"gray.500"}
@@ -248,7 +252,7 @@ const SignUP = () => {
               )}
               <InputGroup>
                 <Input
-                  placeholder="password"
+                  placeholder={t('user.passwordPlaceholder')}
                   bg={"gray.100"}
                   type={show ? "text" : "password"}
                   border={0}
@@ -288,7 +292,7 @@ const SignUP = () => {
               type="submit"
               isLoading={isLoading}
             >
-              Submit
+              {t("auth.signUp")}
             </Button>
           </Box>
           <Stack>
@@ -297,14 +301,14 @@ const SignUP = () => {
               color={"gray.500"}
               fontSize={{ base: "sm", sm: "md" }}
             >
-              Already a T.A.T member?{" "}
+              {t("auth.alreadyMember")}
               <Link
                 color={"blue.400"}
                 onClick={() => {
                   setAuthScreen("login");
                 }}
               >
-                Log in
+                {t("auth.login")}
               </Link>
             </Text>
           </Stack>

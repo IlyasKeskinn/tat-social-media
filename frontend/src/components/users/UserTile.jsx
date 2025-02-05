@@ -1,11 +1,15 @@
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import PropTypes from "prop-types";
 import { useRecoilValue } from "recoil";
-import userAtom from "../../atoms/userAtom";
+import PropTypes from "prop-types";
+
 import useFollowUnfollow from "../../hooks/useFollowUnfollow";
+import userAtom from "../../atoms/userAtom";
+
 
 const UserTile = ({ user }) => {
+  const { t } = useTranslation();
   const currentUser = useRecoilValue(userAtom);
   const isProfileOwner = user._id === currentUser._id;
 
@@ -55,7 +59,7 @@ const UserTile = ({ user }) => {
             isLoading={isLoading}
             isDisabled={isRequestSent || isLoading} // Disable during loading or if request is sent
           >
-            {isRequestSent ? "Request Sent" : isUserFollowing ? "Unfollow" : "Follow"}
+            {isRequestSent ? t("common.requestSent") : isUserFollowing ? t("common.unfollow") : t("common.follow")}
           </Button>
         </Box>
       )}

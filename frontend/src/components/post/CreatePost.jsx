@@ -2,27 +2,29 @@ import { Flex, Box, Avatar, Button, useColorModeValue, useDisclosure, Modal, Mod
 import { useRecoilState, useRecoilValue } from "recoil";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaRegImage } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 import EmojiPickerBox from "../shared/EmojiPickerBox";
 import useShowToast from "../../hooks/showToast";
 import usePrevImg from "../../hooks/usePrevImg";
 import userAtom from "../../atoms/userAtom";
 import useFetch from "../../hooks/useFetch";
 import postAtom from "../../atoms/postAtom";
-import { API_POST_ROUTES } from "../../constants/API_ROUTES";
 
-
-const postSchema = z.object({
-  text: z.string().max(500, "Post text must be at most 500 characters"),
-});
 
 const MAX_CHAR = 500;
 
 const CreatePost = () => {
+  const { t } = useTranslation();
   const URL = API_POST_ROUTES.MAKE_POST;
+
+  const postSchema = z.object({
+    text: z.string().max(500, t("post.maxChar")),
+  });
 
   // Chakra UI hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -75,7 +77,7 @@ const CreatePost = () => {
 
   const onSubmit = (data) => {
     if (!imgUrl) {
-      showToast("Error", "Please select an image", "error");
+      showToast(t("post.error"), t("post.pleaseSelectImage"), "error");
       return;
     }
     const dataPost = {
@@ -90,10 +92,10 @@ const CreatePost = () => {
   // useEffect
   useEffect(() => {
     if (error) {
-      showToast("Error", error.message, "error");
+      showToast(t("common.error"), error.message, "error");
     }
     if (statusCode === 201) {
-      showToast("Successfully", "Post shared successfully", "success");
+      showToast(t("common.success"), t("post.postSharedSuccessfully"), "success");
       setPosts([responseData, ...posts]);
       setPostText("");
       setImgUrl("");
@@ -131,7 +133,7 @@ const CreatePost = () => {
               }}
               onClick={onOpen}
             >
-              Start post
+              {t("post.startPost")}
             </Button>
           </Flex>
         </Flex>
@@ -140,12 +142,12 @@ const CreatePost = () => {
         <ModalOverlay />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalContent>
-            <ModalHeader>Share Post</ModalHeader>
+            <ModalHeader>{t("post.sharePost")}</ModalHeader>
             <ModalCloseButton />
             <ModalBody minH={"400px"}>
               <FormControl mt={5}>
                 <Textarea
-                  placeholder={`Some text...`}
+                  placeholder={`${t("post.someText")}`}
                   _placeholder={{ color: "gray.500" }}
                   resize={"none"}
                   borderColor={useColorModeValue(
@@ -234,7 +236,7 @@ const CreatePost = () => {
                 isDisabled={!imgUrl}
                 isLoading={isLoading}
               >
-                Share
+                {t("post.share")}
               </Button>
             </ModalFooter>
           </ModalContent>

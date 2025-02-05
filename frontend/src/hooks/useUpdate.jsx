@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
+
 import useShowToast from "./showToast";
 
+
 const useUpdate = (req_body, URL, msg) => {
+    const { t } = useTranslation(); 
 
     const showToast = useShowToast();
 
@@ -21,12 +25,12 @@ const useUpdate = (req_body, URL, msg) => {
 
             if (response.status === 200) {
                 setUpdated(true);
-                showToast("Success", msg, "success");
+                showToast(t("common.success"), msg, "success");
             } else {
-                showToast("Error", data.error || "Failed to update!", "error");
+                showToast(t("common.error"), data.error || t("common.failedToUpdate"), "error");
             }
         } catch (error) {
-            showToast("Error", error.message, "error");
+            showToast(t("common.error"), error.message, "error");
             setUpdated(false);
         } finally {
             setLoading(false);
