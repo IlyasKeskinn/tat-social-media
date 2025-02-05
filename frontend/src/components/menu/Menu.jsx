@@ -1,8 +1,8 @@
 import { Flex, VStack, Heading, Divider, useColorMode, Button, Spacer, Avatar, useDisclosure, } from "@chakra-ui/react";
+import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaRegUser, FaRegMoon } from "react-icons/fa";
 import { AiOutlineMessage } from "react-icons/ai";
-import { IoHomeOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { TbMapSearch } from "react-icons/tb";
@@ -83,6 +83,11 @@ const Menu = () => {
             icon={IoMdNotificationsOutline}
             to={"/notifications"}
             notificationCount={unreadNotifications}
+          />
+          <MenuItem 
+            title={t("menu.settings")} 
+            icon={IoSettingsOutline}
+            to="/settings" 
           />
           <LogoutButton />
           <Spacer />

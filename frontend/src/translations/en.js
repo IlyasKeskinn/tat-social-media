@@ -117,6 +117,7 @@ export const en = {
         notifications: "Notifications",
         profile: "Profile",
         search: "Search",
+        settings: "Settings",
     },
     settingsMenu: {
         settings: "Settings",

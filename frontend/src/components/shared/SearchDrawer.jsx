@@ -95,7 +95,7 @@ const SearchDrawer = ({ isOpen, onClose }) => {
         <DrawerCloseButton />
         <DrawerHeader my={6}>
           <Input
-            placeholder="Search..."
+            placeholder={t("common.search")}
             value={query}
             onChange={handleSearchInput}
           />

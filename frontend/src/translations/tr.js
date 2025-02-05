@@ -118,6 +118,7 @@ export const tr = {
         notifications: "Bildirimler",
         profile: "Profil",
         search: "Ara",
+        settings: "Ayarlar",
     },
     settingsMenu: {
         settings: "Ayarlar",
