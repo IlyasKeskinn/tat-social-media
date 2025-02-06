@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
     chatRoomId: {
@@ -58,3 +57,7 @@ messageSchema.pre('save', function(next) {
     }
     next();
 }); 
+
+const Message = mongoose.model('Message', messageSchema);
+
+module.exports = { Message };

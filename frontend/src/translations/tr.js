@@ -26,7 +26,7 @@ export const tr = {
         saved: "Kaydedilenler",
         message: "Mesaj",
         follow: "Takip Et",
-        unfollow: "Takip Et",
+        unfollow: "Takibi Bırak",
         requestSent: "İstek Gönderildi",
         likes: "Beğeni",
         comments: "Yorum",
